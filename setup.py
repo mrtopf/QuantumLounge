@@ -19,6 +19,11 @@ A status stream inspired project management tool""",
       zip_safe=False,
       install_requires=[
           # -*- Extra requirements: -*-
+          'tornado',
+          'py',
+          'quantumcore.storages',
+          'quantumcore.exceptions',
+          'quantumcore.resources'
       ],
       entry_points="""
       # -*- Entry points: -*-
