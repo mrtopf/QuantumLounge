@@ -1,0 +1,183 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Version 1 &mdash; quantum.LOUNGE v0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/print.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/theme_extras.js"></script>
+    <link rel="top" title="quantum.LOUNGE v0.1 documentation" href="../index.html" />
+    <link rel="up" title="Usermanagement" href="intro.html" />
+    <link rel="prev" title="Usermanagement" href="intro.html" /> 
+  </head>
+  <body>
+      <div class="header"><h1 class="heading"><a href="../index.html">
+          <span>quantum.LOUNGE v0.1 documentation</span></a></h1>
+        <h2 class="heading"><span>Version 1</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        «&#160;&#160;<a href="intro.html">Usermanagement</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="version-1">
+<h1>Version 1<a class="headerlink" href="#version-1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="stories">
+<h2>Stories<a class="headerlink" href="#stories" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="store-a-fixed-set-of-users-in-a-dictionary">
+<h3>store a fixed set of users in a dictionary<a class="headerlink" href="#store-a-fixed-set-of-users-in-a-dictionary" title="Permalink to this headline">¶</a></h3>
+<p>Data provided:
+- username
+- password
+- full name
+- email address</p>
+<p>Dictionary format:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">users</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s">&#39;username&#39;</span> <span class="p">:</span> <span class="s">&#39;mrtopf&#39;</span><span class="p">,</span>
+     <span class="s">&#39;password&#39;</span> <span class="p">:</span> <span class="s">&#39;foobar&#39;</span><span class="p">,</span>
+     <span class="s">&#39;fullname&#39;</span> <span class="p">:</span> <span class="s">&#39;Christian Scholz&#39;</span><span class="p">,</span>
+     <span class="s">&#39;photo&#39;</span>    <span class="p">:</span> <span class="s">&#39;http://mrtopf.de/profile.png&#39;</span><span class="p">,</span>
+     <span class="s">&#39;email&#39;</span>    <span class="p">:</span> <span class="s">&#39;mrtopf@gmail.com&#39;</span><span class="p">},</span>
+
+     <span class="o">....</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>In version 1 the user manager only has the following methods:</p>
+<div class="highlight-python"><pre>usermanagager = UserManager()
+user = usermanager['mrtopf']
+
+if usermanager.login('mrtopf', 'foobar'):
+    ...
+print user.email
+print user.username
+print user.fullname
+
+&gt;&gt;&gt; print user.get_poco()
+{
+  "id": "mrtopf",
+  "thumbnailUrl": "http://mrtopf.de/profile.png",
+  "name": {
+    "formatted": "Christian Scholz"
+  },
+  "email" : "mrtopf@gmail.com"
+}</pre>
+</div>
+<p>This will be implemented in a module called <tt class="docutils literal"><span class="pre">users.py</span></tt> inside a class <tt class="docutils literal"><span class="pre">UserManager</span></tt>.
+This story has no web API.</p>
+</div>
+<div class="section" id="user-login">
+<h3>User login<a class="headerlink" href="#user-login" title="Permalink to this headline">¶</a></h3>
+<p>URL: <tt class="docutils literal"><span class="pre">/users/login</span></tt></p>
+<ul class="simple">
+<li>show a login form with username and password</li>
+<li>verify credentials on submission</li>
+<li>either login and return &#8220;logged in&#8221; or show form with error message again</li>
+<li>there can be a <tt class="docutils literal"><span class="pre">?popup=true</span></tt> parameter to format this for a popup</li>
+</ul>
+</div>
+<div class="section" id="allow-oauth-clients-to-obtain-access-tokens-for-a-user">
+<h3>allow OAuth clients to obtain access tokens for a user<a class="headerlink" href="#allow-oauth-clients-to-obtain-access-tokens-for-a-user" title="Permalink to this headline">¶</a></h3>
+<p>For this we use the <a class="reference external" href="http://tools.ietf.org/html/draft-ietf-oauth-v2-10#page-10">Web Server profile of OAuth2.0</a> which works as follows:</p>
+<ol class="arabic simple">
+<li>The client redirects the user to the usermanagers <em>end-user authorization endpoint</em>.</li>
+<li>The user has to login at this endpoint and needs to grant the access token to the client</li>
+<li>The usermanager redirects the user back to the client with an authorization code</li>
+<li>The client exchanges the authorization code with an access token at the <em>token endpoint</em> of the usermanager</li>
+</ol>
+<p>In our story we do it like this:</p>
+<ul class="simple">
+<li>We preregister the client id manually between usermanager and project management server</li>
+<li>Granting an access token is done automatically as the client is known. Only login is necessary</li>
+<li>The login URL above will act as the <em>end-user authorization endpoint</em></li>
+<li>The <em>token endpoint</em> will be <tt class="docutils literal"><span class="pre">/users/token</span></tt></li>
+</ul>
+<p>Views to create:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>extend the login view under <tt class="docutils literal"><span class="pre">users/login</span></tt> to</dt>
+<dd><ul class="first last simple">
+<li>create an access token</li>
+<li>create an authorization code</li>
+<li>redirect the user back to the client based on the <tt class="docutils literal"><span class="pre">redirect_uri</span></tt></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>create a the token endpoint view under <tt class="docutils literal"><span class="pre">users/token</span></tt> to</dt>
+<dd><ul class="first last simple">
+<li>extract the authorization code</li>
+<li>retrieve the access token for it</li>
+<li>return the access token</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Implements the following components:</p>
+<div class="section" id="authorizationmanager">
+<h4>AuthorizationManager<a class="headerlink" href="#authorizationmanager" title="Permalink to this headline">¶</a></h4>
+<p>handles everything regarding access tokens and authorization codes.</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">new(username,</span> <span class="pre">client_id)</span></tt> creates a new access token and an authorization code and returns them for the user and client. It also stores it internally in a list.</li>
+<li><tt class="docutils literal"><span class="pre">get_token(authorization_code)</span></tt> returns the access token for that authorization code or an exception if something went wrong. For now only <tt class="docutils literal"><span class="pre">NotFound</span></tt> is an exception.</li>
+<li>It has a list (of one) <tt class="docutils literal"><span class="pre">client_id</span></tt> stored statically in a list</li>
+</ul>
+</div>
+</div>
+<div class="section" id="allow-oauth-clients-to-obtain-profile-information-for-users-using-the-access-token">
+<h3>allow OAuth clients to obtain profile information for users using the access token<a class="headerlink" href="#allow-oauth-clients-to-obtain-profile-information-for-users-using-the-access-token" title="Permalink to this headline">¶</a></h3>
+<p>This is implemented by providing the endpoint <cite>/users/&lt;username&gt;?access_token=&lt;access_token&gt;</cite>.</p>
+<p>It will</p>
+<ul class="simple">
+<li>check if the access token is valid and belongs to the username requested</li>
+<li>it will return the user information in Portable Contacts JSON format.</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        «&#160;&#160;<a href="intro.html">Usermanagement</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer">
+        &copy; Copyright 2010, Christian Scholz.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.2.
+    </div>
+  </body>
+</html>
