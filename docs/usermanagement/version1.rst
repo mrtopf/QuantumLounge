@@ -99,7 +99,7 @@ AuthorizationManager
 
 handles everything regarding access tokens and authorization codes.
 
-- ``new(username, client_id)`` creates a new access token and an authorization code and returns them for the user and client. It also stores it internally in a list.
+- ``new_token(username, client_id)`` creates a new access token and an authorization code and returns them for the user and client. It also stores it internally in a list.
 - ``get_token(authorization_code)`` returns the access token for that authorization code or an exception if something went wrong. For now only ``NotFound`` is an exception.
 - It has a list (of one) ``client_id`` stored statically in a list
 
