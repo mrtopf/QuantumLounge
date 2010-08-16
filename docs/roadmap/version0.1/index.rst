@@ -7,4 +7,3 @@ Version 0.1
    
    usermanager
    framework
-   

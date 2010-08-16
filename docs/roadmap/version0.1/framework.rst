@@ -75,8 +75,8 @@ Implement some helper decorators
 
 The following decorators might be helpful to decorate the HTTP method implementations with:
 
-- ``@json`` will convert the output of the handler into JSON and wrap it into a werkzeug Response. Usually it means to return a dictionary.
-- ``@response`` will wrap the output of the handler into a werkzeug Response. In the above example you'd only need to return ``"hey!"``.
+- ``@json`` will convert the output of the handler into JSON and wrap it into a werkzeug Response and set the content type to ``application/jsol``. Usually it means to return a dictionary.
+- ``@html`` will wrap the output of the handler into a werkzeug Response and set the content type to HTML. In the above example you'd only need to return ``"hey!"``.
 
 
 
