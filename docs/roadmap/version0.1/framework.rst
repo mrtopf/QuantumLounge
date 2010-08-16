@@ -55,7 +55,7 @@ It should look like this::
     class Website(Application):
         """a website"""
         
-        sub_apps = {'users' , UserManager}
+        sub_apps = {'users' : UserManager}
 
         handlers = [
             ('/static/{filename:.*?}', StaticHandler),
