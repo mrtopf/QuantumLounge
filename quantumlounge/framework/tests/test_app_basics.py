@@ -10,6 +10,10 @@ class TestHandler2(Handler):
     def get(self):
         return werkzeug.Response("test2")
 
+class TestHandler3(Handler):
+    def get(self, id=''):
+        return werkzeug.Response(str(id))
+
 class SubApp(Application):
     """a sub application mounted to /subapp in App1"""
     handlers = (
@@ -25,6 +29,8 @@ class App1(Application):
     handlers = (
         ("/", TestHandler1),
         ("/huhu", TestHandler2),
+        ("/post/{id}", TestHandler3),
+        
     )
 
 def test_app_basics():
@@ -65,4 +71,13 @@ def test_subhandler():
     resp = c.get('/subapp')
     assert resp.status=="200 OK"
     
+def test_path_params():
+
+    app = App1({'foo':'bar'}) # simple settings dict
+    c = werkzeug.Client(app, werkzeug.BaseResponse)
+
+    resp = c.get('/post/33')
+    assert resp.status=="200 OK"
+    assert resp.data == "33"
+
         
