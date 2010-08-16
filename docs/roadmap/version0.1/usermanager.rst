@@ -79,7 +79,8 @@ In our story we do it like this:
 
 Views to create:
 
-- extend the login view under ``users/login`` to
+- extend the login view under ``users/authorize`` to
+    - eventually login the user if not done yet
     - create an access token
     - create an authorization code
     - redirect the user back to the client based on the ``redirect_uri``
