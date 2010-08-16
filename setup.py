@@ -20,6 +20,10 @@ A status stream inspired project management tool""",
       install_requires=[
           # -*- Extra requirements: -*-
           'tornado',
+          'pymongo',
+          'werkzeug',
+          'simplejson',
+          'routes',
           'py',
           'quantumcore.storages',
           'quantumcore.exceptions',
