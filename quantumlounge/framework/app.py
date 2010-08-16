@@ -51,7 +51,8 @@ class Application(object):
             handler = m['handler'](self, request)
             method = request.method.lower()
             if hasattr(handler, method):
-                response = getattr(handler, method)()
+                del m['handler']
+                response = getattr(handler, method)(**m)
             else:
                 return werkzeug.exceptions.MethodNotAllowed()(environ, start_response)
             # call the response
