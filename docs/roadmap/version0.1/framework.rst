@@ -21,6 +21,11 @@ Each handler instance has the following attributes available:
 - ``settings`` contains the ``AttributeMapper`` instance of the global settings
 - ``app`` contains the application object which is calling the handler
 
+If the route in the application contained some further attributes like in ``/users/{userid}`` then those will be passed to the handler method, e.g.::
+
+    def get(self, userid=None): 
+        ...
+        
 Each method is supposed to return a ``werkzeug.Response`` instance (but not call it), e.g.::
 
 
