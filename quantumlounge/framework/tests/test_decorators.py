@@ -1,5 +1,14 @@
-from quantumlounge.framework.decorators import json
+from quantumlounge.framework.decorators import json, html
 
+def test_html_decorator():
+    
+    @html
+    def fu():
+        return "foobar"
+        
+    res = fu()
+    assert res.headers['Content-Type'] == "text/html"
+    assert res.data == """foobar"""
 
 
 def test_json_decorator():
