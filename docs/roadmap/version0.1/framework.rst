@@ -54,9 +54,10 @@ It should look like this::
 
     class Website(Application):
         """a website"""
+        
+        sub_apps = {'users' , UserManager}
 
-        controllers = [
-            ('/users', UserManager), # this delegates to another application
+        handlers = [
             ('/static/{filename:.*?}', StaticHandler),
             ('/js/{filename:.*?}', ResourceHandler),
             ('/css/{filename:.*?}', ResourceHandler),
