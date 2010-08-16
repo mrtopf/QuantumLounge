@@ -2,19 +2,8 @@
 Usermanagement
 ==============
 
-The user management component has the following functionality:
+The User Management has the following features:
 
-- store users with profiles in a MongoDB storage
-- login users
-- provide access tokens for users via OAuth2
-
-
-
-Roadmap
-=======
-
-.. toctree::
-   :maxdepth: 3
-   
-   version1
-
+- manage user records
+- provide a Portable Contacts endpoint
+- provide a means to retrieve an OAuth access token for using the Portable Contacts endpoint

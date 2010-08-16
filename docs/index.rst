@@ -12,6 +12,7 @@ Contents:
    :maxdepth: 3
    
    usermanagement/intro
+   roadmap/intro.rst
 
 Indices and tables
 ==================
