@@ -2,8 +2,8 @@
 User Manager
 ============
 
-store a fixed set of users in a dictionary
-------------------------------------------
+store a fixed set of users in a dictionary (DONE)
+-------------------------------------------------------
 
 Data provided:
 - username
@@ -46,6 +46,16 @@ In version 1 the user manager only has the following methods::
 
 This will be implemented in a module called ``users.py`` inside a class ``UserManager``.
 This story has no web API.
+
+
+implement an AuthorizationManager (DONE)
+----------------------------------------------
+
+handles everything regarding access tokens and authorization codes.
+
+- ``new_token(username, client_id)`` creates a new access token and an authorization code and returns them for the user and client. It also stores it internally in a list.
+- ``get_token(authorization_code)`` returns the access token for that authorization code or an exception if something went wrong. For now only ``NotFound`` is an exception.
+- It has a list (of one) ``client_id`` stored statically in a list
 
 User login
 ----------
@@ -92,14 +102,6 @@ Views to create:
 Implements the following components:
 
 
-AuthorizationManager
-********************
-
-handles everything regarding access tokens and authorization codes.
-
-- ``new_token(username, client_id)`` creates a new access token and an authorization code and returns them for the user and client. It also stores it internally in a list.
-- ``get_token(authorization_code)`` returns the access token for that authorization code or an exception if something went wrong. For now only ``NotFound`` is an exception.
-- It has a list (of one) ``client_id`` stored statically in a list
 
 
 allow OAuth clients to obtain profile information for users using the access token

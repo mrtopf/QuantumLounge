@@ -9,7 +9,7 @@ Welcome to quantum.LOUNGE's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
    
    usermanagement/intro
    framework/intro
@@ -18,6 +18,7 @@ Development
 -----------
 
 .. toctree::
+   :maxdepth: 3
 
    roadmap/intro.rst
 

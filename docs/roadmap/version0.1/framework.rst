@@ -2,8 +2,8 @@
 Framework
 =========
 
-Implement a RESTful handler
-===========================
+Implement a RESTful handler (DONE)
+==================================
 
 Each handler is a class with methods according to HTTP methods, e.g.::
 
@@ -36,8 +36,8 @@ Each method is supposed to return a ``werkzeug.Response`` instance (but not call
 These handlers can easily be unit tested. 
 
 
-Implement a nestable Application
-================================
+Implement a nestable Application (DONE)
+=======================================
 
 The handlers need to be attachable to routes it should be able to modularize those handlers. E.g. a ``/users`` url namespace should be handled by one application and
 a ``/projects`` namespace by another. These application should not need to know about
@@ -70,8 +70,8 @@ It should look like this::
 
 
 
-Implement some helper decorators 
-================================
+Implement some helper decorators (DONE)
+=======================================
 
 The following decorators might be helpful to decorate the HTTP method implementations with:
 
