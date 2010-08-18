@@ -7,3 +7,4 @@ Version 0.1
    
    usermanager
    framework
+   http_usermanager

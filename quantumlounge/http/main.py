@@ -2,6 +2,7 @@ from quantumlounge.framework import Handler, Application
 from quantumlounge.framework.decorators import html
 
 import setup
+from usermanager import UserManager
 
 class MainHandler(Handler):
     """serve some index document"""
@@ -15,6 +16,10 @@ class MainHandler(Handler):
 
 
 class App(Application):
+    
+    sub_apps = {
+        'users' : UserManager,
+    }
 
     handlers = (
         ('/',   MainHandler),

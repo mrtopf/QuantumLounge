@@ -13,6 +13,7 @@ Contents:
    
    usermanagement/intro
    framework/intro
+   brainstorming
    
 Development
 -----------

@@ -83,3 +83,68 @@ The following decorators might be helpful to decorate the HTTP method implementa
 
 
 
+create a basic framework for displaying templates via JavaScript
+=============================================================================
+
+What we need to do:
+
+- create a way to package all relevant JS code (template and JS) for a page.
+- create a base class for the JS handling.
+
+
+
+
+
+Some ideas for the JS side in implementing the oauth authorization endpoint::
+
+    var session = {}; // some local store
+
+    function init_page() {
+        // get the URL with parameters in params
+        session.redirect_uri = params.redirect_uri;
+    }
+
+    # show the login screen
+    function login() {
+        $("content").html(template.login.expand({}));
+        $("#loginform").submit(login_sendform);
+    }
+
+    function login_sendform() {
+        var data = $("#loginform").serialize(); // or however this looks
+        function login_error() {
+            $("content").html(template.login.expand({'username': data.username, 'error': 'Your login credentials have been wrong!'}));
+        }
+        $.ajax({
+            url: api_prefix+"auth",
+            data: data,
+            type: "POST",
+            dataType: "form",
+            success: login_success,
+            error: login_error
+        });
+    }
+
+    function login_success(data, textStatus) {
+        if (data.status && data.status==="ok") {
+            // now we actually have everything already as granting is automated for now
+            // next up we need to redirect the user with an auth code to the redirect uri
+            var userid=data.userid;
+            $.ajax({
+                url: prefix+"/"+userid+"/"+"authcode", // url for retrieving an auth code for the logged in user, only works with that user
+                method: "GET",
+                success: function(data) {
+                    var auth_code = data.auth_code;
+                    // craft some URI
+                    window.location.href = url;
+                }
+            });
+        }
+    }
+
+
+
+
+
+
+

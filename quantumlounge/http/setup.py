@@ -14,6 +14,9 @@ def get_static_urlparser(filepath, cache_max_age = 3600):
 
 import jinja2
 
+from quantumlounge.usermanager.users import UserManager
+
+
 class TemplateHandler(object):
     """a class for caching templates"""
 
@@ -50,8 +53,14 @@ def setup(**kw):
     settings['staticapp'] = get_static_urlparser(pkg_resources.resource_filename(__name__, 'static'))
     tmpls = settings['templates'] = TemplateHandler()
     #settings['master_template'] = tmpls['templates/master.pt'].macros['master']
+    #settings['css_resources'] = CSSResourceManager(CSS, prefix_url="/css", fqdn=app_base_url, auto_reload=True)
+    settings['js_resources'] = JSResourceManager(JS, prefix_url="/js", auto_reload=True)
+    
+    settings['usermanager'] = UserManager()
+    
     settings.update(kw)
     return settings
+
 
 
 
