@@ -2,7 +2,7 @@ from quantumlounge.framework import Handler, Application
 from quantumlounge.framework.decorators import html
 
 import setup
-#import usermanager
+import usermanager
 import api
 
 class MainHandler(Handler):
@@ -21,6 +21,7 @@ class App(Application):
         """setup the mapper"""
         map.connect(None, "/", handler=MainHandler),
         api.setup_handlers(map)
+        usermanager.setup_handlers(map)
     
 def main():
     port = 9991

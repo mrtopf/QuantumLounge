@@ -8,6 +8,7 @@ from quantumcore.storages import AttributeMapper
 from quantumcore.resources import CSSResourceManager, css_from_pkg_stream
 from quantumcore.resources import JSResourceManager, js_from_pkg_stream, jst_from_pkg_stream
 from quantumlounge.usermanager.users import UserManager
+from quantumlounge.usermanager.authorization import AuthorizationManager
 
 
 def get_static_urlparser(filepath, cache_max_age = 3600):
@@ -54,6 +55,9 @@ def setup(**kw):
     settings['js_resources'] = JSResourceManager(JS, prefix_url="/js", auto_reload=True)
     
     settings['usermanager'] = UserManager()
+    settings['authmanager'] = AuthorizationManager()
+
+    settings['secret_key'] = os.urandom(20)
     
     settings.update(kw)
     return settings
