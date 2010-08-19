@@ -79,8 +79,29 @@ The following decorators might be helpful to decorate the HTTP method implementa
 - ``@html`` will wrap the output of the handler into a werkzeug Response and set the content type to HTML. In the above example you'd only need to return ``"hey!"``.
 
 
+Remove the nestable application and use Routes directly
+=======================================================
 
+The purpose of the nested application was to be able to modularize e.g. the usermanager
+to let it be mounted on any URL prefix. In practice this nesting leads to problem though
+if you look at URLs like
 
+/api/1/users
+
+where 1 is actually not a real URL. Here multiple applications are needed for each
+level and this is more like traversing.
+
+As we are doing a monolithic application for now we can also use a common list of routes.
+They still can be changed later and the usermanager is still independant enough to be
+moved out anyday. It can even today already run standalone on it's own port.
+
+Thus the goals are:
+
+- keep the handlers with http methods and decorators
+- keep the request creation on ``__call__`` in an application
+- let one global application object find the right route match
+- maybe let the sub components have their own routes which are simply included
+- the sub packages will simply contain the handlers which are all connected together in a more central manner. They also always include the prefix directly
 
 
 create a basic framework for displaying templates via JavaScript

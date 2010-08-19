@@ -2,7 +2,8 @@ from quantumlounge.framework import Handler, Application
 from quantumlounge.framework.decorators import html
 
 import setup
-from usermanager import UserManager
+#import usermanager
+import apis
 
 class MainHandler(Handler):
     """serve some index document"""
@@ -14,11 +15,11 @@ class MainHandler(Handler):
     def get(self):
         return self.app.settings.templates['templates/master.pt'].render(handler = self)
 
-
 class App(Application):
     
     sub_apps = {
-        'users' : UserManager,
+        '/api/1' : apis.APIManager,
+        #'/users' : usermanager.UserManager,
     }
 
     handlers = (

@@ -2,7 +2,7 @@ from quantumlounge.framework import Handler, Application, json
 import werkzeug
 import simplejson
 
-class LoginHandler(Handler):
+class API(Handler):
     """handle logging in users. On a POST it will check username and password 
     passed in a form encoded document and return a JSON encoded status document."""
     

@@ -1,20 +1,17 @@
 import sys
 import os
 import pkg_resources
+import jinja2
+from paste.urlparser import StaticURLParser
 
 from quantumcore.storages import AttributeMapper
 from quantumcore.resources import CSSResourceManager, css_from_pkg_stream
 from quantumcore.resources import JSResourceManager, js_from_pkg_stream, jst_from_pkg_stream
+from quantumlounge.usermanager.users import UserManager
 
-from paste.urlparser import StaticURLParser
 
 def get_static_urlparser(filepath, cache_max_age = 3600):
     return StaticURLParser(os.path.split(filepath)[0], cache_max_age=cache_max_age)
-
-
-import jinja2
-
-from quantumlounge.usermanager.users import UserManager
 
 
 class TemplateHandler(object):

@@ -12,23 +12,37 @@ class Application(object):
     def __init__(self, settings={}, prefix=""):
         """initialize the Application with a settings dictionary and an optional
         ``prefix`` if this is a sub application"""
+        print "***",self,"***", prefix
         self.settings = settings
         self.prefix = prefix
-        self.setup_mapper()
         self.setup_subapps()
+        self.setup_mapper()
     
     def setup_subapps(self):
         """set up the sub applications by instantiating them"""
-        for prefix,app in self.sub_apps.items():
+        prefix = self.prefix
+        self.sub_mapper = routes.Mapper() # for sub apps
+        self.sub_prefixes = {}
+        
+        for path,app in self.sub_apps.items():
             # instantiate if not instantiated already
+            if path[0]!="/": path = "/"+path
             if not isinstance(app, Application):
-                self.sub_apps[prefix] = app(self.settings, '/'+prefix)
+                app = self.sub_apps[path] = app(self.settings, path)
+            # now add to sub mappers
+            path = prefix+path
+            if path[-1]=='/' and path!="/":
+                path = path[:-1]
+            print path
+            self.sub_mapper.connect(path, app=app)
+            self.sub_prefixes[path] = app
         
     def setup_mapper(self):
         """setup the Routes mapper"""
         prefix = self.prefix
         self.mapper = routes.Mapper()
         for path, handler in self.handlers:
+        
             path = prefix+path
             if path[-1]=='/' and path!="/":
                 path = path[:-1]
@@ -36,16 +50,24 @@ class Application(object):
         
     def __call__(self, environ, start_response):
         request = werkzeug.Request(environ)
-        # first check sub apps
-        p = environ['PATH_INFO'].split("/")
-        if len(p)>1:
-            if self.sub_apps.has_key(p[1]):
-                return self.sub_apps[p[1]](environ, start_response)
-
         path = environ['PATH_INFO']
-        # TODO: Fix this. We need to decide what a path is supposed to end with
+        
         if len(path)>0 and path[-1]=="/" and path!='/':
             path = path[:-1]
+
+        print "called with %s" %path
+        # first check sub apps
+        m = self.sub_mapper.match(path)
+        if m is not None:
+            app = m['app']
+            return app(environ, start_response)
+        
+        for a,v in self.sub_prefixes.items():
+            print path, a,v
+            if path.startswith(a):
+                print "yes"
+                return v(environ, start_response)
+
         m = self.mapper.match(path)
         if m is not None:
             handler = m['handler'](self, request)
