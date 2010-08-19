@@ -8,14 +8,12 @@ class Login(Handler):
     
     def post(self):
         """we except ``username`` and ``password`` in a form encoded document"""
-        
         f = self.request.form
         username = f.get("username", None)
         password = f.get("password", None)
         if username is None or password is None:
             return werkzeug.exceptions.BadRequest(description=u"username or password missing")
         
-        print self.app.settings
         um = self.app.settings['usermanager']
         user = um.get(username)
         if user is None:
@@ -32,9 +30,3 @@ class Login(Handler):
         res.content_type = "application/json"
         return res
 
-
-class UserManager(Application):
-    
-    handlers = (
-        ('/login', Login),
-    )

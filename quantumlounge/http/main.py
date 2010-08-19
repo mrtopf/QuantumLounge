@@ -3,7 +3,7 @@ from quantumlounge.framework.decorators import html
 
 import setup
 #import usermanager
-#import apis
+import api
 
 class MainHandler(Handler):
     """serve some index document"""
@@ -20,7 +20,7 @@ class App(Application):
     def setup_handlers(self, map):
         """setup the mapper"""
         map.connect(None, "/", handler=MainHandler),
-        #map.extend(apis.setup_handlers(map))
+        api.setup_handlers(map)
     
 def main():
     port = 9991
