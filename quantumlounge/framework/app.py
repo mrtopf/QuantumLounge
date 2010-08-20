@@ -22,7 +22,7 @@ class Application(object):
 
         m = self.mapper.match(path)
         if m is not None:
-            handler = m['handler'](self, request)
+            handler = m['handler'](self, request, self.settings)
             method = request.method.lower()
             if hasattr(handler, method):
                 del m['handler']

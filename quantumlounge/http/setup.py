@@ -57,7 +57,7 @@ def setup(**kw):
     settings['usermanager'] = UserManager()
     settings['authmanager'] = AuthorizationManager()
 
-    settings['secret_key'] = os.urandom(20)
+    settings['secret_key'] = "czs7s8c6c8976c89c7s6s8976cs87d6" #os.urandom(20)
     
     settings.update(kw)
     return settings
