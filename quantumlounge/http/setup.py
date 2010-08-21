@@ -34,12 +34,18 @@ class TemplateHandler(object):
 
 
 JS = [
-    js_from_pkg_stream(__name__, 'static/js/plugins.js', name="", merge=False, prio=4,),
-    js_from_pkg_stream(__name__, 'static/js/script.js', name="", merge=False, prio=4,),
+    js_from_pkg_stream(__name__, 'static/js/jquery-1.4.2.min.js', name="jquery", merge=False, prio=1,),
+    js_from_pkg_stream(__name__, 'static/js/modernizr-1.5.min.js', name="head", merge=False, prio=1,),
+
+    js_from_pkg_stream(__name__, 'static/js/jquery.tmpl.js', name="", merge=True, prio=4,),
+    js_from_pkg_stream(__name__, 'static/js/plugins.js', name="", merge=True, prio=4,),
+    js_from_pkg_stream(__name__, 'static/js/script.js', name="", merge=False, prio=5,),
 ]
 
 CSS = [
-    css_from_pkg_stream(__name__, 'static/css/screen.css', merge=True, prio=10, auto_reload=True),
+    css_from_pkg_stream(__name__, 'static/css/screen.css', merge=True, prio=1, auto_reload=True),
+    css_from_pkg_stream(__name__, 'static/css/handheld.css', media="handheld", merge=True, prio=10, auto_reload=True),
+
     #css_from_pkg_stream(__name__, 'static/css/ie.css', merge=True, prio=11, auto_reload=True),
 ]
 
@@ -51,7 +57,7 @@ def setup(**kw):
     settings['staticapp'] = get_static_urlparser(pkg_resources.resource_filename(__name__, 'static'))
     tmpls = settings['templates'] = TemplateHandler()
     #settings['master_template'] = tmpls['templates/master.pt'].macros['master']
-    #settings['css_resources'] = CSSResourceManager(CSS, prefix_url="/css", fqdn=app_base_url, auto_reload=True)
+    settings['css_resources'] = CSSResourceManager(CSS, prefix_url="/css", auto_reload=True)
     settings['js_resources'] = JSResourceManager(JS, prefix_url="/js", auto_reload=True)
     
     settings['usermanager'] = UserManager()

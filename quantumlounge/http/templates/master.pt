@@ -29,16 +29,11 @@
 
 
   <!-- CSS : implied media="all" -->
-  <tal:block replace="structure settings['css_resources']()" />
-  <tal:block replace="structure settings['css_resources']('ie')" />
-
-
-  <!-- For the less-enabled mobile browsers like Opera Mini -->
-  <link rel="stylesheet" media="handheld" href="/css/handheld.css?v=1" />
+  {{ csslinks }}
 
  
   <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
-  <script src="/js/modernizr-1.5.min.js"></script>
+  {{ js_head_link }}
 
 </head>
 
@@ -70,11 +65,11 @@
 
 
   <!-- Grab Google CDN's jQuery. fall back to local if necessary -->
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-  <script>!window.jQuery && document.write('<script src="/static/js/jquery-1.4.2.min.js"><\/script>')</script>
 
+  {{ js_jquery_link }}
 
-  <tal:block replace="structure settings['css_resources']()" />
+  {{ jslinks }}
+
 
   <!--[if lt IE 7 ]>
     <script src="/static/js/dd_belatedpng.js?v=1"></script>
@@ -82,8 +77,8 @@
 
 
   <!-- yui profiler and profileviewer - remove for production -->
-  <script src="/static/js/profiling/yahoo-profiling.min.js?v=1"></script>
-  <script src="/static/js/profiling/config.js?v=1"></script>
+  <script src="/js2/profiling/yahoo-profiling.min.js?v=1"></script>
+  <script src="/js2/profiling/config.js?v=1"></script>
   <!-- end profiling code -->
 
 

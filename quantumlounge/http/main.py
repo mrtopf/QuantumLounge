@@ -13,19 +13,34 @@ class MainHandler(Handler):
     
     @html
     def get(self):
-        return self.app.settings.templates['templates/master.pt'].render(handler = self)
+        return self.app.settings.templates['templates/master.pt'].render(
+            handler = self,
+            js_jquery_link = self.settings['js_resources']("jquery"),            
+            js_head_link = self.settings['js_resources']("head"),
+            jslinks = self.settings['js_resources'](),
+            csslinks = self.settings['css_resources'](),
+            )
 
 class StaticHandler(Handler):
     def get(self, path_info):
         return self.settings.staticapp
+
+class CSSResourceHandler(Handler):
+    def get(self, path_info):
+        return self.settings['css_resources'].render_wsgi
         
+class JSResourceHandler(Handler):
+    def get(self, path_info):
+        return self.settings['js_resources'].render_wsgi
+
 class App(Application):
 
     def setup_handlers(self, map):
         """setup the mapper"""
         map.connect(None, "/", handler=MainHandler)
-        map.connect(None, "/css/{path_info:.*}", handler=StaticHandler)
-        map.connect(None, "/js/{path_info:.*}", handler=StaticHandler)
+        map.connect(None, "/js2/{path_info:.*}", handler=StaticHandler)
+        map.connect(None, "/css/{path_info:.*}", handler=CSSResourceHandler)
+        map.connect(None, "/js/{path_info:.*}", handler=JSResourceHandler)
         map.connect(None, "/img/{path_info:.*}", handler=StaticHandler)
 
         api.setup_handlers(map)
