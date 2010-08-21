@@ -12,7 +12,7 @@ from quantumlounge.usermanager.authorization import AuthorizationManager
 
 
 def get_static_urlparser(filepath, cache_max_age = 3600):
-    return StaticURLParser(os.path.split(filepath)[0], cache_max_age=cache_max_age)
+    return StaticURLParser(filepath, cache_max_age=cache_max_age)
 
 
 class TemplateHandler(object):
@@ -39,7 +39,7 @@ JS = [
 ]
 
 CSS = [
-    #css_from_pkg_stream(__name__, 'static/css/screen.css', merge=True, prio=10, auto_reload=True),
+    css_from_pkg_stream(__name__, 'static/css/screen.css', merge=True, prio=10, auto_reload=True),
     #css_from_pkg_stream(__name__, 'static/css/ie.css', merge=True, prio=11, auto_reload=True),
 ]
 

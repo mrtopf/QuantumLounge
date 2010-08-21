@@ -1,6 +1,6 @@
-=========
-Framework
-=========
+=============
+Brainstorming
+=============
 
 
 Client - Server - Link
@@ -162,5 +162,54 @@ URL naming
 
 - on /api/<version>/<component> we mount API calls which take access tokens. These are for AJAX etc.
 - on /<component>/ we mount calls which take cookies. These are not API as they are called by a user in a browser
+
+
+JavaScript template handling
+============================
+
+We have the following requirements:
+
+* On page load a skeleton template should be rendered
+* Optionally a full page should be rendered
+* Each page has a set of JS views it wants to display, 
+    * the list of activity items
+    * input forms
+    * new status messages
+    * sidebar management
+* a JS View is a template with some JS logic 
+* JS views are registered in a namespace (var views={})
+* how are pages configured?
+
+Lets take the authorize screen as example. It can directly do a redirect but eventually has to show the login form. The login form js a JS view. It's main method is ``render()``.
+
+The following components need to be retrieved:
+
+* the main page
+* some general CSS
+* some general JS
+* the initial JS views
+* some configuration parameters
+
+Idea:
+
+* We load the URL ``/authorize/`` which redirects to ``/authorize/#!login_form`` if a login is necessary
+* The view handler code detects the fragment identifier and loads the JS for ``login_form``. It might be relative to ``/authorize``, e.g. ``/authorize/js/login_form``
+* The ``render()`` method of ``login_form`` is called.
+
+How to serve that?
+------------------
+
+* We have a JS resource for the view mounted at ``/authorize/js/login_form``
+* It has a JST and a JS component
+* We need to change the JST importer for this
+
+
+
+
+
+
+
+
+
 
 

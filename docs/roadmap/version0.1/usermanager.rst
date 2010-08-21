@@ -2,6 +2,11 @@
 User Manager
 ============
 
+
+.. toctree::
+
+
+
 store a fixed set of users in a dictionary (DONE)
 -------------------------------------------------------
 

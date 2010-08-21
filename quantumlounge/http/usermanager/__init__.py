@@ -5,4 +5,3 @@ def setup_handlers(map):
     with map.submapper(path_prefix="/users") as m:
         m.connect(None, '/authorize/login', handler=authviews.Login)
         m.connect(None, '/authorize', handler=authviews.Authorize)
-

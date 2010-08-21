@@ -15,11 +15,19 @@ class MainHandler(Handler):
     def get(self):
         return self.app.settings.templates['templates/master.pt'].render(handler = self)
 
+class StaticHandler(Handler):
+    def get(self, path_info):
+        return self.settings.staticapp
+        
 class App(Application):
 
     def setup_handlers(self, map):
         """setup the mapper"""
-        map.connect(None, "/", handler=MainHandler),
+        map.connect(None, "/", handler=MainHandler)
+        map.connect(None, "/css/{path_info:.*}", handler=StaticHandler)
+        map.connect(None, "/js/{path_info:.*}", handler=StaticHandler)
+        map.connect(None, "/img/{path_info:.*}", handler=StaticHandler)
+
         api.setup_handlers(map)
         usermanager.setup_handlers(map)
     
