@@ -33,6 +33,7 @@ class JSResourceHandler(Handler):
     def get(self, path_info):
         return self.settings['js_resources'].render_wsgi
 
+
 class App(Application):
 
     def setup_handlers(self, map):
@@ -42,6 +43,7 @@ class App(Application):
         map.connect(None, "/css/{path_info:.*}", handler=CSSResourceHandler)
         map.connect(None, "/js/{path_info:.*}", handler=JSResourceHandler)
         map.connect(None, "/img/{path_info:.*}", handler=StaticHandler)
+        map.connect(None, "/jst/{path_info:.*}", handler=StaticHandler)
 
         api.setup_handlers(map)
         usermanager.setup_handlers(map)

@@ -37,7 +37,8 @@ JS = [
     js_from_pkg_stream(__name__, 'static/js/jquery-1.4.2.min.js', name="jquery", merge=False, prio=1,),
     js_from_pkg_stream(__name__, 'static/js/modernizr-1.5.min.js', name="head", merge=False, prio=1,),
 
-    js_from_pkg_stream(__name__, 'static/js/jquery.tmpl.js', name="", merge=True, prio=4,),
+    js_from_pkg_stream(__name__, 'static/js/json-template.js', name="", merge=True, prio=4,),
+    js_from_pkg_stream(__name__, 'static/js/tmpl.js', name="", merge=True, prio=4,),
     js_from_pkg_stream(__name__, 'static/js/plugins.js', name="", merge=True, prio=4,),
     js_from_pkg_stream(__name__, 'static/js/script.js', name="", merge=False, prio=5,),
 ]

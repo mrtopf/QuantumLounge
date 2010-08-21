@@ -13,6 +13,7 @@ Contents:
    
    usermanagement/intro
    framework/intro
+   framework/js
    brainstorming
    
 Development
