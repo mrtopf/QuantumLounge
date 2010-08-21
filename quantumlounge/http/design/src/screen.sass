@@ -1,0 +1,181 @@
+// This import applies a global reset to any page that imports this stylesheet.
+@import blueprint/reset.sass
+
+// To configure blueprint, edit the partials/base.sass file.
+@import partials/base.sass
+
+// Import all the default blueprint modules so that we can access their mixins.
+@import blueprint
+
+// Import the non-default scaffolding module.
+@import blueprint/scaffolding.sass
+@import compass/utilities.sass
+@import compass/css3.sass
+
+// configuration
+
+$blueprint_font_family: unquote("Lucida Grande"), Helvetica, Arial, sans-serif
+$page_width: 960px
+$main_width: 600px
+$main_container_width: $main_width + 20px
+$bigcolumn_width: 600px
+$gutter_size: 30px
+$sidebar_width: $page_width - $bigcolumn_width - $gutter_size
+$panel_width: $main_width - 20px
+
+$row_gutter: 20px
+$row_width: ($page_width - 20px - 3 * $row_gutter) / 4
+
+$box_color: #333333
+
+//Recommended Blueprint configuration with scoping and semantic layout:
+body
+  +blueprint-reset
+  +blueprint-typography(true)
+  background: #aaeeff
+
+header
+  background: white
+  +linear-gradient(color_stops(#dddddd, white))
+  border-top: 5px solid #ffaa00
+  height: 80px
+  margin: 0
+
+#headercontent, #footercontent
+  margin: 0 auto
+  width: $page_width
+
+#logo
+  margin-top: 20px
+
+footer
+  border-top: 5px solid #333333
+  padding-top: 30px
+  +linear-gradient(color_stops(#88ccdd, #aaeeff))
+  margin-top: 0px
+  #footer
+    color: #000033
+
+#main
+  background: white
+  margin: 0
+  padding-bottom: 150px
+
+#page
+  margin: 0 auto
+  width: $page_width
+  overflow: hidden
+
+#content
+  overflow: hidden
+
+nav
+  border-bottom: 1px solid #aaaaaa
+  border-top: 1px solid #eeeeee
+  padding: 5px 0
+  margin: 10px 0 30px 0
+
+#navcontent
+  display: block
+  font-size: 12pt
+  overflow: auto
+  margin: 0
+  padding: 0
+  li
+    float: left
+    list-style: none
+    text-transform: uppercase
+    margin-left: 10px
+    margin-right: 10px
+    ul
+      font-size: 12pt
+      margin: 0
+      padding: 0
+      border: 1px solid #aaaaaa
+      border-top: 0
+      position: absolute
+      z-index: 120
+      background: white
+      clear: both
+      +linear-gradient(color_stops(white, #cccccc))
+      +box-shadow(1px, 3px, 3px, rgba(0, 0, 0, 0.2))
+      margin-left: -2px
+      margin-top: 5px
+      visibility: hidden
+      li
+        margin: 0
+        padding: 7px 15px
+        float: none
+        display: block
+        border-bottom: 1px solid #aaaaaa
+      li:hover
+        background: white
+        color: black
+
+//
+// big column and sidebar
+//
+
+aside
+  float: right
+  margin: 0
+  padding: 10px
+  padding-right: 0
+  padding-top: 0
+  width: $sidebar_width
+
+.bigcolumn
+  width: $bigcolumn_width
+  float: left
+  margin: 0
+  padding: 0
+
+.rows
+  padding: 0px 10px
+  margin-bottom: 30px
+  padding-top: 0
+  overflow: auto
+  h1
+    font-size: 19pt
+  .row
+    margin: 0
+    padding: 0
+    margin-right: $row_gutter
+    float: left
+    width: $row_width
+  .row.last,.bigrow.last
+    margin: 0
+  .bigrow
+    float: left
+    margin: 0
+    padding: 0
+    margin-right: $row_gutter
+    width: $row_width * 2 + $row_gutter
+
+// portlet stuff
+
+.portlet
+  margin: 5px 0 20px 0
+  padding: 0px
+  +border-radius(5px)
+  +linear-gradient(color_stops(white, #eeeeee, #eeeeee))
+  +box-shadow(0px,0px,3px,rgba(0,0,0,0.2))
+  border: 1px solid #cccccc
+  overflow: hidden
+  h2
+    margin: 0
+    padding: 0 8px
+    font-size: 13pt
+  h3
+    margin: 7px 0
+  .content
+    width: $sidebar_width - 12px
+    border-top: 1px solid #cccccc
+    padding: 10px
+    float: left
+    display: block
+
+h1#logofont
+  font-size: 50px
+  font-style: bold
+  font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif

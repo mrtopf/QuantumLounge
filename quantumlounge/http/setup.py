@@ -23,8 +23,8 @@ class TemplateHandler(object):
 
     def get_template(self, filename):
         """retrieve templates and store them inside our PageTemplate cache"""
-        if self._cache.has_key(filename):
-            return self._cache[filename]
+        #if self._cache.has_key(filename):
+            #return self._cache[filename]
         data = pkg_resources.resource_string(__name__, filename)
         t = self._cache[filename] = jinja2.Template(data)
         return t
