@@ -55,11 +55,7 @@
     
     <div id="main">
       <div id="page">
-        <div class="bigcolumn">
-          <h1>Welcome</h1>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.#
-          
-          <div id="hans"></div>
+        <div class="bigcolumn" id="content">
         </div>
         <aside>
           <div class="portlet">
@@ -86,11 +82,16 @@
   </div> <!--! end of #container -->
 
 
-  <!-- Grab Google CDN's jQuery. fall back to local if necessary -->
+  <!-- TODO: Grab Google CDN's jQuery. fall back to local if necessary -->
+  
+  <script src="/js2/goog/base.js"></script>
 
   {{ js_jquery_link }}
-
   {{ jslinks }}
+  
+  <script>
+    var initial_view = '{{initial_view}}';
+  </script>
 
 
   <!--[if lt IE 7 ]>
