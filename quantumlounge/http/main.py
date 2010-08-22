@@ -4,6 +4,7 @@ from quantumlounge.framework.decorators import html
 import setup
 import usermanager
 import api
+import pm
 
 class MainHandler(Handler):
     """serve some index document"""
@@ -47,6 +48,7 @@ class App(Application):
 
         api.setup_handlers(map)
         usermanager.setup_handlers(map)
+        pm.setup_handlers(map)
     
 def main():
     port = 9991
