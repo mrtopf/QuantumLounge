@@ -50,7 +50,8 @@ CSS = [
     #css_from_pkg_stream(__name__, 'static/css/ie.css', merge=True, prio=11, auto_reload=True),
 ]
 
-
+# TODO: Use URL object
+DOMAIN = "http://localhost:9991"
 
 def setup(**kw):
     """initialize the setup"""
@@ -69,8 +70,9 @@ def setup(**kw):
     # settings for the project manager
     pm = AttributeMapper()
     pm.client_id = "pm"
-    pm.um_authorize_uri = "http://localhost:9991/users/authorize"
-    pm.um_token_endpoint = "http://localhost:9991/users/token"
+    pm.um_authorize_uri = DOMAIN+"/users/authorize"
+    pm.um_token_endpoint = DOMAIN+"/api/1/users/token"
+    pm.um_poco_endpoint = DOMAIN+"/api/1/users/u/%s/profile"
     settings['pm'] = pm
     
     # TODO: enable updating of sub settings via dot notation (pm.client_id)
