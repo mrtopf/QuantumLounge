@@ -33,12 +33,23 @@ class AuthorizationManager(object):
         
         return token.token, auth_code
         
-    def get_token(self, authorization_code, client_id):
+    def get_token_for_code(self, authorization_code, client_id):
         """return the token for the given authorization code. Will raise an
         ``AuthorizationCodeNotFound`` exception if it's not found"""
         if self.authorization_codes.has_key(authorization_code):
             token = self.authorization_codes[authorization_code]
             if token.client_id != client_id:
                 raise errors.InvalidAuthorizationCode(authorization_code, client_id)
+            del self.authorization_codes[authorization_code] # one time use only!
             return token
         raise errors.AuthorizationCodeNotFound(authorization_code)
+        
+    def get_token(self, access_token, default=None):
+        return self.tokens.get(access_token, default)
+        
+    __getitem__ = get_token
+    
+    
+    
+    
+    
