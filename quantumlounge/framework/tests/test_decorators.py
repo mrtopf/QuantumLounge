@@ -13,7 +13,7 @@ def test_html_decorator():
 
 def test_json_decorator():
     
-    @json
+    @json()
     def fu(a,b):
         d={
             'a' : a,
@@ -31,7 +31,7 @@ def test_json_method_decorator():
         
         c=17
         
-        @json
+        @json()
         def get(self, a,b):
             return {'a': a, 'b': b, 'c': self.c}
             
