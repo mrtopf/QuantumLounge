@@ -69,8 +69,23 @@ function LoginView() {
     }
 }
 
+function MainView() {    
+    // render the login form
+    function render() {
+        tm.render('pm/main', function (d) {
+            $("#content").html(d);
+        },{})
+    }
+    
+    return {
+        render: render
+    }
+
+}
+
 var views = {
-    login: LoginView()
+    login: LoginView(),
+    'pm/main' : MainView()
 }
 
 $(document).ready(function () {
