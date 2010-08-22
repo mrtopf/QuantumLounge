@@ -9,7 +9,7 @@ class Token(object):
         """create a new token"""
         self.username = username
         self.client_id = client_id
-        self.token = uuid.uuid4() 
+        self.token = unicode(uuid.uuid4())
 
 class AuthorizationManager(object):
     """the AuthorizationManager handles everything around OAuth based authorization
@@ -26,12 +26,12 @@ class AuthorizationManager(object):
         if client_id not in self.client_ids:
             raise errors.ClientNotFound(client_id)
         token = Token(username, client_id)
-        auth_code = uuid.uuid4()
+        auth_code = unicode(uuid.uuid4())
         
         self.authorization_codes[auth_code] = token
         self.tokens[token.token] = token
         
-        return unicode(token.token), unicode(auth_code)
+        return token.token, auth_code
         
     def get_token(self, authorization_code, client_id):
         """return the token for the given authorization code. Will raise an
