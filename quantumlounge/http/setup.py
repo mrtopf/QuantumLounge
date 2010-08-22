@@ -66,6 +66,14 @@ def setup(**kw):
 
     settings['secret_key'] = "czs7s8c6c8976c89c7s6s8976cs87d6" #os.urandom(20)
     
+    # settings for the project manager
+    pm = AttributeMapper()
+    pm.client_id = "pm"
+    pm.um_authorize_uri = "http://localhost:9991/users/authorize"
+    pm.um_token_endpoint = "http://localhost:9991/users/token"
+    settings['pm'] = pm
+    
+    # TODO: enable updating of sub settings via dot notation (pm.client_id)
     settings.update(kw)
     return settings
 
