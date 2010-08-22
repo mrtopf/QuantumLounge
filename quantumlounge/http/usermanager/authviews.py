@@ -109,7 +109,7 @@ class Login(Handler):
     
     """
     
-    @json
+    @json()
     def error(self, code, msg=u""):
         return {
             'status' : 'error',
@@ -161,7 +161,7 @@ class AuthCode(Handler):
             'msg' : msg
         }
 
-    @json
+    @json()
     def get(self):
         client_id = self.request.args.get('client_id')
         
