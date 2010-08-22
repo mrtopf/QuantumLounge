@@ -180,3 +180,29 @@ h1#logofont
   font-weight: bold
   font-style: italic
   font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif
+
+  
+///
+/// login form 
+///
+
+#loginform
+  margin: 150px auto
+  border: 1px solid #888
+  width: 300px
+  +border-radius(10px)
+  +linear-gradient(color_stops(#fff,#f0f0f0))
+  padding: 20px
+  .field
+    padding-bottom: 10px
+  label
+    display: block
+    font-weight: bold
+    font-size: 16px
+  input
+    font-size: 20px
+  input[type=submit]
+    border: 0
+    +linear-gradient(color_stops(#0af,#0090f0))
+    text-transform: uppercase
+    padding: 4px 20px
