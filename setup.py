@@ -29,7 +29,9 @@ A status stream inspired project management tool""",
           'quantumcore.exceptions',
           'quantumcore.resources'
       ],
-      entry_points="""
-      # -*- Entry points: -*-
-      """,
+      entry_points={
+	'paste.app_factory': [
+	    'main=quantumlounge.http.main:app_factory',
+	    ],
+	}
       )
