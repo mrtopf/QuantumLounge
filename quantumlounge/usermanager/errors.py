@@ -17,11 +17,16 @@ class ClientNotFound(UserManagerError):
 class AuthorizationCodeNotFound(UserManagerError):
     """exception raised if an unkown auth code is retrieved"""
     
+    msg = "The authorization code was not found."
+    
     def __init__(self, auth_code):
+        self.msg 
         self.auth_code = auth_code
         
 class InvalidAuthorizationCode(UserManagerError):
     """exception raised if authorization code and client do not match"""
+    
+    msg = "The authorization does not match the client id"
     
     def __init__(self, auth_code, client_id):
         self.auth_code = auth_code
