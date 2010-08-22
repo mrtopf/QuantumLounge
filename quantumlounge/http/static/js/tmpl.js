@@ -16,7 +16,7 @@ function TemplateManager() {
             return false;
         }
         $.ajax({
-            url: "/jst/"+name,
+            url: "/jst/"+name+".jst",
             success: function (data, textResponse) {
                 templates[name] = jsontemplate.Template(data);
                 callback(templates[name].expand(payload));

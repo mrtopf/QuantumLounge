@@ -41,6 +41,19 @@ class Authorize(Handler):
     def error(self, msg):
         return msg
 
+    @html
+    def login_form(self):
+        """render the login form"""
+        return self.app.settings.templates['templates/master.pt'].render(
+            handler = self,
+            js_jquery_link = self.settings['js_resources']("jquery"),            
+            js_head_link = self.settings['js_resources']("head"),
+            jslinks = self.settings['js_resources'](),
+            csslinks = self.settings['css_resources'](),
+            initial_view = "login"
+            )
+        
+        
     def get(self):
         args = self.request.args
         response_type = args.get("response_type")
@@ -99,6 +112,7 @@ class Login(Handler):
     @json
     def error(self, code, msg=u""):
         return {
+            'status' : 'error',
             'error' : code,
             'error_message': msg
         }
@@ -134,3 +148,39 @@ class Login(Handler):
         res.set_cookie('l', cookie, httponly=True)
         return res
 
+class AuthCode(Handler):
+    """create a new auth token and auth code and return the auth code as JSON to the user
+    
+    TODO: Clean this up, this is doubled code!
+    
+    """
+    
+    def error(self, msg=""):
+        return {
+            'status' : 'error',
+            'msg' : msg
+        }
+
+    @json
+    def get(self):
+        client_id = self.request.args.get('client_id')
+        
+        data = self.request.cookies.get("l")
+        if data is not None:
+            login_data = SecureCookie.unserialize(data, self.settings.secret_key)
+        else:
+            login_data = {}
+        if not login_data.has_key("username"):
+            return self.error("not logged in")
+        # logged in, retrieve an auth code and do the redirect
+        username = login_data['username']
+        am = self.settings.authmanager
+        try:
+            token, auth_code = am.new_token(username, client_id)
+        except usermanager.errors.ClientNotFound, e:
+            return self.error("the client_id is incorrect")
+        q = {
+            'status'    : 'ok',
+            'code'      : auth_code,
+        }
+        return q

@@ -31,7 +31,7 @@ class AuthorizationManager(object):
         self.authorization_codes[auth_code] = token
         self.tokens[token.token] = token
         
-        return token.token, auth_code
+        return unicode(token.token), unicode(auth_code)
         
     def get_token(self, authorization_code, client_id):
         """return the token for the given authorization code. Will raise an
