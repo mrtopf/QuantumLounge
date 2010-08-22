@@ -4,11 +4,15 @@ class UserManagerError(Exception):
 class UserNotFound(UserManagerError):
     """a user was not found in the database"""
     
+    msg = "The user was not found"
+    
     def __init__(self, username):
         self.username = username
         
 class ClientNotFound(UserManagerError):
     """exception raised if an unkown client_id is retrieved"""
+    
+    msg = "The client id is unkown"
     
     def __init__(self, client_id):
         """store client id in question"""
