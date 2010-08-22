@@ -204,7 +204,42 @@ How to serve that?
 * We need to change the JST importer for this
 
 
+Problem with the existing dummy JS solution
+===========================================
 
+- We pass in the initial_view now but evenatually a lot of slots need to be filled
+  when entering a screen. e.g. on the PM screen we need to fill the form, the list of
+  statuses and the sidebar, probably more..
+- How does the JS code know about the access token? Or wouldn't it need to? Maybe the API
+  can also check for cookies and access tokens? That way the access token is hidden from
+  the user. 
+- We nevertheless need some way of passing in data from the server to the JS.
+
+Ideas
+-----
+
+- Each page needs to have it's own JS attached. It can be loaded via a name
+- Each page could initialize that itself by simply providing $(document).ready()
+- Data might be passed in while rendering, e.g. it could render a JSON string into the 
+  template which is evaluated then.
+  
+
+Attaching the JS for a page
+---------------------------
+
+We do this in setup::
+
+    js_from_pkg_stream(__name__, 'static/js/pages/<pagename>.js', name="pagename", merge=True, prio=4,)
+    
+Maybe this can be simplified and included in the page code itself?
+
+Passing variables
+-----------------
+
+The server side code adds a template var ``js_vars`` which is a JSON string. It will be inserted into the master template as ``js_vars`` and evaluated automatically by some generic view class we derive from.
+
+
+    
 
 
 
