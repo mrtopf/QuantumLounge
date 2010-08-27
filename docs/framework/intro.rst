@@ -1,8 +1,8 @@
-=========
-Framework
-=========
+=================
+The Web Framework
+=================
 
-This section describes the web framework which is used for some parts of QuantumLounge.
+This section describes the web framework which is used for some parts of QuantumLounge. It is not based on an existing framework other than WSGI. 
 
 Handlers
 ========

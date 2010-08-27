@@ -6,24 +6,28 @@
 Welcome to quantum.LOUNGE's documentation!
 ==========================================
 
-Contents:
+User documentation
+******************
+
+
+Developer Documenation
+**********************
 
 .. toctree::
    :maxdepth: 2
    
-   usermanagement/intro
+   components/index
    framework/intro
    framework/js
-   brainstorming
-   
-Development
------------
-
-.. toctree::
-   :maxdepth: 3
-
    roadmap/intro.rst
 
+Miscelleanous documentation
+***************************
+.. toctree::
+   :maxdepth: 1
+
+   brainstorming
+   
 Indices and tables
 ==================
 
