@@ -239,6 +239,8 @@ Passing variables
 The server side code adds a template var ``js_vars`` which is a JSON string. It will be inserted into the master template as ``js_vars`` and evaluated automatically by some generic view class we derive from.
 
 
+
+
     
 
 
