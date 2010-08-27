@@ -16,13 +16,25 @@ import sys, os
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#sys.path.append(os.path.abspath('.'))
+sys.path.append(os.path.abspath('.'))
+
+parent = os.path.dirname(os.path.dirname(__file__))
+sys.path.append(os.path.abspath(parent))
+wd = os.getcwd()
+os.chdir(parent)
+os.system('%s setup.py test -q' % sys.executable)
+os.chdir(wd)
+
+for item in os.listdir(parent):
+    if item.endswith('.egg'):
+            sys.path.append(os.path.join(parent, item))
+
 
 # -- General configuration -----------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = []
+extensions = ['sphinx.ext.autodoc','sphinx.ext.todo']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -192,3 +204,5 @@ latex_documents = [
 
 # If false, no module index is generated.
 #latex_use_modindex = True
+
+todo_include_todos = True

@@ -6,7 +6,28 @@ import quantumlounge.usermanager.errors as errors
 
 class Login(Handler):
     """handle logging in users. On a POST it will check username and password 
-    passed in a form encoded document and return a JSON encoded status document."""
+    passed in a form encoded document and return a JSON encoded status document.
+    
+    **Allowed Methods**: POST
+    
+    **Form parameters**: ``username`` and ``password`` have to denote a valid user account.
+    Both fields are REQUIRED.
+    
+    **Return value**: On success it will return the following JSON document::
+        
+        {
+            'status' : 'ok',
+            'username' : '<username>',
+            'poco' : '<poco data>'
+        }
+    
+    If an error occurred it will return one of the following HTTP errors:
+    
+    * ``400 Bad Request`` if a required field is missing.
+    * ``404 Not Found`` if the user was not found
+    * ``401 Unauthorized`` if the username and password did not match
+            
+    """
     
     def post(self):
         """we except ``username`` and ``password`` in a form encoded document"""
@@ -33,10 +54,56 @@ class Login(Handler):
         return res
 
 class Token(Handler):
-    """Retrieve an access token for an authorization code
+    """Retrieve an access token for an authorization code. This call is used during the 
+    :term:`OAuth 2.0` web server flow. The client has an authorization code and wants to exchange 
+    it with an access token. For more information check out 
+    `the OAuth specification on the token exchange <http://tools.ietf.org/html/draft-ietf-oauth-v2-10#page-21>`_
     
-    TODO: Add description of view
+    .. note::
+    
+        Note that we only support the web server flow at this point and thus only the
+        ``authorization_code`` grant type. 
+        
+    
+    **Allowed Methods**: GET
+    
+    **URL parameters**: 
+    
+    * ``grant_type`` being ``authorization code`` (REQUIRED)
+    * ``client_id`` being the registered client id (REQUIRED)
+    * ``scope`` the scope also provided to the authorization endpoint (OPTIONAL)
+    * ``code`` the authorization code provided by the authorization endpoint (REQUIRED)
+    * ``redirect_uri`` the same redirect URI  provided to the authorization endpoint to check for security reasons (REQUIRED)
+    
+    **Return value**: On success it will return the following JSON document::
+        
+        {
+          "access_token" : "<access token>",
+          "username" : "<username>",
+        }
+        
+    .. note::
+        
+        The ``username`` field is not part of OAuth 2.0 but we put it here for simplicity for now.
+        This will be replace by a ``@me`` PoCo endpoint soon.
+        
+    If an error occurred it will return a JSON document like this::
+
+        {
+            'error' : code,
+            'error_message' : error_message
+        }
+        
+    Possible error codes are:
+
+        * ``invalid_request`` a required parameter was missing from the request
+        * ``unauthorized_client`` if the authorization code is not found or invalid
+        * ``invalid_client`` if the client_id is invalid
+
     """
+
+    # TODO: Implement the check for the grant_type and redirect_uri check.
+    # TODO: remove the username from the response after poco change.
     
     def error(self, code="invalid_request", error_message=''):
         return {
@@ -64,11 +131,39 @@ class Token(Handler):
         }
 
 class PoCo(Handler):
-    """Return the Portable Contacts data for a user.
+    """Return data about a user using the :term:`Portable Contacts` format.
     
-    We receive an access token in the request parameters which we will check for validity
+    **Allowed Methods**: GET
     
-    TODO: Add description of view
+    **URL parameters**: 
+    
+    * ``access_token`` needs to be valid :term:`OAuth 2.0`` access token
+    
+    The username is part of the path.
+    
+    **Return value**: On success it will return a :term:`Portable Contacts` formatted JSON document, e.g.::
+        
+        {
+            "id": 'mrtopf',
+            "thumbnailUrl": 'http://...',
+            "name": {
+                "formatted": 'Christian Scholz,
+            },
+            "email" : 'somewhere@on.earth.com'
+        }
+        
+    If an error occurred it will return a JSON document like this::
+
+        {
+            'error' : code,
+            'error_message' : error_message
+        }
+        
+    Possible error codes are:
+    
+    * ``invalid_grant`` if the access token is invalid because it's not found or does not match the user it was issued for
+    * ``invalid_request`` the access token is missing from the request)
+    
     """
     
     def error(self, code="invalid_request", error_message=u''):

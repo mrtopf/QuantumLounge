@@ -19,6 +19,7 @@ Developer Documenation
    components/index
    framework/intro
    framework/js
+   site/index
    roadmap/intro.rst
 
 Miscelleanous documentation
@@ -27,11 +28,18 @@ Miscelleanous documentation
    :maxdepth: 1
 
    brainstorming
-   
+   glossary
+
+TODOs
+*****
+
+.. todolist::
+
 Indices and tables
 ==================
 
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
 
