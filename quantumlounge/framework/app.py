@@ -32,8 +32,4 @@ class Application(object):
             # call the response
             return response(environ, start_response)        
         # no view found => 404
-        return self.process(environ, start_response)
-    
-    def process(self, environ, start_response):
-        """override this for custom request processing in case no route matches"""
         return werkzeug.exceptions.NotFound()(environ, start_response)
