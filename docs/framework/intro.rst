@@ -32,6 +32,7 @@ The handler has the following instance variables:
 
 - ``request`` is the werkzeug request which is holding all request data
 - ``app`` is the ``Application`` instance this handler is being called from
+- ``settings`` is the global settings dictionary
 
 Should the route which is bound to that handler in the ``Application`` contain
 further paramaters like ``/users/{userid}`` then those will be passed as keyword
@@ -54,19 +55,44 @@ Lets look at a simple application first::
     
     class MyApp(Application):
     
-        handlers = [
-            ("/", MainHandler),
-        ]
+        def setup_handlers(self, map):
+            """setup the mapper"""
+            map.connect(None, "/", handler=MainHandler)
         
     app = Application()
 
-That's it and it means to use the ``MainHandler`` we defined above to serve
-something on path ``/``. 
+You only need to define a ``setup_handlers`` method which gets a map (which is a Routes Mapper) and has to add routes to it. See the 
+`Routes documentation <http://routes.groovie.org/>`_ for syntax and other details. Parameters in the path like ``/users/{userid}`` will be passed as keyword arguments to the methods of the chosen handler.
 
-The paths are handled using 
-`Routes <http://routes.groovie.org/>`_ and thus the same syntax applies here. Parameters
-in the path like ``/users/{userid}`` will be passed as keyword arguments to the methods
-of the chosen handler.
+Using sub applications
+----------------------
+
+Sometimes it makes sense to not include every URL for every component of the application in this one ``setup_handler()`` method but there is an easy pattern on how to extend it.
+
+Simply import those sub components and call a method of that component to add their own mappings::
+
+    import api
+    
+        ...
+        
+        def setup_handlers(self, map):
+            
+            map.connect(None, "/", handler=MainHandler)
+            api.setup_handlers(map)
+            
+In ``api/__init__.py`` you can define ``setup_handlers()`` as follows::
+
+    import usermanager
+
+    def setup_handlers(map):
+        """setup the handlers"""
+        with map.submapper(path_prefix="/api/1/users") as m:
+            m.connect(None, '/login', handler=usermanager.Login)
+            m.connect(None, '/token', handler=usermanager.Token)
+            m.connect(None, '/u/{username}/profile', handler=usermanager.PoCo)
+
+Note the ``path_prefix`` which can even be passed in to this local function so that the main application has full control over it's paths. 
+            
 
 Application instantiation
 =========================
@@ -79,6 +105,10 @@ An ``Application`` can be instantiated with the following parameters:
 An example::
 
     app = Application({'db': SomeDB()}, '/users')
+    
+Usually we use a module called ``setup.py`` which holds code to create such a dictionary. Checkout how it's done in the 
+`main http application <http://github.com/mrtopf/QuantumLounge/blob/master/quantumlounge/http/setup.py>`_.
+
 
 Running application
 ===================
@@ -90,35 +120,5 @@ You can e.g. use ``wsgiref`` to run this application::
         wsgiref.simple_server.make_server('', 8080, app).serve_forever()
 
 
-Sub Applications
-================
-
-Sometimes it's useful to not have all functionality in one application. E.g. you
-might have different components which work together but can potentially also run
-standalone. In this framework this can be done with sub applications.
-
-Imagine a user manager you want to add to your main application which should
-run under ``/users``. To do this we first create a new application for it just like
-we would do for a primary application::
-
-    class UserManager(Application):
-    
-        handlers = [
-            ('/' : UserListing),
-            ('/{id}', UserDetails)
-        ]
-        
-Then we define the main application which "mounts" this application on ``/users``::
-
-    class MainApp(Application):
-        
-        sub_apps={'users' : UserManager}
-        
-        handler = [
-            ('/' : Index),
-        ]
-        
-
-That way all requests to ``/users/*`` are directed to the sub application and the sub application itself only defines the relative paths.
 
 
