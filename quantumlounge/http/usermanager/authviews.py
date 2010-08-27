@@ -9,8 +9,6 @@ import quantumlounge.usermanager as usermanager
 
 from werkzeug.contrib.securecookie import SecureCookie
 
-
-
 class Authorize(Handler):
     """handles the OAuth authorize endpoint. For this we need to do the following things:
 
@@ -20,15 +18,26 @@ class Authorize(Handler):
         * return the auth code within the redirect
     * if the user is not logged in:
         * show the login screen
+        
+    For the :term:`OAuth 2.0` part check out 
+    `this section of the OAuth 2.0 spec <http://tools.ietf.org/html/draft-ietf-oauth-v2-10#page-16>`_
 
+    **Allowed Methods** : GET
+    
+    **URL parameters**
+    
     The following OAuth 2.0 parameters are handled:
 
-    * ``response_type`` '''REQUIRED'''
-    * ``client_id`` '''REQUIRED'''
-    * ``redirect_uri`` '''REQUIRED'''
-    * ``scope`` '''OPTIONAL''' (we only support "poco" for now which is the default anyway)
-    * ``state`` '''OPTIONAL''' (need to be remembered)
-
+    * ``response_type`` should be ``code`` (REQUIRED)
+    * ``client_id`` is the pre-registered OAuth client id (REQUIRED)
+    * ``redirect_uri`` is the URI to which the user manager is supposed to redirect with the auth code (REQUIRED)
+    * ``scope`` This is not yet used (and OPTIONAL)
+    * ``state`` This is a state variable which is passed back to the client on redirection (OPTIONAL)
+    
+    **Remarks**
+    
+    We show the login form via a JavaScript view.
+    
     TODO: How are errors handled? They should be shown on the screen as a message which a user
     can understand. So it's actually 200 OK request. We also need to display it with JS probably,
     maybe /authorize#error 
@@ -92,7 +101,29 @@ class Login(Handler):
     """handle logging in users. On a POST it will check username and password 
     passed in a form encoded document and return a JSON encoded status document.
     
-    Additionally it will set a cookie to mark the user as logged in.
+    This is similar to the API call but we actually set a cookie which is the reason
+    why it's duplicated here. (TODO: Is this really necessary? Does the API call make 
+    sense at all?)    
+    
+    This view is used during the :term:`OAuth 2.0` authorization process started with the view above.
+    It's called from the JavaScript view.
+    
+    **Allowed methods**: GET
+    
+    **form parameters**
+    
+    * ``username`` (REQUIRED)
+    * ``password`` (REQUIRED)
+    
+    **Return value**
+    
+    If the user can be logged in this view returns a JSON document like this::
+    
+        {
+            'status' : 'ok',
+            'username' : "username",
+            'poco' : <portable contacts dict>
+        }
     
     In the case of an error it will return JSON as well like this::
     
@@ -107,12 +138,18 @@ class Login(Handler):
     * ``USER_NOT_FOUND`` if the username could not be found in the database
     * ``BAD_REQUEST`` if something else goes wrong, description in the message field.
     
+    **Cookie format**
+    
+    The cookie will only contain the ``username``. We use ``SecureCookie`` from werkzeug here.
+    
     """
+    
+    # TODO: make the error codes lower case 
+    # TODO: get rid of status. If error is in the result, then it's an error
     
     @json()
     def error(self, code, msg=u""):
         return {
-            'status' : 'error',
             'error' : code,
             'error_message': msg
         }
@@ -151,14 +188,47 @@ class Login(Handler):
 class AuthCode(Handler):
     """create a new auth token and auth code and return the auth code as JSON to the user
     
-    TODO: Clean this up, this is doubled code!
+    This is another view called from the JavaScript view during the :term:`OAuth 2.0` 
+    authorization process. It will check if the user is logged in and if so generate
+    an authorization code and access token using the :mod:`quantumcore.usermanager` component.
     
+    **Allowed method** : GET
+
+    **URL parameters** 
+    
+    * ``client_id`` being the client id of the client requesting a token (usually the project management)
+    
+    Moreover we rely on the login cookie to be set and read the username from it.
+    
+    **Return value**
+    
+    As JSON::
+
+        q = {
+            'code'      : <auth_code>,
+        }
+        
+    If something goes wrong we return the following error document as JSON::
+    
+        {
+            error: '<error_code>',
+            error_msg: '<optional error message>'
+        }
+    
+    The following error codes are defined:
+    
+    * ``unauthorized_client`` if the client id is unkown
+    * ``user_not_logged_in`` if the user is not logged in or the cookie couldn't be found
+    
+    
+    TODO: Clean this up, this is doubled code!
+    TODO: Test error conditions and success condition
     """
     
-    def error(self, msg=""):
+    def error(self, error_code, error_message=u""):
         return {
-            'status' : 'error',
-            'msg' : msg
+            'error' : error_code,
+            'error_message' : error_message
         }
 
     @json()
@@ -171,16 +241,15 @@ class AuthCode(Handler):
         else:
             login_data = {}
         if not login_data.has_key("username"):
-            return self.error("not logged in")
+            return self.error("user_not_logged_in", "The user is not logged in or the cookie is gone")
         # logged in, retrieve an auth code and do the redirect
         username = login_data['username']
         am = self.settings.authmanager
         try:
             token, auth_code = am.new_token(username, client_id)
         except usermanager.errors.ClientNotFound, e:
-            return self.error("the client_id is incorrect")
+            return self.error("unauthorized_client", "The client id is unknown")
         q = {
-            'status'    : 'ok',
             'code'      : auth_code,
         }
         return q

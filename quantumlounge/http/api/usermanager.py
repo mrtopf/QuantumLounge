@@ -71,9 +71,9 @@ class Token(Handler):
     
     * ``grant_type`` being ``authorization code`` (REQUIRED)
     * ``client_id`` being the registered client id (REQUIRED)
-    * ``scope`` the scope also provided to the authorization endpoint (OPTIONAL)
     * ``code`` the authorization code provided by the authorization endpoint (REQUIRED)
-    * ``redirect_uri`` the same redirect URI  provided to the authorization endpoint to check for security reasons (REQUIRED)
+    * ``redirect_uri`` the same redirect URI  provided to the authorization endpoint to check for security reasons (REQUIRED) (TODO)
+    * ``scope`` the scope also provided to the authorization endpoint. We ignore this for now. (OPTIONAL)
     
     **Return value**: On success it will return the following JSON document::
         
