@@ -5,6 +5,6 @@ import werkzeug
 def pytest_funcarg__um_client(request):
     """return a client object for testing"""
     um = App(setup())    
-    return werkzeug.Client(um, werkzeug.BaseResponse)
+    return werkzeug.Client(um, werkzeug.BaseResponse, use_cookies=True)
     
     

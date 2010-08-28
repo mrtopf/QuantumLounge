@@ -69,7 +69,7 @@ class Token(Handler):
     
     **URL parameters**: 
     
-    * ``grant_type`` being ``authorization code`` (REQUIRED)
+    * ``grant_type`` being ``authorization_code`` (REQUIRED)
     * ``client_id`` being the registered client id (REQUIRED)
     * ``code`` the authorization code provided by the authorization endpoint (REQUIRED)
     * ``redirect_uri`` the same redirect URI  provided to the authorization endpoint to check for security reasons (REQUIRED) (TODO)
@@ -183,11 +183,15 @@ class PoCo(Handler):
         token = am.get_token(access_token, None)
         if token is None:
             return self.error('invalid_grant', 'The authorization token is not valid')
-        if token.username != username:
+        
+        # check if the username is "@me", if so we use the token username
+        if token.username != username and username!=u"@me":
             return self.error('invalid_grant', 'The authorization token is not valid')
         
-        # finally do somethign
-        u = um.get('mrtopf')
+        # now return the PoCo data
+        u = um.get(token.username)
         if u is None:
             return self.error(error_message="no access token was given")
         return u.get_poco()
+
+

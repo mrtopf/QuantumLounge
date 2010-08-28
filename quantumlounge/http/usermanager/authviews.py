@@ -42,8 +42,6 @@ class Authorize(Handler):
     can understand. So it's actually 200 OK request. We also need to display it with JS probably,
     maybe /authorize#error 
     
-    TODO: Add login form
-
     """
 
     @html
@@ -199,6 +197,8 @@ class AuthCode(Handler):
     * ``client_id`` being the client id of the client requesting a token (usually the project management)
     
     Moreover we rely on the login cookie to be set and read the username from it.
+    
+    TODO: Is the client_id really all we need? 
     
     **Return value**
     
