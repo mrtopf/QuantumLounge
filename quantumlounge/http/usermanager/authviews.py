@@ -73,6 +73,7 @@ class Authorize(Handler):
             return self.error("The request invalid")
 
         data = self.request.cookies.get("l")
+        print data
         if data is not None:
             login_data = SecureCookie.unserialize(data, self.settings.secret_key)
         else:
