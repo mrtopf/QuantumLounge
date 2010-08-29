@@ -36,19 +36,15 @@ function LoginView() {
                 
                 // login is correct, now lets retrieve the auth code
                 // as we skip the grant screen.
-                console.log(data);
-                console.log("doing the authcode dance");
                 $.ajax({
                     url: u.toString(),
                     success: function(data, textResponse) {
-                        console.log(data);
                         if (!data.error) {
                             var u = goog.Uri.parse(redirect_uri)
                                 .setParameterValue('code', data.code);                                
                             if (state) {
                                 u.setParameterValue('state', state);
                             }
-                            console.log(u.toString());
                             document.location.href=u.toString();
                         } else {
                             // TODO: What to do on error when trying to receive auth code?
