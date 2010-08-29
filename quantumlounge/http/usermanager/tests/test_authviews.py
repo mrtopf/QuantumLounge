@@ -48,5 +48,31 @@ def test_authorize_loop(um_client):
     poco = simplejson.loads(r.data)
     assert poco['id'] == "mrtopf"
     
+def test_login_wrong_pw(um_client):
+    r = um_client.post("/users/authorize/login",
+        data={'username': 'mrtopf', 'password' : 'nothing'})
+    assert r.status=="200 OK"
+    json = simplejson.loads(r.data)
+    assert json.has_key("error")
+    assert json['error']=="credentials_wrong"
     
+def test_login_wrong_user(um_client):
+    r = um_client.post("/users/authorize/login",
+        data={'username': 'notopf', 'password' : 'nothing'})
+    assert r.status=="200 OK"
+    json = simplejson.loads(r.data)
+    assert json.has_key("error")
+    assert json['error']=="user_not_found"
+
+def test_login_missing_params(um_client):
+    r = um_client.post("/users/authorize/login",
+        data={})
+    assert r.status=="200 OK"
+    json = simplejson.loads(r.data)
+    assert json.has_key("error")
+    assert json['error']=="bad_request"
+
+
+
+
 

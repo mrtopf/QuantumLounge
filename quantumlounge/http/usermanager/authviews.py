@@ -159,14 +159,14 @@ class Login(Handler):
         username = f.get("username", None)
         password = f.get("password", None)
         if username is None or password is None:
-            return self.error("BAD_REQUEST",u"username or password missing")
+            return self.error("bad_request",u"username or password missing")
         
         um = self.app.settings['usermanager']
         user = um.get(username)
         if user is None:
-            return self.error("USER_NOT_FOUND",u"user not found")
+            return self.error("user_not_found",u"user not found")
         if password!=user.password:
-            return self.error("CREDENTIALS_WRONG",u"username and password do not match")
+            return self.error("credentials_wrong",u"username and password do not match")
             
         # apparently we are logged in, so lets set a cookie
         cookie = SecureCookie({
