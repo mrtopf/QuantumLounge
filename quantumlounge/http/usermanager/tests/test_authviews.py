@@ -72,7 +72,23 @@ def test_login_missing_params(um_client):
     assert json.has_key("error")
     assert json['error']=="bad_request"
 
+def test_authcode_not_logged_in(um_client):
+    r = um_client.get("/users/authorize/authcode",
+        query_string={'client_id': 'pm'})
+    assert r.status=="200 OK"
+    json = simplejson.loads(r.data)
+    assert json.has_key("error")
+    assert json['error']=="user_not_logged_in"
 
+def test_authcode_wrong_client_id(um_client):
+    um_client.post("/users/authorize/login",
+        data={'username': 'mrtopf', 'password' : 'foobar'})
+    r = um_client.get("/users/authorize/authcode",
+        query_string={'client_id': 'pm2'})
+    assert r.status=="200 OK"
+    json = simplejson.loads(r.data)
+    assert json.has_key("error")
+    assert json['error']=="unauthorized_client"
 
 
 
