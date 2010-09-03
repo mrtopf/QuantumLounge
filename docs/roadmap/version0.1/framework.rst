@@ -79,8 +79,8 @@ The following decorators might be helpful to decorate the HTTP method implementa
 - ``@html`` will wrap the output of the handler into a werkzeug Response and set the content type to HTML. In the above example you'd only need to return ``"hey!"``.
 
 
-Remove the nestable application and use Routes directly
-=======================================================
+Remove the nestable application and use Routes directly (DONE)
+==============================================================
 
 The purpose of the nested application was to be able to modularize e.g. the usermanager
 to let it be mounted on any URL prefix. In practice this nesting leads to problem though
@@ -107,61 +107,28 @@ Thus the goals are:
 create a basic framework for displaying templates via JavaScript
 =============================================================================
 
-What we need to do:
+Create an example ìn ``http/pm`` which uses ``sammy.js`` to display pages. 
 
-- create a way to package all relevant JS code (template and JS) for a page.
-- create a base class for the JS handling.
+Create the packaging structure and support
+------------------------------------------
+
+The setup code needs to register additional JS and CSS resources for each page which has such client side sammy applications. For this to work the ``setup.py`` codes needs to get
+refactored to that it calls additional packages. 
+
+Registration of these new resources should be done under a name which includes the package path (e.g. ``http.pm.timeline``). Templates will be loaded dynamically anyway.
+
+The setup code needs to do the following:
+
+- go through a list of predefined modules (experiment on where to define this list)
+- try to import ``setup`` from this module/package and run it with 
+    - ``setup_js()`` returns a list of JS resources
+    - ``setup_css()`` returns a list of CSS resources
+    - ``setup(settings)`` might change the settings
+
+For demonstration purposes build an example sammy app for the PM side with switching dummy screens. 
 
 
 
-
-
-Some ideas for the JS side in implementing the oauth authorization endpoint::
-
-    var session = {}; // some local store
-
-    function init_page() {
-        // get the URL with parameters in params
-        session.redirect_uri = params.redirect_uri;
-    }
-
-    # show the login screen
-    function login() {
-        $("content").html(template.login.expand({}));
-        $("#loginform").submit(login_sendform);
-    }
-
-    function login_sendform() {
-        var data = $("#loginform").serialize(); // or however this looks
-        function login_error() {
-            $("content").html(template.login.expand({'username': data.username, 'error': 'Your login credentials have been wrong!'}));
-        }
-        $.ajax({
-            url: api_prefix+"auth",
-            data: data,
-            type: "POST",
-            dataType: "form",
-            success: login_success,
-            error: login_error
-        });
-    }
-
-    function login_success(data, textStatus) {
-        if (data.status && data.status==="ok") {
-            // now we actually have everything already as granting is automated for now
-            // next up we need to redirect the user with an auth code to the redirect uri
-            var userid=data.userid;
-            $.ajax({
-                url: prefix+"/"+userid+"/"+"authcode", // url for retrieving an auth code for the logged in user, only works with that user
-                method: "GET",
-                success: function(data) {
-                    var auth_code = data.auth_code;
-                    // craft some URI
-                    window.location.href = url;
-                }
-            });
-        }
-    }
 
 
 
