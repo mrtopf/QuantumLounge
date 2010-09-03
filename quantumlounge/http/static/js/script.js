@@ -7,6 +7,8 @@ console.log("loaded");
 
 var tm = TemplateManager();
 
+
+
 function LoginView() {    
 
     function submit() {
@@ -88,11 +90,16 @@ var views = {
     'pm/main' : MainView()
 }
 
-$(document).ready(function () {
-    if (initial_view) {
-        if (initial_view in views) {
-            views[initial_view].render();
-        }
-    }    
-})
+;(function($) {
+  var app = $.sammy(function() {
+      
+    this.get('#/loginform', function() {
+        LoginView().render();
+    });
+  });
+
+  $(function() {
+    app.run()
+  });
+})(jQuery);
 
