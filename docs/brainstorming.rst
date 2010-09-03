@@ -240,6 +240,38 @@ The server side code adds a template var ``js_vars`` which is a JSON string. It 
 
 
 
+Packaging client side templates and view code
+=============================================
+
+We have
+
+* a set of templates in whatever template language
+* a set of sammy applications with app logic
+* standard CSS and JS files
+* a handler for serving the empty page
+* multiple handlers for handling the app logic
+
+
+Directory structure
+-------------------
+
+* A package contains all the necessary files
+* The ``__init__.py`` module contains the holding page and the JS setup code.
+
+
+Workflow
+--------
+
+* All additional setup code is registered under a name (also CSS)
+* The ``setup.py`` needs to run through all "modules". Maybe the setup.py itself could be refactored a bit
+* The routes are registered the normal way
+
+
+
+
+
+
+
 
     
 
