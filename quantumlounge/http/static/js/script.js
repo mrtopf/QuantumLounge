@@ -2,21 +2,16 @@
 
 */
 
-goog.require('goog.Uri');
-console.log("loaded");
 
 var tm = TemplateManager();
-
-
 
 function LoginView() {    
 
     function submit() {
         var data = $(this).serialize();
-        var uri = goog.Uri.parse(document.location.href);
-        var qd = uri.getQueryData();
-        var redirect_uri = qd.get('redirect_uri');
-        var state = qd.get('state');
+        var uri = new jsUri(document.location.href);
+        var redirect_uri = uri.getQueryParamValue('redirect_uri');
+        var state = uri.getQueryParamValue('state');
 
         // call the login view to log the user in
         // TODO: add error handler for network and login failed
@@ -34,7 +29,7 @@ function LoginView() {
                 // retrieve the code and redirect to the redirect uri
                 var u = uri.clone();
                 u.setPath("/users/authorize/authcode")
-                  .setParameterValue('redirect_uri', redirect_uri);
+                  .replaceQueryParam('redirect_uri', redirect_uri);
                 
                 // login is correct, now lets retrieve the auth code
                 // as we skip the grant screen.
@@ -42,10 +37,10 @@ function LoginView() {
                     url: u.toString(),
                     success: function(data, textResponse) {
                         if (!data.error) {
-                            var u = goog.Uri.parse(redirect_uri)
-                                .setParameterValue('code', data.code);                                
+                            var u = new jsUri(redirect_uri)
+                                .replaceQueryParam('code', data.code);                                
                             if (state) {
-                                u.setParameterValue('state', state);
+                                u.replaceQueryParam('state', state);
                             }
                             document.location.href=u.toString();
                         } else {

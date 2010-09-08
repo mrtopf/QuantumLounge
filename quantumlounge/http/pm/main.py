@@ -19,11 +19,13 @@ class AuthError(Exception):
         self.error_handler = error_handler
         
 class Token(object):
-    """a token representing an access token with a username attached"""
+    """a token representing an access token
     
-    def __init__(self, token, username):
+    TODO: Do we still need this?
+    """
+    
+    def __init__(self, token):
         self.token = token
-        self.username = username
         
 
 class Main(Handler):
@@ -58,6 +60,11 @@ class Main(Handler):
     @html
     def main_view(self):
         """render the login form"""
+        return self.app.settings.templates['templates/master.pt'].render(
+            pc = self.context,
+            initial_view = "pm/main"
+        )
+        
         return self.app.settings.templates['templates/master.pt'].render(
             handler = self,
             js_jquery_link = self.settings['js_resources']("jquery"),            
@@ -96,11 +103,11 @@ class Main(Handler):
         if not data.has_key("access_token"):
             # TODO: What to do about errors which are not supposed to happen?
             raise AuthError("Something technically went wrong. Please try again later")
-        return Token(data['access_token'], data['username'])
+        return Token(data['access_token'])
         
     def retrieve_userdata(self, token):
         """retrieve the user data"""
-        url = self.settings.pm.um_poco_endpoint %token.username
+        url = self.settings.pm.um_poco_endpoint
         url = url + "?access_token=%s" %token.token
         res = urllib.urlopen(url)
         data = simplejson.loads(res.read())
@@ -109,7 +116,8 @@ class Main(Handler):
     def get(self):
         args = self.request.args
         
-        # first check if we received an auth_code.
+        # first check if we received an auth_code, if it's valid and if we can show
+        # the main view. 
         if args.has_key("code"):
             try:
                 token = self.retrieve_token(args['code'])
@@ -131,7 +139,8 @@ class Main(Handler):
             res = self.main_view()
             res.set_cookie("u", cookie)
             return res
-            
+        
+        # we got no authorization and thus show no main screen yet
         # try to retrieve the user data from the cookie. If this fails, start authorize
         userdata = self.request.cookies.get("u", None)
         if userdata is None:

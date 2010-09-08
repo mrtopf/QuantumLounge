@@ -22,9 +22,10 @@ class Application(object):
 
         m = self.mapper.match(path)
         if m is not None:
-            handler = m['handler'](self, request, self.settings)
+            handler = m['handler'](app=self, request=request, settings=self.settings)
             method = request.method.lower()
             if hasattr(handler, method):
+                self.settings.log.debug("calling method %s on handler '%s' " %(request.method, m['handler']))
                 del m['handler']
                 response = getattr(handler, method)(**m)
             else:

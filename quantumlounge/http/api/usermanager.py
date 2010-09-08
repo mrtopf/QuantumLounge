@@ -126,8 +126,7 @@ class Token(Handler):
             return self.error(e.code, e.msg)
 
         return {
-            'access_token' : token.token,
-            'username' : token.username
+            'access_token' : token.token
         }
 
 class PoCo(Handler):

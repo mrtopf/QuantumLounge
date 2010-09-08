@@ -19,11 +19,10 @@ A status stream inspired project management tool""",
       zip_safe=False,
       install_requires=[
           # -*- Extra requirements: -*-
-          'tornado',
-          'pymongo',
           'werkzeug',
           'simplejson',
           'routes',
+          'logbook',
           'py',
           'quantumcore.storages',
           'quantumcore.exceptions',

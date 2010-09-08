@@ -10,9 +10,9 @@
        Remove this if you use the .htaccess -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title>{{handler.title}}</title>
-  <meta name="description" content="{{ handler.title }}">
-  <meta name="author" content="{{ handler.author }}">
+  <title>{{pc.handler.title}}</title>
+  <meta name="description" content="{{ pc.handler.title }}">
+  <meta name="author" content="{{ pc.handler.author }}">
 
   <!--  Mobile Viewport Fix
         j.mp/mobileviewport & davidbcalhoun.com/2010/viewport-metatag 
@@ -24,16 +24,18 @@
 
 
   <!-- Place favicon.ico and apple-touch-icon.png in the root of your domain and delete these references -->
+  <!--
   <link rel="shortcut icon" href="/favicon.ico">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    -->
 
 
   <!-- CSS : implied media="all" -->
-  {{ csslinks }}
+  {{ pc.csslinks }}
 
  
   <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
-  {{ js_head_link }}
+  {{ pc.js_head_link }}
 
 </head>
 
@@ -84,10 +86,9 @@
 
   <!-- TODO: Grab Google CDN's jQuery. fall back to local if necessary -->
   
-  <script src="/js2/goog/base.js"></script>
-
-  {{ js_jquery_link }}
-  {{ jslinks }}
+  {{ pc.js_jquery_link }}
+  {{ pc.jslinks }}
+  {{ js_page_links }}
   
   <script>
     var initial_view = '{{initial_view}}';
@@ -100,8 +101,10 @@
 
 
   <!-- yui profiler and profileviewer - remove for production -->
+  <!--
   <script src="/js2/profiling/yahoo-profiling.min.js?v=1"></script>
   <script src="/js2/profiling/config.js?v=1"></script>
+    -->
   <!-- end profiling code -->
 
 

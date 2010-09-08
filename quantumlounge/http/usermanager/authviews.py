@@ -52,12 +52,8 @@ class Authorize(Handler):
     def login_form(self):
         """render the login form"""
         return self.app.settings.templates['templates/master.pt'].render(
-            handler = self,
-            js_jquery_link = self.settings['js_resources']("jquery"),            
-            js_head_link = self.settings['js_resources']("head"),
-            jslinks = self.settings['js_resources'](),
-            csslinks = self.settings['css_resources'](),
-            initial_view = "login"
+            pc = self.context,
+            js_page_links = self.settings['js_resources']("http.usermanager.authorize"),
             )
         
         
@@ -73,7 +69,6 @@ class Authorize(Handler):
             return self.error("The request invalid")
 
         data = self.request.cookies.get("l")
-        print data
         if data is not None:
             login_data = SecureCookie.unserialize(data, self.settings.secret_key)
         else:
@@ -155,6 +150,7 @@ class Login(Handler):
 
     def post(self):
         """we except ``username`` and ``password`` in a form encoded document"""
+        self.settings.log.debug("logging user in")
         f = self.request.form
         username = f.get("username", None)
         password = f.get("password", None)
@@ -178,6 +174,7 @@ class Login(Handler):
             'username' : user.username,
             'poco' : user.get_poco()
         }
+        self.settings.log.debug("sending data: %s" %data)
             
         res = werkzeug.Response(simplejson.dumps(data))
         res.content_type = "application/json"
