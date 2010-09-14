@@ -15,11 +15,7 @@ class MainHandler(Handler):
     @html
     def get(self):
         return self.app.settings.templates['templates/master.pt'].render(
-            handler = self,
-            js_jquery_link = self.settings['js_resources']("jquery"),            
-            js_head_link = self.settings['js_resources']("head"),
-            jslinks = self.settings['js_resources'](),
-            csslinks = self.settings['css_resources'](),
+            pc = self.context
             )
 
 class StaticHandler(Handler):
