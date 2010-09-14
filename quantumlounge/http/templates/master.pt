@@ -58,6 +58,9 @@
     <div id="main">
       <div id="page">
         <div class="bigcolumn" id="content">
+          <div>
+          Go to the <a href="/pm">Project Manager</a>
+          </div>
         </div>
         <aside>
           <div class="portlet">
