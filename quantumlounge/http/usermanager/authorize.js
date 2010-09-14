@@ -107,7 +107,7 @@ function LoginView() {
                       url: u.toString(),
                       success: function(data, textResponse) {
                           if (!data.error) {
-                              var u = new jsUri(redirect_uri)
+                              var u = new jsUri(decodeURIComponent(redirect_uri))
                                   .replaceQueryParam('code', data.code);                                
                               if (state) {
                                   u.replaceQueryParam('state', state);
