@@ -64,15 +64,6 @@ class Main(Handler):
             pc = self.context,
             initial_view = "pm/main"
         )
-        
-        return self.app.settings.templates['templates/master.pt'].render(
-            handler = self,
-            js_jquery_link = self.settings['js_resources']("jquery"),            
-            js_head_link = self.settings['js_resources']("head"),
-            jslinks = self.settings['js_resources'](),
-            csslinks = self.settings['css_resources'](),
-            initial_view = "pm/main"
-            )
 
     def start_authorize(self):
         """start the authorization process"""
