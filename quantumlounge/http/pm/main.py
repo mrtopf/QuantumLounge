@@ -15,9 +15,16 @@ def jsonify(d):
 class AuthError(Exception):
     """an authorization error. It stores the error handler to be returned"""
     
-    def __init__(self, error_handler):
-        self.error_handler = error_handler
+    def __init__(self, msg):
+        self.msg = msg
         
+class OAuthError(AuthError):
+    """an oauth specific error with code and msg"""
+    
+    def __init__(self, code, msg):
+        self.code = code
+        self.msg = msg
+    
 class Token(object):
     """a token representing an access token
     
@@ -62,7 +69,7 @@ class Main(Handler):
         """render the login form"""
         return self.app.settings.templates['templates/master.pt'].render(
             pc = self.context,
-            initial_view = "pm/main"
+            js_page_links = self.settings['js_resources']("http.pm.main"),
         )
 
     def start_authorize(self):
@@ -74,6 +81,8 @@ class Main(Handler):
             'response_type' : 'code'
         }
         url = url+"?"+urllib.urlencode(q)
+        self.settings.log.debug("redirecting to %s" %url)
+        
         return werkzeug.redirect(url)
         
     def retrieve_token(self, code):
@@ -89,8 +98,9 @@ class Main(Handler):
         # even write a special handler for this which can do it async.
         d = res.read()
         data = simplejson.loads(d)
+        self.settings.log.debug("result from token endpoint: %s" %data)        
         if data.has_key('error'):
-            raise AuthError("an error occurred. error_code=%(error)s, error_message=%(error_message)s" %data)
+            raise OAuthError(data['error'], data['error_message'])
         if not data.has_key("access_token"):
             # TODO: What to do about errors which are not supposed to happen?
             raise AuthError("Something technically went wrong. Please try again later")
@@ -110,10 +120,16 @@ class Main(Handler):
         # first check if we received an auth_code, if it's valid and if we can show
         # the main view. 
         if args.has_key("code"):
+            self.settings.log.debug("got code '%s' " %(args['code']))
+            
             try:
                 token = self.retrieve_token(args['code'])
             except AuthError, e:
-                return e.error_handler
+                self.settings.log.debug("received error on retrieve_token: %s" %e.msg)
+                # we now retry the OAuth flow and ignore the OAuth code
+                # this can happen if the URL with the code is called again and the server 
+                # was restarted inbetween etc.
+                return self.start_authorize()
                 
             userdata = self.retrieve_userdata(token)
             if userdata is None:

@@ -37,8 +37,11 @@ CSS = [
 DOMAIN = "http://localhost:9991"
 
 import quantumlounge.http.usermanager
+import quantumlounge.http.pm
+
 MODULES = [
-    quantumlounge.http.usermanager
+    quantumlounge.http.usermanager,
+    quantumlounge.http.pm
 ]
 
 for module in MODULES:

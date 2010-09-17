@@ -8,11 +8,11 @@ def setup_handlers(map):
 
 def setup_js():
     return [
-        js_from_pkg_stream(__name__, 'js/timeline.js', name="http.pm.timeline", merge=False, prio=5,),
+        js_from_pkg_stream(__name__, 'main.js', name="http.pm.main", merge=False, prio=5,),
     ]
     
 def setup_css():
     return [
-        css_from_pkg_stream(__name__, 'css/pm.css', name="http.pm.timeline", merge=False, prio=5,),
+        #css_from_pkg_stream(__name__, 'css/pm.css', name="http.pm.timeline", merge=False, prio=5,),
     ]
     
