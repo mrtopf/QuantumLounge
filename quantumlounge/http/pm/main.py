@@ -87,6 +87,7 @@ class Main(Handler):
         
     def retrieve_token(self, code):
         """retrieve the access token for an auth code"""
+        self.settings.log.debug("retrieving token for code %s" %code)        
         url = self.settings.pm.um_token_endpoint
         q = {
             'code' : code,
@@ -108,10 +109,13 @@ class Main(Handler):
         
     def retrieve_userdata(self, token):
         """retrieve the user data"""
+        self.settings.log.debug("retrieving user data for token %s" %token)
+        
         url = self.settings.pm.um_poco_endpoint
         url = url + "?access_token=%s" %token.token
         res = urllib.urlopen(url)
         data = simplejson.loads(res.read())
+        self.settings.log.debug("got user data %s" %data)
         return data
         
     def get(self):
@@ -149,11 +153,15 @@ class Main(Handler):
         
         # we got no authorization and thus show no main screen yet
         # try to retrieve the user data from the cookie. If this fails, start authorize
-        userdata = self.request.cookies.get("u", None)
+        userdata = self.request.cookies.get("u", None)        
         if userdata is None:
+            self.settings.log.debug("no user data found")
             return self.start_authorize()
         userdata = SecureCookie.unserialize(userdata, self.settings.secret_key)
+        self.settings.log.debug("found user data: %s" %userdata)
+
         if userdata=={}:
+            self.settings.log.debug("user data empty, starting OAuth dance")
             return self.start_authorize()
             
         # TODO: Maybe we want to check if the access token is still valid and reload
