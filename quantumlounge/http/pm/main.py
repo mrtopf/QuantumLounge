@@ -70,6 +70,7 @@ class Main(Handler):
         return self.app.settings.templates['templates/master.pt'].render(
             pc = self.context,
             js_page_links = self.settings['js_resources']("http.pm.main"),
+            css_page_links = self.settings['css_resources']("http.pm.main"),
         )
 
     def start_authorize(self):
