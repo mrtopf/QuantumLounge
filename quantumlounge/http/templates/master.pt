@@ -32,6 +32,7 @@
 
   <!-- CSS : implied media="all" -->
   {{ pc.csslinks }}
+  {{ css_page_links }}
 
  
   <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
