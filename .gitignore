@@ -3,6 +3,7 @@
 *.egg-info
 *.cache
 *.orig
+*.swp
 *.rej
 *~
 *.o
