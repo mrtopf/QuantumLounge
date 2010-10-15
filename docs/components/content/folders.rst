@@ -88,5 +88,18 @@ folders. You can do it like this::
     return f.all_cids
 
 
+Implementation notes
+====================
+
+We use ``quantumcore.storages.MongoObjectStore`` as a base. We added properties
+for handling parents and ancestors. We also implement the ancestor model as
+described in `the MongoDB documentation <http://www.mongodb.org/display/DOCS/Trees+in+MongoDB#TreesinMongoDB-ArrayofAncestors>`_.
+
+We use an ``ancestors`` list and update the subtree of a node once it's parent
+relationship changes. This is implemented in ``_after_save_hook()`` in
+``FolderManager``.
+
+
+
 
 
