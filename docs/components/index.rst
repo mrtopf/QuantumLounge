@@ -10,4 +10,5 @@ These are not directly exposed to the network but always capsuled in some HTTP v
    :maxdepth: 2
    
    usermanagement/intro
+   content/index
 

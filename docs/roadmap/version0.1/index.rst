@@ -9,3 +9,4 @@ Version 0.1
    framework
    http_usermanager
    auth_integration
+   content
