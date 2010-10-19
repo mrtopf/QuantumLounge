@@ -1,9 +1,7 @@
-from quantumcore.storages.mongoobjectstore import MongoObjectStore, Model
-from pymongo.code import Code
-import copy
+from base import Content, ContentManager
 
-class Folder(Model):
-    """a folder object with a parent"""
+class Tweet(Model):
+    """example content type defining a tweet"""
     _attribs = ['_id','title','description','parent_id','ancestors']
     _defaults = {
             'parent_id' : None,
