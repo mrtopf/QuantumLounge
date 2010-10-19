@@ -1,10 +1,9 @@
 import pymongo
-from quantumlounge.content.folders import FolderManager
+from quantumlounge.content.base import ContentManager
 
-def pytest_funcarg__fstore(request):
-    """initialize a folder store and return it"""
+def pytest_funcarg__cstore(request):
+    """initialize a content store and return it"""
     db = pymongo.Connection().ql_test
-    db.drop_collection("folders")
-    f = FolderManager(db,"folders")
-    return f
+    db.drop_collection("contents")
+    return ContentManager(db, "contents")
 
