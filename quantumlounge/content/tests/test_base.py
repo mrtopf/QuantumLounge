@@ -110,11 +110,3 @@ def test_ancestors_reroot(cstore):
 
 
 
-
-
-
-
-
-
-
-

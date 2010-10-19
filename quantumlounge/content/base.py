@@ -59,6 +59,11 @@ class Content(object):
         if self._ancestors is None:
             self._ancestors = []
 
+        self._after_init()
+
+    def _after_init(self):
+        """hook for updating data after init"""
+
     def _to_dict(self):
         """serialize this object to a dictionary"""
         d={}
