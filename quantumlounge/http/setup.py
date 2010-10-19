@@ -1,6 +1,7 @@
 import sys
 import os
 import pkg_resources
+import pymongo
 import logbook
 
 from quantumcore.storages import AttributeMapper
@@ -8,6 +9,8 @@ from quantumcore.resources import CSSResourceManager, css_from_pkg_stream
 from quantumcore.resources import JSResourceManager, js_from_pkg_stream, jst_from_pkg_stream
 from quantumlounge.usermanager.users import UserManager
 from quantumlounge.usermanager.authorization import AuthorizationManager
+from quantumlounge.content.tweet import TweetType
+from quantumlounge.content.contenttypes import ContentTypeManager
 
 from quantumlounge.framework.utils import get_static_urlparser, TemplateHandler
 
@@ -15,6 +18,8 @@ from quantumlounge.framework.utils import get_static_urlparser, TemplateHandler
 JS = [
     js_from_pkg_stream(__name__, 'static/js/jquery-1.4.2.min.js', name="jquery", merge=False, prio=1,),
     js_from_pkg_stream(__name__, 'static/js/modernizr-1.5.min.js', name="head", merge=False, prio=1,),
+
+    js_from_pkg_stream(__name__, 'static/js/jquery.NobleCount.min.js', name="", merge=True, prio=1,),
 
     js_from_pkg_stream(__name__, 'static/js/jsuri-1.0.2-min.js', name="", merge=True, prio=1,),
     js_from_pkg_stream(__name__, 'static/js/sammy.js', name="", merge=False, prio=2,),
@@ -73,6 +78,12 @@ def setup(**kw):
     settings['pm'] = pm
     
     settings['log'] = logbook.Logger("quantumlounge")
+
+    ## content types
+    db = pymongo.Connection().pm
+    ctm = ContentTypeManager()
+    ctm.add(TweetType(db, "contents"))
+    settings['content1']=ctm
 
     # TODO: enable updating of sub settings via dot notation (pm.client_id)
     settings.update(kw)
