@@ -38,7 +38,6 @@ class Content(object):
 
     def __init__(self, _id=None, _store = None, **kwargs):
         """initialize the database object class. """
-
         data = copy.copy(self._base_defaults)
         for a,v in self._defaults.items():
             if a in self._base_attribs:
@@ -72,6 +71,23 @@ class Content(object):
                 continue
             d[attrib] = getattr(self, attrib, u'')
         return d
+    
+    @property
+    def json(self):
+        """return the JSON representation excluding internal attributes"""
+        d={}
+        for attrib in self._attribs+['_id','_type']:
+            d[attrib] = getattr(self, attrib, u'')
+        return self.jsonify(d) # eventually convert data
+
+    def jsonify(self, data):
+        """hook for converting a dictionary to valid JSON. Input is a
+        dictionary in ``data`` which might contain e.g. datetime elements
+        which need to be converted to JSON compatible data.
+
+        This hook should return a new (or updated) dictionary. 
+        """
+        return data
 
     @classmethod
     def from_dict(cls, d, store):

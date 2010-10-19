@@ -16,6 +16,11 @@ class Tweet(Content):
         """fix data"""
         self.date = datetime.datetime.now()
 
+    def jsonify(self, data):
+        """convert the dictionary to a JSON representation"""
+        data['date'] = data['date'].strftime("%d.%m.%Y %H:%M")
+        return data
+
 class TweetManager(ContentManager):
     """manages tweets"""
 
@@ -29,7 +34,7 @@ def TweetType(db, coll):
         name = u"Tweet",
         description = "a status message",
         fields = Tweet._attribs,
-        required_fields = ['content'],
+        required_fields = ['content', 'user'],
         mgr = tm,
         cls = Tweet,
         reprs = ['default', 'atom'],

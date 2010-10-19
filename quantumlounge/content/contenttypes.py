@@ -28,4 +28,9 @@ class ContentType(AttributeMapper):
 class ContentTypeManager(AttributeMapper):
     """a content type manager which is simply a dictionary"""
 
+    def add(self, ct):
+        """add a content type"""
+        self[ct._id] = ct
+
+
 
