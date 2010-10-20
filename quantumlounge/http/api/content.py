@@ -3,10 +3,9 @@ import werkzeug
 import simplejson
 import uuid
 
-class ContentHandler(Handler):
-    """implements the RESTful content API
-    """
-    
+class TweetHandler(Handler):
+    """return a tweet"""
+
     @json()
     def get(self, tweet_id):
         """we a tweet id and return the tweet as JSON"""
@@ -14,7 +13,11 @@ class ContentHandler(Handler):
         tweet = ct.mgr[tweet_id]
         return tweet.json
 
-    @json()
+class ContentHandler(Handler):
+    """create a tweet and return a list of tweets
+    """
+
+    @json(content_type="application/json")
     def post(self, tweet_id=None):
         """create a new tweet"""
         d = self.request.values.to_dict()
@@ -40,10 +43,6 @@ class ContentHandler(Handler):
         return { 'error' : msg }
 
 
-class IndexHandler(Handler):
-    """implements the RESTful content API
-    """
-    
     @json()
     def get(self):
         """return an index for the tweets"""
@@ -59,8 +58,12 @@ class IndexHandler(Handler):
         except:
             return self.error("wrong value for 'o'")
 
-        tweet = ct.mgr[tweet_id]
-        return tweet.json
+        tweets = ct.mgr.index(
+            sort_on = so,
+            sort_order = sd,
+            limit = l,
+            offset = o
+        )
+        tweets = [t.json for t in tweets]
+        return tweets
     
-    def error(self, msg):
-        return { 'error' : msg }

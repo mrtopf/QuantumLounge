@@ -194,3 +194,26 @@ class PoCo(Handler):
         return u.get_poco()
 
 
+class Names(Handler):
+    """Returns the full names for a list of user ids
+
+    **Allowed Methods**: GET
+
+    **URL parameters**: 
+
+
+    **Return value**: On success it will return an JSON object containing
+        the full names for the userids passed in like this::
+       
+        {
+            "mrtopf": "Christian Scholz",
+            ,,,
+        }
+        
+    """ 
+
+    @json()
+    def post(self):
+        print simplejson.loads(self.request.data)
+        return {'mrtopf' : 'Christian Scholz'}
+
