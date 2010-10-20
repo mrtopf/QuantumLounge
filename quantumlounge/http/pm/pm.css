@@ -1,0 +1,157 @@
+/* line 4, sass/pm.scss */
+#activities #entrybox {
+  overflow: auto;
+}
+/* line 7, sass/pm.scss */
+#activities nav, #activities #attachmentlinks {
+  border: 0;
+  margin: 0;
+  padding: 3px;
+  float: left;
+}
+/* line 12, sass/pm.scss */
+#activities nav a, #activities #attachmentlinks a {
+  text-decoration: none;
+  color: #888;
+  padding: 2px 10px;
+  margin: 0;
+  border: 1px solid #888;
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -o-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -khtml-border-radius: 20px;
+  border-radius: 20px;
+}
+/* line 20, sass/pm.scss */
+#activities nav a.active, #activities #attachmentlinks a.active {
+  background: white;
+  color: white;
+  background: #fa0;
+  border: 1px solid #fa0;
+}
+/* line 27, sass/pm.scss */
+#activities #status-content {
+  width: 98%;
+  font-size: 1.2em;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -o-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -khtml-border-radius: 3px;
+  border-radius: 3px;
+  resize: none;
+  border: 1px solid #888;
+  margin: 2px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  -webkit-transition: border 0.2s linear, -webkit-box-shadow 0.2s linear;
+}
+/* line 38, sass/pm.scss */
+#activities #status-headline {
+  overflow: auto;
+}
+/* line 41, sass/pm.scss */
+#activities #status-headline #status-content-count {
+  font-size: 2em;
+  font-weight: bold;
+  color: #aaa;
+  display: block;
+  float: right;
+}
+/* line 48, sass/pm.scss */
+#activities #status-headline h2 {
+  display: block;
+  float: left;
+  font-size: 1.8em;
+  margin: 0;
+  padding: 0;
+}
+/* line 57, sass/pm.scss */
+#activities #status-send {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -o-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  border-radius: 5px;
+  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #ffffff), color-stop(100%, #cccccc));
+  background-image: -moz-linear-gradient(top, #ffffff 0%, #cccccc 100%);
+  border: 1px solid #aaa;
+  font-size: 1.5em;
+  float: right;
+  text-shadow: white 0px 1px 1px;
+  color: #222;
+}
+/* line 68, sass/pm.scss */
+#activities .status-type {
+  padding: 10px 0;
+}
+/* line 72, sass/pm.scss */
+#activities hr {
+  margin: 20px 0;
+  border: 0;
+  border-bottom: 1px dotted black;
+}
+/* line 78, sass/pm.scss */
+#activities .activity {
+  overflow: auto;
+  margin: 5px 0;
+  padding: 3px 0;
+  border-bottom: 1px solid #eee;
+}
+/* line 85, sass/pm.scss */
+#activities .vcard {
+  float: left;
+  padding: 2px;
+  margin: 0;
+  margin-right: 5px;
+  border: 1px solid #ddd;
+  display: block;
+}
+/* line 94, sass/pm.scss */
+#activities .body {
+  display: block;
+}
+/* line 98, sass/pm.scss */
+#activities .name {
+  font-weight: bold;
+  color: #113;
+  text-decoration: none;
+}
+/* line 104, sass/pm.scss */
+#activities .time {
+  display: block;
+  font-size: 0.9em;
+  color: #aaa;
+}
+/* line 110, sass/pm.scss */
+#activities nav {
+  float: right;
+}
+/* line 114, sass/pm.scss */
+#activities #searchbar {
+  float: left;
+}
+/* line 116, sass/pm.scss */
+#activities #searchbar input {
+  -moz-border-radius: 100px;
+  -webkit-border-radius: 100px;
+  -o-border-radius: 100px;
+  -ms-border-radius: 100px;
+  -khtml-border-radius: 100px;
+  border-radius: 100px;
+  background: white;
+  border: 1px solid #888;
+  font-size: 1.2em;
+}
+/* line 124, sass/pm.scss */
+#activities header {
+  overflow: hidden;
+  background: none;
+  margin: 0;
+  margin-bottom: 20px;
+  padding: 0;
+  border: 0;
+  height: auto;
+}

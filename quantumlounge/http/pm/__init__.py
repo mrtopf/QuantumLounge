@@ -1,5 +1,6 @@
 import pkg_resources
 import main
+import var
 from quantumlounge.framework import StaticHandlerFactory
 from quantumcore.resources import js_from_pkg_stream, css_from_pkg_stream
 
@@ -8,6 +9,7 @@ def setup_handlers(map):
     with map.submapper(path_prefix="/pm") as m:
         m.connect(None, '/templates/{path_info:.*}', handler = StaticHandlerFactory(pkg_resources.resource_filename(__name__, 'templates')))
         m.connect(None, '', handler=main.Main)
+        m.connect(None, '/var', handler=var.Var)
 
 def setup_js():
     return [
