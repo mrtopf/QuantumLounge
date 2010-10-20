@@ -22,8 +22,12 @@ JS = [
     js_from_pkg_stream(__name__, 'static/js/jquery.NobleCount.min.js', name="", merge=True, prio=1,),
 
     js_from_pkg_stream(__name__, 'static/js/jsuri-1.0.2-min.js', name="", merge=True, prio=1,),
-    js_from_pkg_stream(__name__, 'static/js/sammy.js', name="", merge=False, prio=2,),
-    js_from_pkg_stream(__name__, 'static/js/sammy.template.js', name="", merge=False, prio=3,),
+    js_from_pkg_stream(__name__, 'static/js/sammy.js', name="", merge=True, prio=2,),
+    js_from_pkg_stream(__name__, 'static/js/sammy.mustache.min.js', name="", merge=True, prio=3,),
+    js_from_pkg_stream(__name__, 'static/js/sammy.title.min.js', name="", merge=True, prio=3,),
+    js_from_pkg_stream(__name__, 'static/js/sammy.json.min.js', name="", merge=True, prio=3,),
+    js_from_pkg_stream(__name__, 'static/js/underscore-min.js', name="", merge=True, prio=3,),
+    js_from_pkg_stream(__name__, 'static/js/backbone-min.js', name="", merge=True, prio=4,),
 
     js_from_pkg_stream(__name__, 'static/js/json-template.js', name="", merge=True, prio=4,),
     js_from_pkg_stream(__name__, 'static/js/tmpl.js', name="", merge=True, prio=4,),
