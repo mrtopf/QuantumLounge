@@ -6,11 +6,11 @@
   CONTENT_API = "/api/1/tweets/";
   app = $.sammy(function() {
     this.element_selector = '#content';
-    this.use(Sammy.Mustache, 'tmpl');
+    this.use(Sammy.Mustache, 'mustache');
     this.use(Sammy.JSON);
     this.use(Sammy.Title);
     this.get('#/', function(context) {
-      return this.partial('/pm/templates/timeline.tmpl').then(function() {
+      return this.partial('/pm/templates/timeline.mustache').then(function() {
         $('#status-content').NobleCount('#status-content-count', {
           block_negative: true
         });
@@ -30,7 +30,7 @@
                 item.username = data[item.user];
                 return item;
               });
-              return that.renderEach('/pm/templates/entry.tmpl', items).appendTo("#statuslist");
+              return that.renderEach('/pm/templates/entry.mustache', items).appendTo("#statuslist");
             }
           });
         });
@@ -51,7 +51,7 @@
           data.id = data._id;
           data.username = VAR.poco.name.formatted;
           data.profile = VAR.poco.thumbnailUrl;
-          context.render('/pm/templates/entry.tmpl', data).then(function(content) {
+          context.render('/pm/templates/entry.mustache', data).then(function(content) {
             return $(content).prependTo("#statuslist").slideDown();
           });
           return $(':input', '#entrybox').not(':button, :submit, :reset, :hidden').val('').removeAttr('checked').removeAttr('selected');

@@ -7,12 +7,12 @@ CONTENT_API = "/api/1/tweets/"
 app = $.sammy(
     ->
       @element_selector = '#content'
-      @use(Sammy.Mustache,'tmpl')
+      @use(Sammy.Mustache,'mustache')
       @use(Sammy.JSON)
       @use(Sammy.Title)
-      
+
       @get('#/', (context) ->
-          @partial('/pm/templates/timeline.tmpl')
+          @partial('/pm/templates/timeline.mustache')
           .then(() ->
             $('#status-content').NobleCount('#status-content-count',{block_negative: true})
             @load(CONTENT_API)
@@ -22,7 +22,7 @@ app = $.sammy(
                 that = this
                 $.ajax({
                     url:'/api/1/users/names',
-                    data: JSON.stringify(users), 
+                    data: JSON.stringify(users),
                     type: 'POST',
                     processData: false,
                     contentType: "application/json",
@@ -31,11 +31,9 @@ app = $.sammy(
                             item.username = data[item.user]
                             return item
                         )
-                        that.renderEach('/pm/templates/entry.tmpl', items)
+                        that.renderEach('/pm/templates/entry.mustache', items)
                         .appendTo("#statuslist")
                 })
-                    
-                
             )
           )
       )
@@ -51,9 +49,9 @@ app = $.sammy(
             'dataType' : 'json',
             'success' : (data, textResponse) ->
                 data.id = data._id
-                data.username = VAR.poco.name.formatted;
-                data.profile = VAR.poco.thumbnailUrl;
-                context.render('/pm/templates/entry.tmpl', data)
+                data.username = VAR.poco.name.formatted
+                data.profile = VAR.poco.thumbnailUrl
+                context.render('/pm/templates/entry.mustache', data)
                 .then( (content) ->
                     $(content).prependTo("#statuslist")
                     .slideDown()
@@ -62,7 +60,7 @@ app = $.sammy(
                  .not(':button, :submit, :reset, :hidden')
                  .val('')
                  .removeAttr('checked')
-                 .removeAttr('selected');
+                 .removeAttr('selected')
         })
         false
       )
@@ -78,4 +76,3 @@ $(document).ready(
         app.run("#/")
     )
 )
-  
