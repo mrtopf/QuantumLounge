@@ -4,7 +4,7 @@ from paste.urlparser import StaticURLParser
 import jinja2
 
 
-def get_static_urlparser(filepath, cache_max_age = 0):
+def get_static_urlparser(filepath, cache_max_age = 1):
     return StaticURLParser(filepath, cache_max_age=cache_max_age)
 
 
