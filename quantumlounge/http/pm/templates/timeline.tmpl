@@ -1,9 +1,43 @@
-<div id="timeline">
-hansi  
-  <h1>What are you doing right now?</h1>
-  <form action="timeline_submit" method="get" accept-charset="utf-8">
-      <textarea name="status" rows="8" cols="40">huhuhu</textarea>
-
-    <p><input type="submit" value="Continue &rarr;"></p>
+<div id="activities">  
+  <form id="entrybox" name="status" action="#/submit" method="POST" accept-charset="utf-8">
+    <input type="hidden" name="status-type" value="note" id="status-type">
+    <div id="status-headline">
+      <span id='status-content-count'></span>
+    </div>
+    
+    <textarea name="content" 
+              rows="2" 
+              accesskey="u" 
+              autocomplete="false" 
+              cols="80" 
+              id="status-content" />
+    <div id="attachmentlinks">
+      <a href="#/link"> + Link</a>
+      <a href="#/file"> + File</a>
+      <a href="#/event"> + Event</a>
+    </div>
+    
+    <div id="attachment">
+    </div>
+    <p><input type="submit" id="status-send" value="Send"></p>
   </form>
+  <hr />
+  <div id="timeline">
+    <header>
+      <div id="searchbar">
+          <form id="search">
+            <input type="text" maxlength="200" size="20" value="" />
+          </form>
+      </div>
+      <nav>
+        <a class="active" href="#/all">All</a>
+        <a href="#/note">Notes</a>
+        <a href="#/link">Links</a>
+        <a href="#/file">Files</a>
+        <a href="#/event">Events</a>
+      </nav>
+    </header>
+    <div id="statuslist"> 
+    </div>
+  </div>
 </div>
