@@ -11,4 +11,5 @@ These are not directly exposed to the network but always capsuled in some HTTP v
    
    usermanagement/intro
    content/index
+   content/index
 

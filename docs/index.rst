@@ -16,9 +16,12 @@ Developer Documenation
 .. toctree::
    :maxdepth: 2
    
+   concepts/security
+   concepts/contentapi
    components/index
    framework/intro
    framework/js
+   framework/restful
    site/index
    roadmap/intro.rst
 
