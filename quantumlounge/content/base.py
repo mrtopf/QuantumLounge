@@ -1,5 +1,5 @@
 from quantumcore.storages.mongoobjectstore import MongoObjectStore, Model
-from pymongo.code import Code
+import pymongo
 import copy
 
 class Content(object):
@@ -139,6 +139,14 @@ class ContentManager(MongoObjectStore):
     """This is the base content manager from which all other managers should derive."""
 
     data_class = Content
+
+    def index(self, sort_order="up", **kwargs):
+        """return a list of items""" 
+        if sort_order == "up":
+            sort_order = pymongo.ASCENDING
+        else:
+            sort_order = pymongo.DESCENDING
+        return self.find(sort_order = sort_order, **kwargs)
 
     def _after_save_hook(self, folder):
         """compute ancestors for a folder and it's children. This needs
