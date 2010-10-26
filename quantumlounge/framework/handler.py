@@ -14,6 +14,17 @@ class Handler(object):
         self.app = app
         self.request = request
         self.settings = settings
+
+    def handle(self, **m):
+        """handle a single request. This means checking the method to use, looking up
+        the method for it and calling it. We have to return a WSGI application"""
+        method = self.request.method.lower()
+        if hasattr(self, method):
+            self.settings.log.debug("calling method %s on handler '%s' " %(self.request.method, m['handler']))
+            del m['handler']
+            return getattr(self, method)(**m)
+        else:
+            return werkzeug.exceptions.MethodNotAllowed()
         
     @property
     def context(self):
@@ -60,4 +71,36 @@ class StaticHandlerFactory(object):
         
     def __call__(self, **kw):
         return StaticHandler(filepath = self.filepath, **kw)
+
+
+class RESTfulHandler(Handler):
+    """a handler for handling RESTful services. 
+
+    Additional features:
+
+    * adjusts the method according to a ``_method`` paramater
+    * extracts the access token from the requests
+    * retrieves the session from the session store/component
+    """
+    
+    def __init__(self, **kw):
+        """initialize RESTful handler by checking access token and session"""
+        super(RESTfulHandler, self).__init__(**kw)
+        self.access_token = access_token = self.request.values.get("access_token", None)
+        if access_token is None:
+            self.session = None
+        else:
+            am = self.settings.authmanager
+            self.session = am.get(access_token)
+
+    def handle(self, **m):
+        """handle a single request. This means checking the method to use, looking up
+        the method for it and calling it. We have to return a WSGI application"""
+        method = self.request.method.lower()
+        if hasattr(self, method):
+            self.settings.log.debug("calling method %s on handler '%s' " %(self.request.method, m['handler']))
+            del m['handler']
+            return getattr(self, method)(**m)
+        else:
+            return werkzeug.exceptions.MethodNotAllowed()
         
