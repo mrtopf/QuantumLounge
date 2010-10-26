@@ -9,8 +9,8 @@ from quantumcore.resources import CSSResourceManager, css_from_pkg_stream
 from quantumcore.resources import JSResourceManager, js_from_pkg_stream, jst_from_pkg_stream
 from quantumlounge.usermanager.users import UserManager
 from quantumlounge.usermanager.authorization import AuthorizationManager
-from quantumlounge.content.basetypedefs import TweetType
-from quantumlounge.content.basetypes import FolderType
+from quantumlounge.content.basetypedefs import StatusType
+from quantumlounge.content.basetypes import FolderType, LinkType
 from quantumlounge.content.contenttypes import ContentTypeManager
 
 from quantumlounge.framework.utils import get_static_urlparser, TemplateHandler
@@ -83,8 +83,9 @@ def setup(**kw):
     ## content types
     db = pymongo.Connection().pm
     ctm = ContentTypeManager()
-    ctm.add(TweetType(db, "contents"))
+    ctm.add(StatusType(db, "contents"))
     ctm.add(FolderType(db, "contents"))
+    ctm.add(LinkType(db, "contents"))
     settings['content1']=ctm
 
     settings['usermanager'] = UserManager(db,"users")

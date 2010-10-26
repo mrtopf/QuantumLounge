@@ -1,7 +1,7 @@
 from base import Status, StatusCollection
 from contenttypes import ContentType
 
-def TweetType(db, coll):
+def StatusType(db, coll):
     tm = StatusCollection(db, coll)
     return ContentType(
         u"status",
