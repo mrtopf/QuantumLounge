@@ -86,7 +86,7 @@ class RESTfulHandler(Handler):
     def __init__(self, **kw):
         """initialize RESTful handler by checking access token and session"""
         super(RESTfulHandler, self).__init__(**kw)
-        self.access_token = access_token = self.request.values.get("access_token", None)
+        self.access_token = access_token = self.request.values.get("oauth_token", None)
         if access_token is None:
             self.session = None
         else:

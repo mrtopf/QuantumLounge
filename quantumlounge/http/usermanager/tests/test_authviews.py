@@ -42,7 +42,7 @@ def test_authorize_loop(um_client):
     
     # now we try to retrieve the PoCo data for @me
     r = um_client.get("/api/1/users/u/@me/profile",
-        query_string={'access_token' : token})
+        query_string={'oauth_token' : token})
         
     assert r.status=="200 OK"
     poco = simplejson.loads(r.data)

@@ -207,7 +207,7 @@ class PoCo(RESTfulHandler):
         am = self.app.settings['authmanager']
         um = self.app.settings['usermanager']
         
-        access_token = self.request.args.get("access_token", None)
+        access_token = self.request.args.get("oauth_token", None)
         self.settings.log.debug("using access token: %s" %access_token)
         if access_token is None:
             return self.error(error_message="no access token was given")

@@ -113,7 +113,7 @@ class Main(Handler):
         self.settings.log.debug("retrieving user data for token %s" %token)
         
         url = self.settings.pm.um_poco_endpoint
-        url = url + "?access_token=%s" %token
+        url = url + "?oauth_token=%s" %token
         res = urllib.urlopen(url)
         data = simplejson.loads(res.read())
         self.settings.log.debug("got user data %s" %data)

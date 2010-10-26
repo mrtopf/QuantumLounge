@@ -37,13 +37,15 @@ app = $.sammy(
             )
           )
       )
+
       @post('#/submit', (context) ->
         p = {
             content : @params.content,
-            user : VAR.poco.id
+            user : VAR.poco.id,
+            oauth_token : VAR.token
         }
         $.ajax({
-            'url' : CONTENT_API,
+            'url' : CONTENT_API
             'type' : 'POST',
             'data' : p,
             'dataType' : 'json',
@@ -72,7 +74,6 @@ $(document).ready(
   ->
     $.getJSON('/pm/var', (data) ->
         VAR = data
-        console.log(data)
         app.run("#/")
     )
 )
