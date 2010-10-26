@@ -1,54 +1,66 @@
+from quantumlounge.content import Model, Collection
 import uuid
-
 import errors
 
-class Token(object):
-    """an Access token for OAuth based authorization"""
-    
-    def __init__(self, username, client_id):
-        """create a new token"""
-        self.username = username
-        self.client_id = client_id
-        self.token = unicode(uuid.uuid4())
+class Token(Model):
+    """a security session called Token (used as OAuth Access Token"""
+    TYPE = "token"
+    _attribs = ['_id', 'username','valid_until','roles','client_id',
+                'state','auth_code']
+    _defaults = {
+            'username' : '',
+            'valid_until' : None,
+            'client_id' : None,
+            'state' : "initialized",
+            'roles' : ['admin'],
+    }
 
-class AuthorizationManager(object):
+class AuthorizationManager(Collection):
     """the AuthorizationManager handles everything around OAuth based authorization
     such as access tokens, authorization codes and clients"""
+
+    data_class = Token
     
     client_ids = ['pm'] # our one client id for now
     tokens = {} # the list of tokens this manager manages
     authorization_codes = {} # mapping from code -> access token
-    
     
     def new_token(self, username, client_id):
         """create a new access token and authorization code for it and
         store it related to this user"""
         if client_id not in self.client_ids:
             raise errors.ClientNotFound(client_id)
-        token = Token(username, client_id)
-        auth_code = unicode(uuid.uuid4())
-        
-        self.authorization_codes[auth_code] = token
-        self.tokens[token.token] = token
-        
-        return token.token, auth_code
+        _id = unicode(uuid.uuid4())
+        token = Token(
+                _id= unicode(uuid.uuid4()), 
+                username=username, 
+                auth_code= unicode(uuid.uuid4()), 
+                client_id=client_id,
+                state="initialized")
+        tid = self.put(token) 
+        return tid, token.auth_code
         
     def get_token_for_code(self, authorization_code, client_id):
         """return the token for the given authorization code. Will raise an
         ``AuthorizationCodeNotFound`` exception if it's not found"""
-        if self.authorization_codes.has_key(authorization_code):
-            token = self.authorization_codes[authorization_code]
+        tokens = self.find({'auth_code' : authorization_code})
+        if len(tokens)==1:
+            token = tokens[0]
             if token.client_id != client_id:
                 raise errors.InvalidAuthorizationCode(authorization_code, client_id)
-            del self.authorization_codes[authorization_code] # one time use only!
+            if token.state!="initialized":
+                raise errors.AuthorizationCodeNotFound(authorization_code)
+            token.state="active"
+            self.update(token)
             return token
         raise errors.AuthorizationCodeNotFound(authorization_code)
         
     def get_token(self, access_token, default=None):
-        return self.tokens.get(access_token, default)
+        r = self.get(access_token)
+        if r is None:
+            return default
+        return r
         
-    __getitem__ = get_token
-    
     
     
     
