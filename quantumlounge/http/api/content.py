@@ -21,7 +21,7 @@ class ContentHandler(RESTfulHandler):
     def post(self, tweet_id=None):
         """create a new tweet"""
         d = self.request.values.to_dict()
-        ct = self.settings['content1']['tweet']
+        ct = self.settings['content1']['status']
         for field in ct.required_fields:
             if field not in d.keys():
                 self.settings.log.error("required field '%s' missing" %field)
@@ -43,7 +43,7 @@ class ContentHandler(RESTfulHandler):
     @json()
     def get(self):
         """return an index for the tweets"""
-        ct = self.settings['content1']['tweet']
+        ct = self.settings['content1']['status']
         so = self.request.values.get("so","date") # sort order
         sd = self.request.values.get("sd","down") # sort direction
         try:

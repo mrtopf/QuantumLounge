@@ -9,7 +9,8 @@ from quantumcore.resources import CSSResourceManager, css_from_pkg_stream
 from quantumcore.resources import JSResourceManager, js_from_pkg_stream, jst_from_pkg_stream
 from quantumlounge.usermanager.users import UserManager
 from quantumlounge.usermanager.authorization import AuthorizationManager
-from quantumlounge.content.tweet import TweetType
+from quantumlounge.content.basetypedefs import TweetType
+from quantumlounge.content.basetypes import FolderType
 from quantumlounge.content.contenttypes import ContentTypeManager
 
 from quantumlounge.framework.utils import get_static_urlparser, TemplateHandler
@@ -67,7 +68,6 @@ def setup(**kw):
     settings['css_resources'] = CSSResourceManager(CSS, prefix_url="/css", auto_reload=True)
     settings['js_resources'] = JSResourceManager(JS, prefix_url="/js", auto_reload=True)
     
-
     settings['secret_key'] = "czs7s8c6c8976c89c7s6s8976cs87d6" #os.urandom(20)
     
     # settings for the project manager
@@ -84,6 +84,7 @@ def setup(**kw):
     db = pymongo.Connection().pm
     ctm = ContentTypeManager()
     ctm.add(TweetType(db, "contents"))
+    ctm.add(FolderType(db, "contents"))
     settings['content1']=ctm
 
     settings['usermanager'] = UserManager(db,"users")
