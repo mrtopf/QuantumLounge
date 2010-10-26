@@ -2,7 +2,7 @@ from quantumcore.storages.mongoobjectstore import MongoObjectStore, Model
 import pymongo
 import copy
 
-class Content(object):
+class Model(object):
     """a data model based on quantumcore.storages but copied here to make
     it more flexible. We provide the following features:
         
@@ -135,10 +135,10 @@ class Content(object):
 
     oid = property(get_id, set_id)
 
-class ContentManager(MongoObjectStore):
+class Collection(MongoObjectStore):
     """This is the base content manager from which all other managers should derive."""
 
-    data_class = Content
+    data_class = Model
 
     def index(self, sort_order="up", **kwargs):
         """return a list of items""" 
