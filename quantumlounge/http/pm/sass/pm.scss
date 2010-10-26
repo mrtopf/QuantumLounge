@@ -1,6 +1,39 @@
 @import "compass/css3";
 
 #activities {
+
+  #breadcrumbbox {
+    font-size: 0.9em;
+    a {
+        text-decoration: none;
+    }
+    .bc.active {
+        font-size: 2em;
+    }
+    .add {
+        font-size: 1em;
+        height: 5px;
+        width: 5px;
+        @include border-radius(100px);
+        @include linear-gradient(color_stops(#fff,#eee));
+        padding: 1px 3px;
+        border: 1px solid #ccc;
+        @include text-shadow(#fff,0px,1px,1px);
+        color: #888;
+    }
+    .add:hover {
+        font-size: 1em;
+        height: 5px;
+        width: 5px;
+        @include border-radius(100px);
+        @include linear-gradient(color_stops(#afc,#8ea));
+        padding: 1px 3px;
+        border: 1px solid #888;
+        @include text-shadow(#fff,0px,1px,1px);
+        color: #444;
+    }
+    
+  }
   #entrybox {
     overflow: auto;
   }
