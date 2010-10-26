@@ -86,12 +86,19 @@ class RESTfulHandler(Handler):
     def __init__(self, **kw):
         """initialize RESTful handler by checking access token and session"""
         super(RESTfulHandler, self).__init__(**kw)
-        self.access_token = access_token = self.request.values.get("oauth_token", None)
-        if access_token is None:
+        at = None
+        # check header for oauth token
+        # TODO
+        # check URI parameters
+        at = self.request.args.get("oauth_token", None)
+        if at is None:
+            # check POST values
+            at = self.request.form.get("oauth_token", None)
+        if at is None:
             self.session = None
         else:
             am = self.settings.authmanager
-            self.session = am.get(access_token)
+            self.session = am.get(at)
 
     def handle(self, **m):
         """handle a single request. This means checking the method to use, looking up
