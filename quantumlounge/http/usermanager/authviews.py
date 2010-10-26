@@ -72,9 +72,11 @@ class Authorize(Handler):
         if data is not None:
             login_data = SecureCookie.unserialize(data, self.settings.secret_key)
         else:
+            self.settings.log.debug("cookie for user login data not found")
             login_data = {}
         if not login_data.has_key("username"):
             # not logged in, show login form
+            self.settings.log.debug("redirecting to login form")
             return self.login_form()
         else: 
             # logged in, retrieve an auth code and do the redirect
@@ -155,13 +157,16 @@ class Login(Handler):
         username = f.get("username", None)
         password = f.get("password", None)
         if username is None or password is None:
+            self.settings.log.debug("login failed: username and pw missing")
             return self.error("bad_request",u"username or password missing")
         
         um = self.app.settings['usermanager']
-        user = um.get(username)
+        user = um.get_by_username(username)
         if user is None:
+            self.settings.log.debug("login failed: user %s not found" %username)
             return self.error("user_not_found",u"user not found")
         if password!=user.password:
+            self.settings.log.debug("login for %s failed: password wrong" %username)
             return self.error("credentials_wrong",u"username and password do not match")
             
         # apparently we are logged in, so lets set a cookie

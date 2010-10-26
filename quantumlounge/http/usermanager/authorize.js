@@ -2,7 +2,6 @@
 
 */
 
-var tm = TemplateManager();
 
 function LoginView() {    
 
