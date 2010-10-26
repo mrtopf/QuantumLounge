@@ -2,6 +2,7 @@ from quantumcore.storages.mongoobjectstore import MongoObjectStore
 import pymongo
 import datetime
 import copy
+import uuid
 
 class Model(object):
     """a data model based on quantumcore.storages but copied here to make
@@ -54,6 +55,8 @@ class Model(object):
                 setattr(self, a, data[a])
 
         # now some manual storage of internal attributes
+        if _id is None:
+            _id = unicode(uuid.uuid4())
         self._id = _id
         self._store = _store
         if self._ancestors is None:
