@@ -1,8 +1,8 @@
-from base import Content, ContentManager
+from quantumlounge.content import Model, Collection
 from contenttypes import ContentType
 import datetime
 
-class Tweet(Content):
+class Tweet(Model):
     """example content type defining a tweet"""
     TYPE = "tweet"
     _attribs = ['content','date','user']
@@ -21,7 +21,7 @@ class Tweet(Content):
         data['date'] = data['date'].strftime("%d.%m.%Y %H:%M")
         return data
 
-class TweetManager(ContentManager):
+class TweetManager(Collection):
     """manages tweets"""
 
     data_class = Tweet
