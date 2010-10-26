@@ -1,8 +1,38 @@
-from quantumlounge.framework import Handler, json, html
+from quantumlounge.framework import Handler, json, html, RESTfulHandler
 import werkzeug
 import simplejson
+import functools
 
 import quantumlounge.usermanager.errors as errors
+
+class role(object):
+    """check if roles are present in the session"""
+    def __init__(self, *roles):
+        self.roles = roles
+
+    def __call__(self, method):
+        """creating a wrapper to check roles. We do this as follows:
+            
+        * get the session via the access token
+        * retrieve the roles of the user from the session
+        * check if one of the roles given to the decorator is inside the session
+        """
+   
+        possible_roles = self.roles
+        @functools.wraps(method)
+        def wrapper(self, *args, **kwargs):
+            session = self.session
+            if session is None:
+                roles = []
+            else:
+                roles = session.roles
+            if len(set(possible_roles).intersection(set(roles)))==0:
+                # TODO: find a better way
+                self.settings.log.error("access for session %s not authorized: roles needed: %s, roles found: %s"
+                        %(access_token, needed_roles, roles))
+                return None
+            return method(self, *args, **kwargs)
+        return wrapper
 
 class Login(Handler):
     """handle logging in users. On a POST it will check username and password 
@@ -126,10 +156,10 @@ class Token(Handler):
             return self.error(e.code, e.msg)
 
         return {
-            'access_token' : token.token
+            'access_token' : token._id
         }
 
-class PoCo(Handler):
+class PoCo(RESTfulHandler):
     """Return data about a user using the :term:`Portable Contacts` format.
     
     **Allowed Methods**: GET
@@ -170,27 +200,32 @@ class PoCo(Handler):
             'error' : code,
             'error_message' : error_message
         }
-    
+
     @json()
+    @role('admin','user')
     def get(self, username):
         am = self.app.settings['authmanager']
         um = self.app.settings['usermanager']
         
         access_token = self.request.args.get("access_token", None)
+        self.settings.log.debug("using access token: %s" %access_token)
         if access_token is None:
             return self.error(error_message="no access token was given")
         token = am.get_token(access_token, None)
+        print token
         if token is None:
             return self.error('invalid_grant', 'The authorization token is not valid')
         
         # check if the username is "@me", if so we use the token username
         if token.username != username and username!=u"@me":
+            self.settings.log.debug("token contains wrong username, necessary: %s, found: %s" %(username, token.username))
             return self.error('invalid_grant', 'The authorization token is not valid')
         
         # now return the PoCo data
-        u = um.get(token.username)
+        u = um.get_by_username(token.username)
         if u is None:
-            return self.error(error_message="no access token was given")
+            self.settings.log.debug("user with username %s not found" %(token.username))
+            return self.error(error_message="user not found")
         return u.get_poco()
 
 
