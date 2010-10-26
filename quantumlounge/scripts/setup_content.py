@@ -27,13 +27,24 @@ def do():
     uid = unicode(user['_id'])
 
     # setup the root node
-    rf = Folder(user=uid, content="root")
+    rf = Folder(_id = "0", user=uid, content="root")
     rfid = fm.put(rf)
     
     f1 = Folder(user=uid, content="links", _parent_id=rfid)
     f2 = Folder(user=uid, content="messages", _parent_id=rfid)
     fm.put(f1)
     fm.put(f2)
+
+    f = Folder(user=uid, content="A", _parent_id=rfid)
+    fid = fm.put(f)
+    f = Folder(user=uid, content="B", _parent_id=fid)
+    fid = fm.put(f)
+    f = Folder(user=uid, content="C", _parent_id=fid)
+    fid = fm.put(f)
+    f = Folder(user=uid, content="D", _parent_id=fid)
+    fid = fm.put(f)
+    f = Folder(user=uid, content="E", _parent_id=fid)
+    fid = fm.put(f)
 
 if __name__ == '__main__':
     do()
