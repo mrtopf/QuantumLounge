@@ -44,10 +44,12 @@ DOMAIN = "http://localhost:9991"
 
 import quantumlounge.http.usermanager
 import quantumlounge.http.pm
+import quantumlounge.http.api.users
 
 MODULES = [
     quantumlounge.http.usermanager,
-    quantumlounge.http.pm
+    quantumlounge.http.pm,
+    quantumlounge.http.api.users
 ]
 
 for module in MODULES:
@@ -65,8 +67,6 @@ def setup(**kw):
     settings['css_resources'] = CSSResourceManager(CSS, prefix_url="/css", auto_reload=True)
     settings['js_resources'] = JSResourceManager(JS, prefix_url="/js", auto_reload=True)
     
-    settings['usermanager'] = UserManager()
-    settings['authmanager'] = AuthorizationManager()
 
     settings['secret_key'] = "czs7s8c6c8976c89c7s6s8976cs87d6" #os.urandom(20)
     
@@ -85,6 +85,9 @@ def setup(**kw):
     ctm = ContentTypeManager()
     ctm.add(TweetType(db, "contents"))
     settings['content1']=ctm
+
+    settings['usermanager'] = UserManager(db,"users")
+    settings['authmanager'] = AuthorizationManager(db, "tokens")
 
     # TODO: enable updating of sub settings via dot notation (pm.client_id)
     settings.update(kw)
