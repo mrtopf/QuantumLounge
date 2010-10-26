@@ -16,7 +16,7 @@ def test_get_token_with_unkown_client_id():
 def test_get_token_for_auth_code():
     token, auth_code = am.new_token('mrtopf', 'pm')
     real_token = am.get_token_for_code(auth_code, 'pm')
-    assert real_token.token == token
+    assert real_token._id == token
     
 def test_get_token_for_auth_code_with_wrong_code():
     token, auth_code = am.new_token('mrtopf', 'pm')
