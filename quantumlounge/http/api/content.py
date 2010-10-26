@@ -1,9 +1,9 @@
-from quantumlounge.framework import Handler, json, html
+from quantumlounge.framework import RESTfulHandler, json, html
 import werkzeug
 import simplejson
 import uuid
 
-class TweetHandler(Handler):
+class TweetHandler(RESTfulHandler):
     """return a tweet"""
 
     @json()
@@ -13,7 +13,7 @@ class TweetHandler(Handler):
         tweet = ct.mgr[tweet_id]
         return tweet.json
 
-class ContentHandler(Handler):
+class ContentHandler(RESTfulHandler):
     """create a tweet and return a list of tweets
     """
 
@@ -24,12 +24,9 @@ class ContentHandler(Handler):
         ct = self.settings['content1']['tweet']
         for field in ct.required_fields:
             if field not in d.keys():
+                self.settings.log.error("required field '%s' missing" %field)
                 return self.error("required field '%s' missing" %field)
-        myfields = ct.fields
-        for field in d.keys():
-            if field not in myfields:
-                return self.error("unknown field '%s'" %field)
-
+        
         # TODO: Better validation
 
         # create a new tweet and store it
