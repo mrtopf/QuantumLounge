@@ -1,5 +1,6 @@
-from quantumcore.storages.mongoobjectstore import MongoObjectStore, Model
+from quantumcore.storages.mongoobjectstore import MongoObjectStore
 import pymongo
+import datetime
 import copy
 
 class Model(object):
@@ -180,6 +181,30 @@ class Collection(MongoObjectStore):
         set_ancestors(d, ancestors)
 
 
+class Status(Model):
+    """example content type defining our own base type"""
+    TYPE = "status"
+    _attribs = ['content','date','user']
+    _defaults = {
+            'content' : u'',
+            'date' : None,
+            'user' : u'',
+        }
 
+    def _after_init(self):
+        """fix data"""
+        self.date = datetime.datetime.now()
 
+    def jsonify(self, data):
+        """convert the dictionary to a JSON representation
 
+        # TODO: this should be in the content API, not DB API
+        
+        """
+        data['date'] = data['date'].strftime("%d.%m.%Y %H:%M")
+        return data
+
+class StatusCollection(Collection):
+    """manages status messages"""
+
+    data_class = Status

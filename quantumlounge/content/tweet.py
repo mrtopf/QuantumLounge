@@ -1,27 +1,12 @@
-from quantumlounge.content import Model, Collection
+from quantumlounge.content import Model, Collection, Status, StatusCollection
 from contenttypes import ContentType
 import datetime
 
-class Tweet(Model):
+class Tweet(Status):
     """example content type defining a tweet"""
     TYPE = "tweet"
-    _attribs = ['content','date','user']
-    _defaults = {
-        'content' : u'',
-        'date' : None,
-        'user' : u'',
-    }
 
-    def _after_init(self):
-        """fix data"""
-        self.date = datetime.datetime.now()
-
-    def jsonify(self, data):
-        """convert the dictionary to a JSON representation"""
-        data['date'] = data['date'].strftime("%d.%m.%Y %H:%M")
-        return data
-
-class TweetManager(Collection):
+class TweetManager(StatusCollection):
     """manages tweets"""
 
     data_class = Tweet
