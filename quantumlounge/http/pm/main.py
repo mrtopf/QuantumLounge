@@ -148,7 +148,8 @@ class Main(Handler):
                 'poco' : userdata,
                 'token' : token
             }, self.settings.secret_key).serialize()
-            res = self.main_view()
+            # redirect back to this view but without the code
+            res = werkzeug.redirect(self.request.base_url)
             res.set_cookie("u", cookie)
             return res
         

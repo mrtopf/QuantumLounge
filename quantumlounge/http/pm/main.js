@@ -40,7 +40,8 @@
       var p;
       p = {
         content: this.params.content,
-        user: VAR.poco.id
+        user: VAR.poco.id,
+        oauth_token: VAR.token
       };
       $.ajax({
         'url': CONTENT_API,
@@ -64,7 +65,6 @@
   $(document).ready(function() {
     return $.getJSON('/pm/var', function(data) {
       VAR = data;
-      console.log(data);
       return app.run("#/");
     });
   });
