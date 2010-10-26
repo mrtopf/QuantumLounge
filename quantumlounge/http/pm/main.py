@@ -106,14 +106,14 @@ class Main(Handler):
         if not data.has_key("access_token"):
             # TODO: What to do about errors which are not supposed to happen?
             raise AuthError("Something technically went wrong. Please try again later")
-        return Token(data['access_token'])
+        return data['access_token']
         
     def retrieve_userdata(self, token):
         """retrieve the user data"""
         self.settings.log.debug("retrieving user data for token %s" %token)
         
         url = self.settings.pm.um_poco_endpoint
-        url = url + "?access_token=%s" %token.token
+        url = url + "?access_token=%s" %token
         res = urllib.urlopen(url)
         data = simplejson.loads(res.read())
         self.settings.log.debug("got user data %s" %data)
@@ -160,6 +160,12 @@ class Main(Handler):
             return self.start_authorize()
         userdata = SecureCookie.unserialize(userdata, self.settings.secret_key)
         self.settings.log.debug("found user data: %s" %userdata)
+        if userdata.has_key("poco"):
+            if userdata['poco'].has_key("error"):
+                self.settings.log.debug("userdata contains error, trying again")
+                userdata = {}
+        else:
+            userdata = {}
 
         if userdata=={}:
             self.settings.log.debug("user data empty, starting OAuth dance")

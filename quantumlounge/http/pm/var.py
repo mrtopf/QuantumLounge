@@ -21,6 +21,6 @@ class Var(Handler):
         userdata = SecureCookie.unserialize(userdata, self.settings.secret_key)
         d = {
             'poco' : userdata['poco'],
-            'token' : userdata['token'].token
+            'token' : userdata['token']
         }
         return d
