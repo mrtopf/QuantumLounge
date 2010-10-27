@@ -11,6 +11,7 @@ from quantumlounge.usermanager.users import UserManager
 from quantumlounge.usermanager.authorization import AuthorizationManager
 from quantumlounge.content.basetypedefs import StatusType
 from quantumlounge.content.basetypes import FolderType, LinkType
+from quantumlounge.content.base import ContentManager
 from quantumlounge.content.contenttypes import ContentTypeManager
 
 from quantumlounge.framework.utils import get_static_urlparser, TemplateHandler
@@ -90,6 +91,7 @@ def setup(**kw):
 
     settings['usermanager'] = UserManager(db,"users")
     settings['authmanager'] = AuthorizationManager(db, "tokens")
+    settings['contentmanager'] = ContentManager(db, "contents", ctm, "0")
 
     # TODO: enable updating of sub settings via dot notation (pm.client_id)
     settings.update(kw)
