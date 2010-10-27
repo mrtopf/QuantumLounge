@@ -131,6 +131,27 @@ class Model(object):
         """return recursively all children of a subtree starting with this node"""
         return self._store.find({ '_ancestors' : self._id })
 
+    @property
+    def parents(self):
+        """return a list of all parent objects 
+
+        TODO: This should not be here! We need a more generic data class
+        for this to work because otherwise different objects from different
+        types will contain different attributes. As we only need content for
+        now this might be ok but should be changed!
+        """
+        p=[]
+        o = self
+        while True:
+            if o._parent_id == None:
+                return p
+            o = self._store.get(o._parent_id,None)
+            if o is None:
+                # TODO: this should not happen, do some error management
+                return p
+            p.append(o)
+        return p
+
     def set_id(self, id_):
         self._id = id_
 
@@ -211,3 +232,68 @@ class StatusCollection(Collection):
     """manages status messages"""
 
     data_class = Status
+
+class ContentManager(object):
+    """generic content manager
+
+    This manager is able to manage content defined by types derived
+    from the above base classes.
+    
+    """
+
+    def __init__(self, db, collection_name, content_types, root_node=u"0"):
+        """initialize the content manager.
+
+        Use the given MongoDB ``db`` and the collection defined by
+        ``collection_name`` inside. The ``content_types`` parameter takes the
+        actual content type register and the ``root_node`` defines the name of
+        the root node.
+        
+        """
+        self.db = db
+        self.collection_name = collection_name
+        self.collection = db[collection_name]
+        self.content_types = content_types
+        self.root_node = root_node
+
+    def index(self, sort_order="up", **kwargs):
+        """return a list of items""" 
+        if sort_order == "up":
+            sort_order = pymongo.ASCENDING
+        else:
+            sort_order = pymongo.DESCENDING
+        return self.find(sort_order = sort_order, **kwargs)
+
+    def _to_obj(self, item):
+        """convert a dictionary to a content object of the correct type"""
+        _type = item['_type']
+        ct_obj = self.content_types.get(_type, None)
+        cls = ct_obj.cls 
+        return cls.from_dict(item, ct_obj.mgr)
+
+    def find(self, query={}, 
+                   sort_on=None, 
+                   sort_order=pymongo.ASCENDING,
+                   limit=10,                                                                                                                   
+                   offset=0):
+        """return some entries based on the query"""
+        results = self.collection.find(query)
+        if sort_on is not None:
+            results.sort(sort_on, sort_order)
+        results = results[offset:limit+offset]
+
+        # retrieve the data classes for those items
+        objs = []
+        for item in results:
+            objs.append(self._to_obj(item))
+        return objs
+
+    def get(self, oid):
+        """return the object with the given object id"""
+        d = self.collection.find_one({'_id' : oid})
+        return self._to_obj(d)
+
+    @property
+    def root(self):
+        """return the root node"""
+        return self.get(self.root_node)
