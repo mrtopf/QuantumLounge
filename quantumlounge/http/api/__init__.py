@@ -1,5 +1,5 @@
-import usermanager, content
-import users
+import usermanager
+import users, content
 
 def setup_handlers(map):
     """setup the handlers"""
@@ -10,6 +10,7 @@ def setup_handlers(map):
         m.connect(None, '/u/{username}/profile', handler=usermanager.PoCo)
 
 
+    """
     with map.submapper(path_prefix="/api/1/tweets") as m:
         #m.connect(None, '/{path_info:.*}', handler = content.ContentHandler)
         # routes for now which use GET and POST on tweets
@@ -18,5 +19,7 @@ def setup_handlers(map):
         m.connect(None, '/{tweet_id}', 
                 handler = content.TweetHandler,
                 conditions=dict(method=["GET"]))
+    """
     users.setup_handlers(map)
+    content.setup_handlers(map)
     
