@@ -1,8 +1,4 @@
-status = {
-    active: 'note'
-}
-
-CONTENT_API = "/api/1/tweets/"
+CONTENT_API = "/api/1/content/0?r=children"
 
 app = $.sammy(
     ->
@@ -12,28 +8,36 @@ app = $.sammy(
       @use(Sammy.Title)
 
       @get('#/', (context) ->
-          @partial('/pm/templates/timeline.mustache')
-          .then(() ->
-            $('#status-content').NobleCount('#status-content-count',{block_negative: true})
-            @load(CONTENT_API)
-            .then( (context) ->
-                users = _.uniq(_.pluck(@content, 'user'))
-                items = @content
-                that = this
-                $.ajax({
-                    url:'/api/1/users/names',
-                    data: JSON.stringify(users),
-                    type: 'POST',
-                    processData: false,
-                    contentType: "application/json",
-                    success: (data) ->
-                        items = _.map(items, (item) ->
-                            item.username = data[item.user]
-                            return item
-                        )
-                        that.renderEach('/pm/templates/entry.mustache', items)
-                        .appendTo("#statuslist")
-                })
+        $.getJSON('/api/1/content/17456c03-ba37-4ca6-8925-a906678bc79d?r=parents', (data) ->
+            data.parents = data.parents.slice(1, data.parents.length)
+            $.getJSON('/api/1/content/17456c03-ba37-4ca6-8925-a906678bc79d?r=default', (details) ->
+                data.title = details.default.content
+                context.partial('/pm/templates/timeline.mustache', data)
+                .then(() ->
+                    $('#status-content').NobleCount('#status-content-count',{block_negative: true})
+                    @load(CONTENT_API)
+                    .then( (context) ->
+                        console.log("ok")
+                        items = @content.children
+                        console.log(items)
+                        users = _.uniq(_.pluck(items, 'user'))
+                        that = this
+                        $.ajax({
+                            url:'/api/1/users/names',
+                            data: JSON.stringify(users),
+                            type: 'POST',
+                            processData: false,
+                            contentType: "application/json",
+                            success: (data) ->
+                                items = _.map(items, (item) ->
+                                    item.username = data[item.user]
+                                    return item
+                                )
+                                that.renderEach('/pm/templates/entry.mustache', items)
+                                .appendTo("#statuslist")
+                        })
+                    )
+                )
             )
           )
       )

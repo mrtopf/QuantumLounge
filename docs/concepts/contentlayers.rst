@@ -95,6 +95,54 @@ want to have the following representations:
 * A version which only includes the text which is supposed to be searchable
 * A version with all information
 
+Description of the REST API
+===========================
 
+We usually start with a root folder which has a certain id (we use "0").
+
+We can retrieve it::
+
+    GET /api/1/content/0
+
+and we receive a JSON formatted record with it's details.
+
+We can also request it's contents by using the index representation::
+
+    GET /api/1/content/0?r=index
+
+which will return a list of it's sub objects. Each object only contains it's 
+base information, no connection information is sent along. Moreover you will
+receive the total amount of objects so that you can do batching::
+
+    {
+        'total_amount' : 1203,
+        'items' : [
+          {
+            '_id' : 'c87sc87s6c8c76s8c76',
+            'content' : 'Great!',
+            'user' : '762762',
+            'date' : '2010-10-20T13:45:11',
+          },
+          {
+            '_id' : 'c87sc87s6c8c76s8c76',
+            'content' : 'Great!',
+            'user' : '762762',
+            'date' : '2010-10-20T13:45:11',
+          },
+          ...
+        ]
+    }
+
+We can further sort and order it, limit it etc.::
+
+    GET /api/1/content/0?r=index&sd=up&so=date&l=10&o=0
+
+which means:
+
+* ``sd`` is sort direction, up or down
+* ``so`` is sort order which must be one if the fields, e.g. ``date``
+* ``l`` is the amount of records to return, 10 in this case
+* ``o`` is the offset from where to start returning objects. Thus you can do
+  batching with it.
 
 

@@ -36,4 +36,3 @@ class UserManager(Collection):
         if len(r)==0:
             return None
         return r[0]
-

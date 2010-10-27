@@ -60,6 +60,16 @@ class Item(RESTfulHandler):
         }
         return self._query_objs(query)
 
+    def r_parents(self, content_id):
+        """all recursively all nodes in the subtree of this object"""
+        ct = self.settings.contentmanager
+        item = ct.get(content_id)
+        ancestors = item._ancestors
+        res = []
+        for a in ancestors:
+            res.append(ct.get(a).json)
+        return res
+
     def r_children(self, content_id):
         """return all direct children of this object"""
         query = {
@@ -108,7 +118,7 @@ class Item(RESTfulHandler):
         rname = "r_%s" %r
         m = getattr(self, rname, None)
         if m is not None:
-            return m(content_id)
+            return {r : m(content_id)}
         return {'error' : 'representation not found'}
 
     

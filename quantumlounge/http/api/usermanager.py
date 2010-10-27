@@ -249,6 +249,13 @@ class Names(Handler):
 
     @json()
     def post(self):
-        print simplejson.loads(self.request.data)
-        return {'mrtopf' : 'Christian Scholz'}
+        userids =  simplejson.loads(self.request.data)
+        um = self.app.settings['usermanager']
+        res = {}
+        users = um.find({
+            '_id' : {"$in": userids},
+        })
+        for u in users:
+            res[u._id] = u.fullname
+        return res
 
