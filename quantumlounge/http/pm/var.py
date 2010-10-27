@@ -19,8 +19,10 @@ class Var(Handler):
         """return the user related data"""
         userdata = self.request.cookies.get("u", None)        
         userdata = SecureCookie.unserialize(userdata, self.settings.secret_key)
+        cm = self.settings.contentmanager
         d = {
             'poco' : userdata['poco'],
-            'token' : userdata['token']
+            'token' : userdata['token'],
+            'root' : cm.root.json
         }
         return d
