@@ -212,7 +212,6 @@ class PoCo(RESTfulHandler):
         if access_token is None:
             return self.error(error_message="no access token was given")
         token = am.get_token(access_token, None)
-        print token
         if token is None:
             return self.error('invalid_grant', 'The authorization token is not valid')
         
