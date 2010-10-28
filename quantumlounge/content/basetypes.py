@@ -4,6 +4,11 @@ from contenttypes import ContentType
 class Folder(Status):
     """a folder"""
     TYPE = "folder"
+    _attribs = Status._attribs+['subtypes']
+    _defaults = Status._defaults
+    _defaults.update({
+        'subtypes' : None # means all are allowed
+    })
 
 class FolderCollection(StatusCollection):
     """manages folders"""
