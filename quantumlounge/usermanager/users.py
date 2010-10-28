@@ -10,7 +10,7 @@ class User(Model):
     def get_poco(self):
         """return the user as a Portable Contact instance"""
         return {
-          "id": self.username,
+          "id": self._id,
           "thumbnailUrl": self.photo,
           "name": {
             "formatted": self.fullname,
