@@ -1,6 +1,91 @@
 
 CONTENT_API = "/api/1/content/"
 
+TABS = {
+    active: null
+    tab_elem: null
+    tabs: null
+    active_tab: null
+    init: () ->
+        TABS.tab_element = $("#tabs")
+        TABS.active = TABS.tab_element.children().first()
+        TABS.set()
+        $("#tabs li > a").click( () ->
+            TABS.active.removeClass("current")
+            TABS.active = $(this).parent()
+            TABS.set()
+            return false
+        )
+    set: () ->
+        if (TABS.active_tab)
+            TABS.active_tab.slideUp()
+        TABS.active.addClass("current")
+        mid = TABS.active.children().first().attr("id")
+        tabname = mid.slice(4, mid.length)
+        TABS.active_tab = $("#pane-"+tabname)
+        TABS.active_tab.slideDown()
+}
+
+LINKS = {
+    url: null
+    img_idx: 0
+    img_url: null
+    img_amount: 0
+    data: null
+    process: () ->
+        LINKS.data = null
+        $("#link-submit").text("Loading...")
+        $("#link-box").slideUp()
+        url = $("#link").val()
+        $.ajax({
+            url: VAR.scraper+"?url="+url
+            dataType: "jsonp"
+            success: (data) ->
+                LINKS.data = data
+                LINKS.img_amount = data.all_image_urls.length
+                $("#link-box-title").text(data.title)
+                $("#link-box-description").text(data.content)
+                $("#link-box-url").text(url)
+                $("#link-box").slideDown()
+                $("#link-submit").text("Load")
+                $("#link-box-image-next").click(LINKS.next_image)
+                $("#link-box-image-prev").click(LINKS.prev_image)
+                LINKS.set_image(0)
+        })
+        false
+
+    next_image: () ->
+        console.log("next")
+        idx = LINKS.img_idx
+        idx++
+        if idx>(LINKS.img_amount-1)
+            idx= LINKS.img_amount-1
+        LINKS.set_image(idx)
+        false
+
+    prev_image: () ->
+        idx = LINKS.img_idx
+        idx--
+        if idx<0
+            idx= 0
+        LINKS.set_image(idx)
+        false
+
+    set_image: (idx) ->
+        LINKS.img_idx = idx
+        imgurl = LINKS.data.all_image_urls[idx]
+        img = LINKS.data.images[imgurl]
+        $("#link-box-image").attr("src",img.thumb.url)
+
+    init: () ->
+        $("#link-submit").click( () ->
+            LINKS.process()
+        )
+        $("#link").submit( () ->
+            LINKS.process()
+        )
+}
+
 PAGE = {
     id: null,
     render: (context, content_id) ->
@@ -13,6 +98,8 @@ PAGE = {
                 data.parents = data.parents.slice(1, data.parents.length)
                 context.partial('/pm/templates/timeline.mustache', data)
                 .then(() ->
+                    TABS.init()
+                    LINKS.init()
                     $('#status-content').NobleCount('#status-content-count',{block_negative: true})
                     statuslist = $("#statuslist").detach()
                     @load(base_url+"?r=children&oauth_token="+VAR.token)

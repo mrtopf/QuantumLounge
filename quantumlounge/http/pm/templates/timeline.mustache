@@ -1,53 +1,87 @@
 <div id="activities">  
-<div id="breadcrumbbox">
-<a href="#/" class="bc">/</a>
-{{#parents}}
-    <a href="#/{{_id}}" class="bc">{{content}}</a>/
-{{/parents}}
-{{#title}}
-<span class="bc active">{{title}}</span>
-{{/title}}
-<a href="#add_folder" class="add">+</a> 
-</div>
-  <form id="entrybox" name="status" action="#/submit" method="POST" accept-charset="utf-8">
-    <input type="hidden" name="status-type" value="note" id="status-type">
-    <div id="status-headline">
-      <span id='status-content-count'></span>
+    <div id="breadcrumbbox">
+        <a href="#/" class="bc">/</a>
+        {{#parents}}
+        <a href="#/{{_id}}" class="bc">{{content}}</a>/
+        {{/parents}}
+
+        {{#title}}
+        <span class="bc active">{{title}}</span>
+        {{/title}}
+        <a href="#add_folder" class="add">+</a> 
     </div>
-    
-    <textarea name="content" 
-              rows="2" 
-              accesskey="u" 
-              autocomplete="false" 
-              cols="80" 
-              id="status-content" />
-    <div id="attachmentlinks">
-      <a href="#/link"> + Link</a>
-      <a href="#/file"> + File</a>
-      <a href="#/event"> + Event</a>
-    </div>
-    
-    <div id="attachment">
-    </div>
-    <p><input type="submit" id="status-send" value="Send"></p>
-  </form>
-  <hr />
-  <div id="timeline">
-    <header>
-      <div id="searchbar">
-          <form id="search">
-            <input type="text" maxlength="200" size="20" value="" />
-          </form>
-      </div>
-      <nav>
-        <a class="active" href="#/all">All</a>
-        <a href="#/note">Notes</a>
-        <a href="#/link">Links</a>
-        <a href="#/file">Files</a>
-        <a href="#/event">Events</a>
-      </nav>
-    </header>
-    <div id="statuslist"> 
-    </div>
-  </div>
-</div>
+
+    <ul id="tabs">
+        <li><a id="tab-message" href="#">Message</a></li>
+        <li><a id="tab-link" href="#">Link</a></li>
+    </ul>
+    <form id="entrybox" name="status" action="#/submit" method="POST" accept-charset="utf-8">
+        <input type="hidden" name="status-type" value="note" id="status-type" />
+
+
+        <div id="status-headline">
+            <span id='status-content-count'></span>
+        </div>
+        <textarea name="content" 
+                rows="2" 
+                accesskey="u" 
+                autocomplete="false" 
+                cols="80" 
+                id="status-content" />
+
+        <div id="panes">
+            <div class="pane" id="pane-message"></div>
+            <div class="pane" id="pane-link">
+                <div class="field">
+                    <label for="link">Link:</label>
+                    <div id="link-container">
+                        <input type="text" size="40" maxlength="300" value="" name="link" id="link" />
+                        <button id="link-submit">Load</button>
+                    </div>
+                </div>
+                <div id="link-box">
+                    <img id="link-box-image" />
+                    <h4 id="link-box-title">Link Title</h4>
+                    <span id="link-box-url">Link URL</span>
+                    <div id="link-box-description">Description</div>
+                    <div id="imageselector">
+                    <a href="#" id="link-box-image-prev">prev</a>
+                    <a href="#" id="link-box-image-next">next</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="attachmentlinks" style="display:none">
+            <a href="#/link"> + Link</a>
+            <a href="#/file"> + File</a>
+            <a href="#/event"> + Event</a>
+        </div>
+
+        <div id="attachment"></div>
+
+        <p><input type="submit" id="status-send" value="Send"></p>
+    </form>
+
+    <hr />
+
+    <div id="timeline">
+        <header>
+            <div id="searchbar">
+                <form id="search">
+                    <input type="text" maxlength="200" size="20" value="" />
+                </form>
+            </div>
+            <nav>
+                <a class="active" href="#/all">All</a>
+                <a href="#/note">Notes</a>
+                <a href="#/link">Links</a>
+                <a href="#/file">Files</a>
+                <a href="#/event">Events</a>
+            </nav>
+        </header>
+
+        <div id="statuslist"> </div>
+
+    </div><!-- timeline -->
+</div><!-- activities -->

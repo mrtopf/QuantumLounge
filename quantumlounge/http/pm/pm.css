@@ -1,16 +1,31 @@
+@charset "UTF-8";
+/* line 3, sass/pm.scss */
+#activities {
+  /* single tab */
+  /* link inside the tab. uses a background image */
+  /* when mouse enters the tab move the background image */
+  /* active tab uses a class name "current". it's highlight is also done by moving the background image. */
+  /* Different widths for tabs: use a class name: w1, w2, w3 or w2 */
+  /* width 1 */
+  /* width 2 */
+  /* width 3 */
+  /* width 4 */
+  /* initially all panes are hidden */
+}
 /* line 5, sass/pm.scss */
 #activities #breadcrumbbox {
   font-size: 0.9em;
+  margin-bottom: 20px;
 }
-/* line 7, sass/pm.scss */
+/* line 8, sass/pm.scss */
 #activities #breadcrumbbox a {
   text-decoration: none;
 }
-/* line 10, sass/pm.scss */
+/* line 11, sass/pm.scss */
 #activities #breadcrumbbox .bc.active {
   font-size: 2em;
 }
-/* line 13, sass/pm.scss */
+/* line 14, sass/pm.scss */
 #activities #breadcrumbbox .add {
   font-size: 1em;
   height: 5px;
@@ -23,12 +38,13 @@
   border-radius: 100px;
   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #ffffff), color-stop(100%, #eeeeee));
   background-image: -moz-linear-gradient(top, #ffffff 0%, #eeeeee 100%);
+  background-image: linear-gradient(top, #ffffff 0%, #eeeeee 100%);
   padding: 1px 3px;
   border: 1px solid #ccc;
   text-shadow: white 0px 1px 1px;
   color: #888;
 }
-/* line 24, sass/pm.scss */
+/* line 25, sass/pm.scss */
 #activities #breadcrumbbox .add:hover {
   font-size: 1em;
   height: 5px;
@@ -41,23 +57,27 @@
   border-radius: 100px;
   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #aaffcc), color-stop(100%, #88eeaa));
   background-image: -moz-linear-gradient(top, #aaffcc 0%, #88eeaa 100%);
+  background-image: linear-gradient(top, #aaffcc 0%, #88eeaa 100%);
   padding: 1px 3px;
   border: 1px solid #888;
   text-shadow: white 0px 1px 1px;
   color: #444;
 }
-/* line 37, sass/pm.scss */
+/* line 39, sass/pm.scss */
 #activities #entrybox {
   overflow: auto;
+  border: 1px solid #999;
+  border-top: 0;
+  padding: 15px 10px;
 }
-/* line 40, sass/pm.scss */
+/* line 46, sass/pm.scss */
 #activities nav, #activities #attachmentlinks {
   border: 0;
   margin: 0;
   padding: 3px;
   float: left;
 }
-/* line 45, sass/pm.scss */
+/* line 51, sass/pm.scss */
 #activities nav a, #activities #attachmentlinks a {
   text-decoration: none;
   color: #888;
@@ -71,35 +91,51 @@
   -khtml-border-radius: 20px;
   border-radius: 20px;
 }
-/* line 53, sass/pm.scss */
+/* line 59, sass/pm.scss */
 #activities nav a.active, #activities #attachmentlinks a.active {
   background: white;
   color: white;
   background: #fa0;
   border: 1px solid #fa0;
 }
-/* line 60, sass/pm.scss */
+/* line 66, sass/pm.scss */
 #activities #status-content {
   width: 98%;
-  font-size: 1.2em;
+  font-size: 1.3em;
+  font-weight: normal;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   -o-border-radius: 3px;
   -ms-border-radius: 3px;
   -khtml-border-radius: 3px;
   border-radius: 3px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 3px 0 inset;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 3px 0 inset;
+  -o-box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 3px 0 inset;
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 3px 0 inset;
   resize: none;
-  border: 1px solid #888;
+  border: 1px solid #aaa;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
   margin: 2px;
+  outline: none;
   white-space: pre-wrap;
   word-wrap: break-word;
   -webkit-transition: border 0.2s linear, -webkit-box-shadow 0.2s linear;
 }
-/* line 71, sass/pm.scss */
+/* line 82, sass/pm.scss */
+#activities #status-content:focus {
+  border: 1px solid #8ac;
+  -moz-box-shadow: #00aaff 0 0 3px 0;
+  -webkit-box-shadow: #00aaff 0 0 3px 0;
+  -o-box-shadow: #00aaff 0 0 3px 0;
+  box-shadow: #00aaff 0 0 3px 0;
+}
+/* line 87, sass/pm.scss */
 #activities #status-headline {
   overflow: auto;
 }
-/* line 74, sass/pm.scss */
+/* line 90, sass/pm.scss */
 #activities #status-headline #status-content-count {
   font-size: 2em;
   font-weight: bold;
@@ -107,7 +143,7 @@
   display: block;
   float: right;
 }
-/* line 81, sass/pm.scss */
+/* line 97, sass/pm.scss */
 #activities #status-headline h2 {
   display: block;
   float: left;
@@ -115,7 +151,7 @@
   margin: 0;
   padding: 0;
 }
-/* line 90, sass/pm.scss */
+/* line 106, sass/pm.scss */
 #activities #status-send {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -125,30 +161,31 @@
   border-radius: 5px;
   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #ffffff), color-stop(100%, #cccccc));
   background-image: -moz-linear-gradient(top, #ffffff 0%, #cccccc 100%);
+  background-image: linear-gradient(top, #ffffff 0%, #cccccc 100%);
   border: 1px solid #aaa;
   font-size: 1.5em;
   float: right;
   text-shadow: white 0px 1px 1px;
   color: #222;
 }
-/* line 101, sass/pm.scss */
+/* line 117, sass/pm.scss */
 #activities .status-type {
   padding: 10px 0;
 }
-/* line 105, sass/pm.scss */
+/* line 121, sass/pm.scss */
 #activities hr {
   margin: 20px 0;
   border: 0;
   border-bottom: 1px dotted black;
 }
-/* line 111, sass/pm.scss */
+/* line 127, sass/pm.scss */
 #activities .activity {
   overflow: auto;
   margin: 5px 0;
   padding: 3px 0;
   border-bottom: 1px solid #eee;
 }
-/* line 118, sass/pm.scss */
+/* line 134, sass/pm.scss */
 #activities .vcard {
   float: left;
   padding: 2px;
@@ -157,31 +194,31 @@
   border: 1px solid #ddd;
   display: block;
 }
-/* line 127, sass/pm.scss */
+/* line 143, sass/pm.scss */
 #activities .body {
   display: block;
 }
-/* line 131, sass/pm.scss */
+/* line 147, sass/pm.scss */
 #activities .name {
   font-weight: bold;
   color: #113;
   text-decoration: none;
 }
-/* line 137, sass/pm.scss */
+/* line 153, sass/pm.scss */
 #activities .time {
   display: block;
   font-size: 0.9em;
   color: #aaa;
 }
-/* line 143, sass/pm.scss */
+/* line 159, sass/pm.scss */
 #activities nav {
   float: right;
 }
-/* line 147, sass/pm.scss */
+/* line 163, sass/pm.scss */
 #activities #searchbar {
   float: left;
 }
-/* line 149, sass/pm.scss */
+/* line 165, sass/pm.scss */
 #activities #searchbar input {
   -moz-border-radius: 100px;
   -webkit-border-radius: 100px;
@@ -193,7 +230,7 @@
   border: 1px solid #888;
   font-size: 1.2em;
 }
-/* line 157, sass/pm.scss */
+/* line 173, sass/pm.scss */
 #activities header {
   overflow: hidden;
   background: none;
@@ -202,4 +239,182 @@
   padding: 0;
   border: 0;
   height: auto;
+}
+/* line 184, sass/pm.scss */
+#activities #tabs {
+  list-style: none;
+  margin: 0 !important;
+  padding: 0;
+  height: 30px;
+  border-bottom: 1px solid #666;
+}
+/* line 193, sass/pm.scss */
+#activities #tabs li {
+  float: left;
+  text-indent: 0;
+  padding: 0;
+  margin: 0 !important;
+  list-style-image: none !important;
+}
+/* line 202, sass/pm.scss */
+#activities #tabs a {
+  background: url(http://flowplayer.org//img/global/tabs.png) no-repeat -652px 0;
+  font-size: 11px;
+  display: block;
+  height: 30px;
+  line-height: 30px;
+  width: 111px;
+  text-align: center;
+  text-decoration: none;
+  color: #000;
+  padding: 0px;
+  margin: 0px;
+  position: relative;
+  top: 1px;
+}
+/* line 218, sass/pm.scss */
+#activities #tabs a:active {
+  outline: none;
+}
+/* line 223, sass/pm.scss */
+#activities #tabs a:hover {
+  background-position: -652px -31px;
+  color: #fff;
+}
+/* line 229, sass/pm.scss */
+#activities #tabs .current, #activities #tabs .current:hover, #activities #tabs li.current a {
+  background-position: -652px -62px;
+  cursor: default !important;
+  color: #000 !important;
+}
+/* line 239, sass/pm.scss */
+#activities #tabs .w1 {
+  background-position: -519px 0;
+  width: 134px;
+}
+/* line 240, sass/pm.scss */
+#activities #tabs .w1:hover {
+  background-position: -519px -31px;
+}
+/* line 241, sass/pm.scss */
+#activities #tabs .w1.current {
+  background-position: -519px -62px;
+}
+/* line 244, sass/pm.scss */
+#activities #tabs .w2 {
+  background-position: -366px 0px;
+  width: 154px;
+}
+/* line 245, sass/pm.scss */
+#activities #tabs .w2:hover {
+  background-position: -366px -31px;
+}
+/* line 246, sass/pm.scss */
+#activities #tabs .w2.current {
+  background-position: -366px -62px;
+}
+/* line 250, sass/pm.scss */
+#activities #tabs .w3 {
+  background-position: -193px 0px;
+  width: 174px;
+}
+/* line 251, sass/pm.scss */
+#activities #tabs .w3:hover {
+  background-position: -193px -31px;
+}
+/* line 252, sass/pm.scss */
+#activities #tabs .w3.current {
+  background-position: -193px -62px;
+}
+/* line 255, sass/pm.scss */
+#activities #tabs .w4 {
+  background-position: 0px 0px;
+  width: 194px;
+}
+/* line 256, sass/pm.scss */
+#activities #tabs .w4:hover {
+  background-position: 0px -31px;
+}
+/* line 257, sass/pm.scss */
+#activities #tabs .w4.current {
+  background-position: 0px -62px;
+}
+/* line 261, sass/pm.scss */
+#activities #panes .pane {
+  display: none;
+}
+/* line 266, sass/pm.scss */
+#activities .field {
+  margin: 0 2px 10px 0;
+}
+/* line 268, sass/pm.scss */
+#activities .field label {
+  padding: 4px;
+  display: inline-block;
+  float: left;
+  font-weight: bold;
+}
+/* line 276, sass/pm.scss */
+#activities #link-container {
+  border: 1px solid #777;
+  border-top: 1px solid #aaa;
+  border-left: 1px solid #aaa;
+  overflow: auto;
+  width: 92%;
+}
+/* line 284, sass/pm.scss */
+#activities #link {
+  display: inline-block;
+  width: 80%;
+  height: 20px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  -o-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -khtml-border-radius: 2px;
+  border-radius: 2px;
+  border: none;
+  font-size: 1.1em;
+  margin-right: 0;
+  float: left;
+  outline: none;
+}
+/* line 296, sass/pm.scss */
+#activities #link-submit {
+  display: inline-block;
+  padding: 3px 14px;
+  border: none;
+  border-left: 1px solid #aaa;
+  width: 19%;
+  height: 25px;
+  font-weight: bold;
+  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #eeeeee), color-stop(100%, #dddddd));
+  background-image: -moz-linear-gradient(top, #eeeeee 0%, #dddddd 100%);
+  background-image: linear-gradient(top, #eeeeee 0%, #dddddd 100%);
+  margin: 0;
+  float: right;
+}
+/* line 309, sass/pm.scss */
+#activities #link-box {
+  display: none;
+  border: 1px solid #888;
+  margin: 10px 0;
+  padding: 5px;
+  overflow: auto;
+}
+/* line 316, sass/pm.scss */
+#activities #link-box img {
+  width: 100px;
+  height: 100px;
+  padding: 3px;
+  float: left;
+}
+/* line 323, sass/pm.scss */
+#activities #link-box h4 {
+  margin: 0;
+}
+/* line 326, sass/pm.scss */
+#activities #link-box #link-box-url {
+  font-size: 0.9em;
+  color: #777;
 }

@@ -26,5 +26,6 @@ class Var(Handler):
             'token' : userdata['token'],
             'root' : cm.root.json,
             'types' : cm.content_types.json,
+            'scraper' : 'http://pagescraper.mrtopf.clprojects.net'
         }
         return d
