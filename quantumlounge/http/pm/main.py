@@ -65,10 +65,11 @@ class Main(Handler):
         return msg
         
     @html
-    def main_view(self):
-        """render the login form"""
+    def main_view(self, content_id):
+        """render main view"""
         return self.app.settings.templates['templates/master.pt'].render(
             pc = self.context,
+            content_id = content_id, # tell the JS where we are, TODO: Make it read this itself
             js_page_links = self.settings['js_resources']("http.pm.main"),
             css_page_links = self.settings['css_resources']("http.pm.main"),
         )
@@ -119,7 +120,7 @@ class Main(Handler):
         self.settings.log.debug("got user data %s" %data)
         return data
         
-    def get(self):
+    def get(self, content_id="0"):
         args = self.request.args
         
         # first check if we received an auth_code, if it's valid and if we can show
@@ -180,5 +181,5 @@ class Main(Handler):
         self.user = userdata['poco']
         
         # render the main template
-        return self.main_view()
+        return self.main_view(content_id)
         
