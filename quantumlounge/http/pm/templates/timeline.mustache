@@ -1,9 +1,12 @@
 <div id="activities">  
 <div id="breadcrumbbox">
+<a href="#/" class="bc">/</a>
 {{#parents}}
-    <a href="#" class="bc">{{content}}</a>/
+    <a href="#/{{_id}}" class="bc">{{content}}</a>/
 {{/parents}}
+{{#title}}
 <span class="bc active">{{title}}</span>
+{{/title}}
 <a href="#add_folder" class="add">+</a> 
 </div>
   <form id="entrybox" name="status" action="#/submit" method="POST" accept-charset="utf-8">
