@@ -24,6 +24,14 @@ class ContentType(AttributeMapper):
         d = copy.copy(default)
         d.update(data)
         self.update(d)
+    @property
+    def json(self):
+        """return a JSON compatible representation"""
+        return {
+            '_id' : self._id,
+            'name' : self.name,
+            'description' : self.description,
+        }
 
 class ContentTypeManager(AttributeMapper):
     """a content type manager which is simply a dictionary"""
@@ -32,5 +40,8 @@ class ContentTypeManager(AttributeMapper):
         """add a content type"""
         self[ct._id] = ct
 
-
+    @property
+    def json(self):
+        """return a list of JSONified types"""
+        return [t.json for t in self.values()]
 
