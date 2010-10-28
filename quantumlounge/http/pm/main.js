@@ -1,25 +1,26 @@
 (function() {
-  var CONTENT_API, VAR, app;
-  CONTENT_API = "/api/1/content/0?r=children";
-  app = $.sammy(function() {
-    this.element_selector = '#content';
-    this.use(Sammy.Mustache, 'mustache');
-    this.use(Sammy.JSON);
-    this.use(Sammy.Title);
-    this.get('#/', function(context) {
-      return $.getJSON('/api/1/content/17456c03-ba37-4ca6-8925-a906678bc79d?r=parents', function(data) {
-        data.parents = data.parents.slice(1, data.parents.length);
-        return $.getJSON('/api/1/content/17456c03-ba37-4ca6-8925-a906678bc79d?r=default', function(details) {
-          data.title = details["default"].content;
+  var CONTENT_API, PAGE, VAR, app;
+  CONTENT_API = "/api/1/content/";
+  PAGE = {
+    id: null,
+    render: function(context, content_id) {
+      var base_url;
+      base_url = CONTENT_API + content_id;
+      return $.getJSON(base_url + '?r=parents&oauth_token=' + VAR.token, function(data) {
+        return $.getJSON(base_url + '?r=default&oauth_token=' + VAR.token, function(details) {
+          if (data.parents.length > 0) {
+            data.title = details["default"].content;
+          }
+          data.parents = data.parents.slice(1, data.parents.length);
           return context.partial('/pm/templates/timeline.mustache', data).then(function() {
+            var statuslist;
             $('#status-content').NobleCount('#status-content-count', {
               block_negative: true
             });
-            return this.load(CONTENT_API).then(function(context) {
+            statuslist = $("#statuslist").detach();
+            return this.load(base_url + "?r=children&oauth_token=" + VAR.token).then(function(context) {
               var items, that, users;
-              console.log("ok");
               items = this.content.children;
-              console.log(items);
               users = _.uniq(_.pluck(items, 'user'));
               that = this;
               return $.ajax({
@@ -29,27 +30,47 @@
                 processData: false,
                 contentType: "application/json",
                 success: function(data) {
-                  items = _.map(items, function(item) {
+                  var res;
+                  res = [];
+                  _.each(items, function(item) {
                     item.username = data[item.user];
-                    return item;
+                    return that.render('/pm/templates/entry.' + item._type + '.mustache', item).appendTo(statuslist);
                   });
-                  return that.renderEach('/pm/templates/entry.mustache', items).appendTo("#statuslist");
+                  return statuslist.appendTo("#timeline");
                 }
               });
             });
           });
         });
       });
+    },
+    set_id: function(id) {
+      return (PAGE.id = id);
+    }
+  };
+  app = $.sammy(function() {
+    this.element_selector = '#content';
+    this.use(Sammy.Mustache, 'mustache');
+    this.use(Sammy.JSON);
+    this.use(Sammy.Title);
+    this.get('#/', function(context) {
+      PAGE.render(context, content_id);
+      return PAGE.set_id(content_id);
+    });
+    this.get('#/:id', function(context) {
+      PAGE.render(context, this.params.id);
+      return PAGE.set_id(this.params.id);
     });
     return this.post('#/submit', function(context) {
-      var p;
+      var base_url, p;
       p = {
         content: this.params.content,
         user: VAR.poco.id,
         oauth_token: VAR.token
       };
+      base_url = CONTENT_API + PAGE.id;
       $.ajax({
-        'url': CONTENT_API,
+        'url': base_url,
         'type': 'POST',
         'data': p,
         'dataType': 'json',
