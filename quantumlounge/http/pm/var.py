@@ -21,8 +21,10 @@ class Var(Handler):
         userdata = SecureCookie.unserialize(userdata, self.settings.secret_key)
         cm = self.settings.contentmanager
         d = {
+            'userdata' : userdata,
             'poco' : userdata['poco'],
             'token' : userdata['token'],
-            'root' : cm.root.json
+            'root' : cm.root.json,
+            'types' : cm.content_types.json,
         }
         return d
