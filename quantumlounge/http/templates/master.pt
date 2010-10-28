@@ -94,8 +94,8 @@
   {{ pc.jslinks }}
   {{ js_page_links }}
   
-  <script>
-    var initial_view = '{{initial_view}}';
+  <script language="JavaScript">
+    var content_id = "{{content_id}}";
   </script>
 
 
