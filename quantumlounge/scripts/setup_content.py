@@ -30,8 +30,8 @@ def do():
     rf = Folder(_id = "0", user=uid, content="root")
     rfid = fm.put(rf)
     
-    f1 = Folder(user=uid, content="links", _parent_id=rfid)
-    f2 = Folder(user=uid, content="messages", _parent_id=rfid)
+    f1 = Folder(user=uid, content="links", _parent_id=rfid, subtypes=['link'])
+    f2 = Folder(user=uid, content="messages", _parent_id=rfid, subtypes=['status'])
     fm.put(f1)
     fm.put(f2)
 
