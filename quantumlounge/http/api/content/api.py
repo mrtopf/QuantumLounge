@@ -2,6 +2,36 @@ from quantumlounge.framework import RESTfulHandler, json, html
 import werkzeug
 import simplejson
 import uuid
+import functools
+
+class role(object):
+    """check if roles are present in the session"""
+    def __init__(self, *roles):
+        self.roles = roles
+
+    def __call__(self, method):
+        """creating a wrapper to check roles. We do this as follows:
+            
+        * get the session via the access token
+        * retrieve the roles of the user from the session
+        * check if one of the roles given to the decorator is inside the session
+        """
+   
+        possible_roles = self.roles
+        @functools.wraps(method)
+        def wrapper(self, *args, **kwargs):
+            session = self.session
+            if session is None:
+                roles = []
+            else:
+                roles = session.roles
+            if len(set(possible_roles).intersection(set(roles)))==0:
+                # TODO: find a better way
+                self.settings.log.error("access for session %s not authorized: roles needed: %s, roles found: %s"
+                        %(session, possible_roles, roles))
+                return None
+            return method(self, *args, **kwargs)
+        return wrapper
 
 class Item(RESTfulHandler):
     """handle all methods for an item
@@ -110,6 +140,7 @@ class Item(RESTfulHandler):
 
 
     @json()
+    @role("admin")
     def get(self, content_id, format = None):
         """return an index for the tweets"""
         cm = self.settings.contentmanager
@@ -120,5 +151,26 @@ class Item(RESTfulHandler):
         if m is not None:
             return {r : m(content_id)}
         return {'error' : 'representation not found'}
+
+    
+    @json(content_type="application/json")
+    @role("admin")
+    def post(self, content_id, format = None):
+        """POSTing to an item means creating a new one"""
+        d = self.request.values.to_dict()
+        d['_parent_id'] = content_id
+        ct = self.settings['content1']['status']
+        for field in ct.required_fields:
+            if field not in d.keys():
+                self.settings.log.error("required field '%s' missing" %field)
+                return self.error("required field '%s' missing" %field)
+       
+        # create a new tweet and store it
+        item = ct.cls(**d)
+        item.oid = unicode(uuid.uuid4())
+        i = ct.mgr.put(item)
+        item = ct.mgr[i]
+        # post the new item back
+        return item.json
 
     
