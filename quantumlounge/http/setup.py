@@ -29,6 +29,7 @@ JS = [
     js_from_pkg_stream(__name__, 'static/js/sammy.title.min.js', name="", merge=True, prio=3,),
     js_from_pkg_stream(__name__, 'static/js/sammy.json.min.js', name="", merge=True, prio=3,),
     js_from_pkg_stream(__name__, 'static/js/underscore-min.js', name="", merge=True, prio=3,),
+    js_from_pkg_stream(__name__, 'static/js/jquery.tools.min.js', name="", merge=True, prio=3,),
 
     js_from_pkg_stream(__name__, 'static/js/plugins.js', name="", merge=True, prio=4,),
     #js_from_pkg_stream(__name__, 'static/js/script.js', name="", merge=False, prio=5,),
