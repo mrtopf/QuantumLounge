@@ -12,34 +12,32 @@
     </div>
 
     <ul id="tabs">
-        <li><a id="tab-message" href="#">Message</a></li>
+        <li><a id="tab-status" href="#">Message</a></li>
         <li><a id="tab-link" href="#">Link</a></li>
     </ul>
     <form id="entrybox" name="status" action="#/submit" method="POST" accept-charset="utf-8">
-        <input type="hidden" name="status-type" value="note" id="status-type" />
-
-
         <div id="status-headline">
             <span id='status-content-count'></span>
         </div>
         <textarea name="content" 
                 rows="2" 
                 accesskey="u" 
+                required="required"
                 autocomplete="false" 
                 cols="80" 
                 id="status-content" />
 
         <div id="panes">
-            <div class="pane" id="pane-message"></div>
+            <div class="pane" id="pane-status"></div>
             <div class="pane" id="pane-link">
                 <div class="field">
                     <label for="link">Link:</label>
                     <div id="link-container">
-                        <input type="text" size="40" maxlength="300" value="" name="link" id="link" />
+                        <input type="url" size="40" maxlength="300" value="" name="link" id="link" />
                         <button id="link-submit">Load</button>
                     </div>
                 </div>
-                <div id="link-box">
+                <div class="link-info" id="link-box">
                     <img id="link-box-image" />
                     <h4 id="link-box-title">Link Title</h4>
                     <span id="link-box-url">Link URL</span>

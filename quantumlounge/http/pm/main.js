@@ -1,32 +1,52 @@
 (function() {
-  var CONTENT_API, LINKS, PAGE, TABS, VAR, app;
+  var CONTENT_API, LINKS, PAGE, STATUS, TABS, TYPES, VAR, app;
+  var __hasProp = Object.prototype.hasOwnProperty;
+  String.prototype.startsWith = function(str) {
+    var r;
+    r = this.match("^" + str);
+    if (!r) {
+      return false;
+    }
+    return r[0] === str;
+  };
   CONTENT_API = "/api/1/content/";
   TABS = {
+    active_name: null,
+    tab_element: null,
     active: null,
-    tab_elem: null,
     tabs: null,
     active_tab: null,
+    active_pane: null,
     init: function() {
       TABS.tab_element = $("#tabs");
-      TABS.active = TABS.tab_element.children().first();
+      TABS.active_tab = TABS.tab_element.children().first();
       TABS.set();
       return $("#tabs li > a").click(function() {
-        TABS.active.removeClass("current");
-        TABS.active = $(this).parent();
+        TABS.active_tab.removeClass("current");
+        TABS.active_tab = $(this).parent();
         TABS.set();
         return false;
       });
     },
     set: function() {
       var mid, tabname;
-      if (TABS.active_tab) {
-        TABS.active_tab.slideUp();
+      if (TABS.active_pane) {
+        TABS.active_pane.slideUp();
       }
-      TABS.active.addClass("current");
-      mid = TABS.active.children().first().attr("id");
+      TABS.active_tab.addClass("current");
+      mid = TABS.active_tab.children().first().attr("id");
       tabname = mid.slice(4, mid.length);
-      TABS.active_tab = $("#pane-" + tabname);
-      return TABS.active_tab.slideDown();
+      TABS.active_name = tabname;
+      TABS.active_pane = $("#pane-" + tabname);
+      return TABS.active_pane.slideDown();
+    }
+  };
+  STATUS = {
+    init: function() {},
+    to_form: function(params) {
+      return {
+        content: params.content
+      };
     }
   };
   LINKS = {
@@ -35,12 +55,34 @@
     img_url: null,
     img_amount: 0,
     data: null,
+    active_image: null,
+    to_form: function(params) {
+      var data;
+      console.log(LINKS.active_image);
+      data = {
+        content: params.content,
+        link: params.link,
+        link_title: LINKS.data.title,
+        link_description: LINKS.data.content,
+        link_image: LINKS.active_image
+      };
+      console.log("sending: " + data);
+      return data;
+    },
     process: function() {
       var url;
       LINKS.data = null;
-      $("#link-submit").text("Loading...");
       $("#link-box").slideUp();
       url = $("#link").val();
+      if (url.length < 5) {
+        return false;
+      }
+      console.log(url.startsWith("http://"));
+      if (!url.startsWith("http://")) {
+        url = "http://" + url;
+        $("#link").val(url);
+      }
+      $("#link-submit").text("Loading...");
       $.ajax({
         url: VAR.scraper + "?url=" + url,
         dataType: "jsonp",
@@ -55,13 +97,15 @@
           $("#link-box-image-next").click(LINKS.next_image);
           $("#link-box-image-prev").click(LINKS.prev_image);
           return LINKS.set_image(0);
+        },
+        error: function() {
+          return $("#link-submit").text("Load");
         }
       });
       return false;
     },
     next_image: function() {
       var idx;
-      console.log("next");
       idx = LINKS.img_idx;
       idx++;
       if (idx > (LINKS.img_amount - 1)) {
@@ -85,16 +129,28 @@
       LINKS.img_idx = idx;
       imgurl = LINKS.data.all_image_urls[idx];
       img = LINKS.data.images[imgurl];
+      LINKS.active_image = img.thumb.url;
+      console.log(img);
+      console.log(LINKS.active_image);
       return $("#link-box-image").attr("src", img.thumb.url);
     },
     init: function() {
       $("#link-submit").click(function() {
         return LINKS.process();
       });
-      return $("#link").submit(function() {
-        return LINKS.process();
+      return $("#link").keydown(function(event) {
+        if (event.keyCode === 13) {
+          console.log("ok");
+          LINKS.process();
+          event.preventDefault();
+          return false;
+        }
       });
     }
+  };
+  TYPES = {
+    link: LINKS,
+    status: STATUS
   };
   PAGE = {
     id: null,
@@ -108,9 +164,14 @@
           }
           data.parents = data.parents.slice(1, data.parents.length);
           return context.partial('/pm/templates/timeline.mustache', data).then(function() {
-            var statuslist;
+            var _a, name, obj, statuslist;
             TABS.init();
-            LINKS.init();
+            _a = TYPES;
+            for (name in _a) {
+              if (!__hasProp.call(_a, name)) continue;
+              obj = _a[name];
+              obj.init();
+            }
             $('#status-content').NobleCount('#status-content-count', {
               block_negative: true
             });
@@ -159,23 +220,25 @@
       return PAGE.set_id(this.params.id);
     });
     return this.post('#/submit', function(context) {
-      var base_url, p;
-      p = {
-        content: this.params.content,
-        user: VAR.poco.id,
-        oauth_token: VAR.token
-      };
+      var active, active_type, base_url, data;
+      active = TABS.active_name;
+      active_type = TYPES[active];
+      data = active_type.to_form(this.params);
+      data._type = active;
+      data.user = VAR.poco.id;
+      data.oauth_token = VAR.token;
       base_url = CONTENT_API + PAGE.id;
       $.ajax({
         'url': base_url,
         'type': 'POST',
-        'data': p,
+        'data': data,
         'dataType': 'json',
         'success': function(data, textResponse) {
+          console.log(data);
           data.id = data._id;
           data.username = VAR.poco.name.formatted;
           data.profile = VAR.poco.thumbnailUrl;
-          context.render('/pm/templates/entry.mustache', data).then(function(content) {
+          context.render('/pm/templates/entry.' + active + '.mustache', data).then(function(content) {
             return $(content).prependTo("#statuslist").slideDown();
           });
           return $(':input', '#entrybox').not(':button, :submit, :reset, :hidden').val('').removeAttr('checked').removeAttr('selected');
