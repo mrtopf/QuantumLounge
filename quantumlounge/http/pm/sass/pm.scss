@@ -306,7 +306,7 @@
     float:right;
   }
 
-  #link-box {
+  #link-box, .link-info {
     display: none;
     border: 1px solid #888;
     margin: 10px 0;
@@ -318,6 +318,7 @@
       height: 100px;
       padding: 3px;
       float: left;
+      margin-right: 3px;
     }
 
     h4 {
@@ -327,6 +328,10 @@
       font-size: 0.9em;
       color: #777;
     }
+  }
+  .link-info {
+    display: block;
+    border: none;
   }
 
 }
