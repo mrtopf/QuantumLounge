@@ -3,6 +3,7 @@ import werkzeug
 import simplejson
 import uuid
 import functools
+import pprint
 
 class role(object):
     """check if roles are present in the session"""
@@ -36,25 +37,6 @@ class role(object):
 class Item(RESTfulHandler):
     """handle all methods for an item
     """
-
-    @json(content_type="application/json")
-    def post(self, tweet_id=None):
-        """create a new tweet"""
-        d = self.request.values.to_dict()
-        ct = self.settings['content1']['status']
-        for field in ct.required_fields:
-            if field not in d.keys():
-                self.settings.log.error("required field '%s' missing" %field)
-                return self.error("required field '%s' missing" %field)
-        
-        # TODO: Better validation
-
-        # create a new tweet and store it
-        tweet = ct.cls(**d)
-        tweet.oid = unicode(uuid.uuid4())
-        i = ct.mgr.put(tweet)
-        tweet = ct.mgr[i]
-        return tweet.json
 
     def error(self, msg):
         return { 'error' : msg }
@@ -159,7 +141,8 @@ class Item(RESTfulHandler):
         """POSTing to an item means creating a new one"""
         d = self.request.values.to_dict()
         d['_parent_id'] = content_id
-        ct = self.settings['content1']['status']
+        _type = d['_type']
+        ct = self.settings['content1'][_type]
         for field in ct.required_fields:
             if field not in d.keys():
                 self.settings.log.error("required field '%s' missing" %field)
