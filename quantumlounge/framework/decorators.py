@@ -29,13 +29,23 @@ class json(object):
     
     def __call__(self, method):
         """takes a dict output of a handler method and returns it as JSON"""
+
+        that = self
     
         @functools.wraps(method)
-        def wrapper(*args, **kwargs):
-            data = method(*args, **kwargs)
-            response = werkzeug.Response(simplejson.dumps(data))
-            response.content_type = "application/json"
-            for a,v in self.headers.items():
+        def wrapper(self, *args, **kwargs):
+            data = method(self, *args, **kwargs)
+            s = simplejson.dumps(data)
+            if self.request.args.has_key("callback"):
+                print "callback"
+                callback = self.request.args.get("callback")
+                s = "%s(%s)" %(callback, s)
+                response = werkzeug.Response(s)
+                response.content_type = "application/javascript"
+            else:
+                response = werkzeug.Response(s)
+                response.content_type = "application/json"
+            for a,v in that.headers.items():
                 response.headers[a] = v
             return response
 
