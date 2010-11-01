@@ -10,12 +10,11 @@
   };
   Processor.prototype.templates = ['link', 'status'];
   Processor.prototype.tmpls = {
-    link: '<div class="activity" id="a-{{id}}">\n<span class="body">\n<a href="" class="name">{{username}}</a>\n{{content}}\n<div class="link-info">\n<img class="link-box-image" src="{{link_image}}" />\n<strong class="link-box-title"><a href="{{link_url}}">{{link_title}}</a></strong>\n<div class="link-box-description">{{link_description}}</div>\n</div>\n<span class="time">{{date}}</span>\n</span>\n</div>',
-    status: '<div class="activity" id="a-{{ id }}">\n<span class="body">\n<a href="" class="name">{{ username }}</a>\n{{ content }}\n<span class="time">{{ date }}</span>\n</span>\n</div>'
+    link: '<div class="activity" id="a-{{id}}">\n    <div class="body">\n        {{content}}\n        <div class="link-info">\n            <img class="link-box-image" src="{{link_image}}" />\n            <strong class="link-box-title"><a href="{{link_url}}">{{link_title}}</a></strong>\n            <div class="link-box-description">{{link_description}}</div>\n        </div>\n    </div>\n</div>',
+    status: '<div class="activity" id="a-{{ id }}">\n    <div class="body">\n        {{ content }}\n    </div>\n</div>'
   };
   Processor.prototype.display_items = function() {
     document.write("<div id='jsview'></div>");
-    console.log(this.tmpls);
     return $.ajax({
       url: "http://localhost:9991/api/1/content/0?r=jsview&jsview_type=link&so=date&sd=down",
       dataType: "jsonp",

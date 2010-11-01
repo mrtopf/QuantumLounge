@@ -5,32 +5,27 @@ class Processor
     tmpls: {
         link: '''
                 <div class="activity" id="a-{{id}}">
-                <span class="body">
-                <a href="" class="name">{{username}}</a>
-                {{content}}
-                <div class="link-info">
-                <img class="link-box-image" src="{{link_image}}" />
-                <strong class="link-box-title"><a href="{{link_url}}">{{link_title}}</a></strong>
-                <div class="link-box-description">{{link_description}}</div>
-                </div>
-                <span class="time">{{date}}</span>
-                </span>
+                    <div class="body">
+                        {{content}}
+                        <div class="link-info">
+                            <img class="link-box-image" src="{{link_image}}" />
+                            <strong class="link-box-title"><a href="{{link_url}}">{{link_title}}</a></strong>
+                            <div class="link-box-description">{{link_description}}</div>
+                        </div>
+                    </div>
                 </div>
          '''
         status: '''
                 <div class="activity" id="a-{{ id }}">
-                <span class="body">
-                <a href="" class="name">{{ username }}</a>
-                {{ content }}
-                <span class="time">{{ date }}</span>
-                </span>
+                    <div class="body">
+                        {{ content }}
+                    </div>
                 </div>
         '''
     }
     constructor: (@baseurl) ->
     display_items: ->
         document.write("<div id='jsview'></div>")
-        console.log(@tmpls)
         $.ajax({
             url: "http://localhost:9991/api/1/content/0?r=jsview&jsview_type=link&so=date&sd=down"
             dataType: "jsonp"
