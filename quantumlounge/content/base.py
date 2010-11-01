@@ -217,7 +217,8 @@ class Status(Model):
 
     def _after_init(self):
         """fix data"""
-        self.date = datetime.datetime.now()
+        if self.date is None:
+            self.date = datetime.datetime.now()
 
     def jsonify(self, data):
         """convert the dictionary to a JSON representation
