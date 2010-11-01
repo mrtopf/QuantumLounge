@@ -32,6 +32,9 @@ JS = [
     js_from_pkg_stream(__name__, 'static/js/jquery.tools.min.js', name="", merge=True, prio=3,),
 
     js_from_pkg_stream(__name__, 'static/js/plugins.js', name="", merge=True, prio=4,),
+    js_from_pkg_stream(__name__, 'static/js/jquery-1.4.2.min.js', name="external", merge=True, prio=1, auto_reload=True),
+    js_from_pkg_stream(__name__, 'static/js/mustache.js', name="external", merge=True, prio=3, auto_reload=True),
+    js_from_pkg_stream(__name__, 'static/js/external.js', name="external", merge=True, prio=4, auto_reload=True),
     #js_from_pkg_stream(__name__, 'static/js/script.js', name="", merge=False, prio=5,),
 ]
 
