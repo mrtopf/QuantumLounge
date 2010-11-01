@@ -65,6 +65,7 @@ class Item(RESTfulHandler):
         items = [i.json for i in items]
         return items
 
+    @role("admin")
     def r_subtree(self, content_id):
         """all recursively all nodes in the subtree of this object"""
         query = {
@@ -72,6 +73,17 @@ class Item(RESTfulHandler):
         }
         return self._query_objs(query)
 
+    def r_jsview(self, content_id):
+        """return a JSON structure of the most recent item of the given
+        type which is passed in as ``jsview_type`` in the request"""
+        t = self.request.args.get("jsview_type","status")
+        query = {
+            '_ancestors' : "0",
+            '_type' : t
+        }
+        return self._query_objs(query)
+
+    @role("admin")
     def r_parents(self, content_id):
         """all recursively all nodes in the subtree of this object"""
         ct = self.settings.contentmanager
@@ -82,6 +94,7 @@ class Item(RESTfulHandler):
             res.append(ct.get(a).json)
         return res
 
+    @role("admin")
     def r_children(self, content_id):
         """return all direct children of this object"""
         query = {
@@ -115,14 +128,13 @@ class Item(RESTfulHandler):
         items = [i.json for i in items]
         return items
 
+    @role("admin")
     def r_default(self, content_id):
         """return the default representation meaning the actual payload"""
         item = self.settings.contentmanager.get(content_id)
         return item.json
 
-
     @json()
-    @role("admin")
     def get(self, content_id, format = None):
         """return an index for the tweets"""
         cm = self.settings.contentmanager
