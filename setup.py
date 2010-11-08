@@ -24,6 +24,8 @@ A status stream inspired project management tool""",
           'routes',
           'logbook',
           'py',
+          'python-dateutil',
+          'formencode',
           'quantumcore.storages',
           'quantumcore.exceptions',
           'quantumcore.resources'
