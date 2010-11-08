@@ -3,6 +3,9 @@ import pymongo
 import datetime
 import copy
 import uuid
+import types
+import dateutil
+import processors
 
 class Model(object):
     """a data model based on quantumcore.storages but copied here to make
@@ -208,17 +211,44 @@ class Collection(MongoObjectStore):
 class Status(Model):
     """example content type defining our own base type"""
     TYPE = "status"
-    _attribs = ['content','date','user']
+    _attribs = ['content','date','user', 'publication_date', 'depublication_date']
     _defaults = {
             'content' : u'',
             'date' : None,
             'user' : u'',
+            'publication_date' : u'',
+            'depublication_date' : u'',
         }
+
+    _processors = {
+            'publication_date' : [processors.EmptyToNone(),processors.DateParser()],
+            'depublication_date' : [processors.EmptyToNone(),processors.DateParser()],
+    }
+
+    def process(self):
+        """convert and validate data"""
+        errors = {}
+        for field, procs in self._processors.items():
+            v = getattr(self, field, None)
+            for p in procs:
+                try:
+                    v = p.process(v, field)
+                except processors.ProcessingError, e:
+                    errors[field] = e.msg
+                    break
+                else:
+                    setattr(self, field, v)
+        return errors
 
     def _after_init(self):
         """fix data"""
+        t = datetime.datetime.now()
         if self.date is None:
             self.date = datetime.datetime.now()
+        errors = self.process()
+        if errors != {}:
+            print "Errors on validation", errors
+        # TODO: How to to error handling? We ignore them for now.
 
     def jsonify(self, data):
         """convert the dictionary to a JSON representation
@@ -227,6 +257,11 @@ class Status(Model):
         
         """
         data['date'] = data['date'].strftime("%d.%m.%Y %H:%M")
+        t=type(datetime.datetime.now())
+        if type(data['publication_date'])==t:
+            data['publication_date'] = data['publication_date'].strftime("%d.%m.%Y %H:%M")
+        if type(data['depublication_date'])==t:
+            data['depublication_date'] = data['depublication_date'].strftime("%d.%m.%Y %H:%M")
         return data
 
 class StatusCollection(Collection):
