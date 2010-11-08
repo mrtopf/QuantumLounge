@@ -10,7 +10,7 @@ from quantumcore.resources import JSResourceManager, js_from_pkg_stream, jst_fro
 from quantumlounge.usermanager.users import UserManager
 from quantumlounge.usermanager.authorization import AuthorizationManager
 from quantumlounge.content.basetypedefs import StatusType
-from quantumlounge.content.basetypes import FolderType, LinkType
+from quantumlounge.content.basetypes import FolderType, LinkType, PollType
 from quantumlounge.content.base import ContentManager
 from quantumlounge.content.contenttypes import ContentTypeManager
 
@@ -93,6 +93,7 @@ def setup(**kw):
     ctm.add(StatusType(db, "contents"))
     ctm.add(FolderType(db, "contents"))
     ctm.add(LinkType(db, "contents"))
+    ctm.add(PollType(db, "contents"))
     settings['content1']=ctm
 
     settings['usermanager'] = UserManager(db,"users")
