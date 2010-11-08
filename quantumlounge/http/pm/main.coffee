@@ -37,12 +37,36 @@ TABS = {
 STATUS = {
     init: () ->
 
-    to_form: (params) ->
-        {
-            content: params.content
+    convert_dates: (params) ->
+        today = new Date
+        publication_date = params.publication_date
+        depublication_date = params.depublication_date
+        if !publication_date
+            publication_date = ""
+        else
+            s = publication_date.split(".")
+            s=s[2]+"-"+s[1]+"-"+s[0]
+            publication_date = s
+        if !depublication_date
+            depublication_date = ""
+        else
+            s = depublication_date.split(".")
+            s=s[2]+"-"+s[1]+"-"+s[0]
+            depublication_date = s
+        data = {
+            publication_date : publication_date.toString()
+            depublication_date : depublication_date.toString()
         }
+        data
 
-
+    to_form: (params) ->
+        data = {
+                content: params.content
+            }
+        for a,v of STATUS.convert_dates(params)
+            data[a]=v
+        console.log(data)
+        data
 }
 
 LINKS = {
@@ -62,7 +86,10 @@ LINKS = {
             link_description: LINKS.data.content
             link_image: LINKS.active_image
         }
-        console.log("sending: "+data)
+        if params.publication_date!="Today"
+            data.publication_date = params.publication_date
+        if params.depublication_date!="Today"
+            data.depublication_date = params.depublication_date
         data
 
     process: () ->
@@ -153,7 +180,8 @@ PAGE = {
                     TABS.init()
                     for name, obj of TYPES
                         obj.init()
-                    $('#status-content').NobleCount('#status-content-count',{block_negative: true})
+                    #$('#status-content').NobleCount('#status-content-count',{block_negative: true})
+                    $( ".dateinput" ).datepicker({dateFormat: 'dd.mm.yy'});
                     statuslist = $("#statuslist").detach()
                     @load(base_url+"?r=children&oauth_token="+VAR.token)
                     .then( (context) ->

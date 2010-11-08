@@ -66,7 +66,7 @@
 /* line 39, sass/pm.scss */
 #activities #entrybox {
   overflow: auto;
-  border: 1px solid #999;
+  border: 1px solid #ddd;
   border-top: 0;
   padding: 15px 10px;
 }
@@ -232,15 +232,14 @@
 }
 /* line 173, sass/pm.scss */
 #activities header {
-  overflow: hidden;
+  overflow: auto;
   background: none;
-  margin: 0;
-  margin-bottom: 20px;
+  margin: 20px 0;
   padding: 0;
   border: 0;
   height: auto;
 }
-/* line 184, sass/pm.scss */
+/* line 183, sass/pm.scss */
 #activities #tabs {
   list-style: none;
   margin: 0 !important;
@@ -248,7 +247,7 @@
   height: 30px;
   border-bottom: 1px solid #666;
 }
-/* line 193, sass/pm.scss */
+/* line 192, sass/pm.scss */
 #activities #tabs li {
   float: left;
   text-indent: 0;
@@ -256,7 +255,7 @@
   margin: 0 !important;
   list-style-image: none !important;
 }
-/* line 202, sass/pm.scss */
+/* line 201, sass/pm.scss */
 #activities #tabs a {
   background: url(http://flowplayer.org//img/global/tabs.png) no-repeat -652px 0;
   font-size: 11px;
@@ -272,89 +271,89 @@
   position: relative;
   top: 1px;
 }
-/* line 218, sass/pm.scss */
+/* line 217, sass/pm.scss */
 #activities #tabs a:active {
   outline: none;
 }
-/* line 223, sass/pm.scss */
+/* line 222, sass/pm.scss */
 #activities #tabs a:hover {
   background-position: -652px -31px;
   color: #fff;
 }
-/* line 229, sass/pm.scss */
+/* line 228, sass/pm.scss */
 #activities #tabs .current, #activities #tabs .current:hover, #activities #tabs li.current a {
   background-position: -652px -62px;
   cursor: default !important;
   color: #000 !important;
 }
-/* line 239, sass/pm.scss */
+/* line 238, sass/pm.scss */
 #activities #tabs .w1 {
   background-position: -519px 0;
   width: 134px;
 }
-/* line 240, sass/pm.scss */
+/* line 239, sass/pm.scss */
 #activities #tabs .w1:hover {
   background-position: -519px -31px;
 }
-/* line 241, sass/pm.scss */
+/* line 240, sass/pm.scss */
 #activities #tabs .w1.current {
   background-position: -519px -62px;
 }
-/* line 244, sass/pm.scss */
+/* line 243, sass/pm.scss */
 #activities #tabs .w2 {
   background-position: -366px 0px;
   width: 154px;
 }
-/* line 245, sass/pm.scss */
+/* line 244, sass/pm.scss */
 #activities #tabs .w2:hover {
   background-position: -366px -31px;
 }
-/* line 246, sass/pm.scss */
+/* line 245, sass/pm.scss */
 #activities #tabs .w2.current {
   background-position: -366px -62px;
 }
-/* line 250, sass/pm.scss */
+/* line 249, sass/pm.scss */
 #activities #tabs .w3 {
   background-position: -193px 0px;
   width: 174px;
 }
-/* line 251, sass/pm.scss */
+/* line 250, sass/pm.scss */
 #activities #tabs .w3:hover {
   background-position: -193px -31px;
 }
-/* line 252, sass/pm.scss */
+/* line 251, sass/pm.scss */
 #activities #tabs .w3.current {
   background-position: -193px -62px;
 }
-/* line 255, sass/pm.scss */
+/* line 254, sass/pm.scss */
 #activities #tabs .w4 {
   background-position: 0px 0px;
   width: 194px;
 }
-/* line 256, sass/pm.scss */
+/* line 255, sass/pm.scss */
 #activities #tabs .w4:hover {
   background-position: 0px -31px;
 }
-/* line 257, sass/pm.scss */
+/* line 256, sass/pm.scss */
 #activities #tabs .w4.current {
   background-position: 0px -62px;
 }
-/* line 261, sass/pm.scss */
+/* line 260, sass/pm.scss */
 #activities #panes .pane {
   display: none;
 }
-/* line 266, sass/pm.scss */
+/* line 265, sass/pm.scss */
 #activities .field {
   margin: 0 2px 10px 0;
 }
-/* line 268, sass/pm.scss */
+/* line 267, sass/pm.scss */
 #activities .field label {
   padding: 4px;
   display: inline-block;
   float: left;
   font-weight: bold;
 }
-/* line 276, sass/pm.scss */
+/* line 275, sass/pm.scss */
 #activities #link-container {
   border: 1px solid #777;
   border-top: 1px solid #aaa;
@@ -362,7 +361,7 @@
   overflow: auto;
   width: 92%;
 }
-/* line 284, sass/pm.scss */
+/* line 283, sass/pm.scss */
 #activities #link {
   display: inline-block;
   width: 80%;
@@ -379,7 +378,7 @@
   float: left;
   outline: none;
 }
-/* line 296, sass/pm.scss */
+/* line 295, sass/pm.scss */
 #activities #link-submit {
   display: inline-block;
   padding: 3px 14px;
@@ -394,7 +393,7 @@
   margin: 0;
   float: right;
 }
-/* line 309, sass/pm.scss */
+/* line 308, sass/pm.scss */
 #activities #link-box, #activities .link-info {
   display: none;
   border: 1px solid #888;
@@ -402,7 +401,7 @@
   padding: 5px;
   overflow: auto;
 }
-/* line 316, sass/pm.scss */
+/* line 315, sass/pm.scss */
 #activities #link-box img, #activities .link-info img {
   width: 100px;
   height: 100px;
@@ -410,17 +409,214 @@
   float: left;
   margin-right: 3px;
 }
-/* line 324, sass/pm.scss */
+/* line 323, sass/pm.scss */
 #activities #link-box h4, #activities .link-info h4 {
   margin: 0;
 }
-/* line 327, sass/pm.scss */
+/* line 326, sass/pm.scss */
 #activities #link-box #link-box-url, #activities .link-info #link-box-url {
   font-size: 0.9em;
   color: #777;
 }
-/* line 332, sass/pm.scss */
+/* line 331, sass/pm.scss */
 #activities .link-info {
   display: block;
   border: none;
+}
+
+/* For the details, see: http://flowplayer.org/tools/dateinput/index.html#skinning */
+/* the input field */
+/* line 347, sass/pm.scss */
+#pubdate-field, #depubdate-field {
+  font-size: 0.8em;
+  color: #888;
+  float: left;
+  margin-right: 10px;
+}
+
+/* line 354, sass/pm.scss */
+.dateinput {
+  border: none;
+  text-align: left;
+  width: 100px;
+  background: #eee;
+  cursor: pointer;
+  color: #888;
+}
+
+/* calendar root element */
+/* line 364, sass/pm.scss */
+#calroot {
+  /* place on top of other elements. set a higher value if nessessary */
+  z-index: 10000;
+  margin-top: -1px;
+  width: 198px;
+  padding: 2px;
+  background-color: #fff;
+  font-size: 11px;
+  border: 1px solid #ccc;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-box-shadow: 0 0 15px #666;
+  -webkit-box-shadow: 0 0 15px #666;
+}
+
+/* head. contains title, prev/next month controls and possible month/year selectors */
+/* line 383, sass/pm.scss */
+#calhead {
+  padding: 2px 0;
+  height: 22px;
+}
+
+/* line 388, sass/pm.scss */
+#caltitle {
+  font-size: 14px;
+  color: #0150D1;
+  float: left;
+  text-align: center;
+  width: 155px;
+  line-height: 20px;
+  text-shadow: 0 1px 0 #ddd;
+}
+
+/* line 398, sass/pm.scss */
+#calnext, #calprev {
+  display: block;
+  width: 20px;
+  height: 20px;
+  background: transparent url(prev.gif) no-repeat scroll center center;
+  float: left;
+  cursor: pointer;
+}
+
+/* line 407, sass/pm.scss */
+#calnext {
+  background-image: url(next.gif);
+  float: right;
+}
+
+/* line 412, sass/pm.scss */
+#calprev.caldisabled, #calnext.caldisabled {
+  visibility: hidden;
+}
+
+/* year/month selector */
+/* line 417, sass/pm.scss */
+#caltitle select {
+  font-size: 10px;
+}
+
+/* names of the days */
+/* line 422, sass/pm.scss */
+#caldays {
+  height: 14px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* line 427, sass/pm.scss */
+#caldays span {
+  display: block;
+  float: left;
+  width: 28px;
+  text-align: center;
+}
+
+/* container for weeks */
+/* line 435, sass/pm.scss */
+#calweeks {
+  background-color: #fff;
+  margin-top: 4px;
+}
+
+/* single week */
+/* line 441, sass/pm.scss */
+.calweek {
+  clear: left;
+  height: 22px;
+}
+
+/* single day */
+/* line 447, sass/pm.scss */
+.calweek a {
+  display: block;
+  float: left;
+  width: 27px;
+  height: 20px;
+  text-decoration: none;
+  font-size: 11px;
+  margin-left: 1px;
+  text-align: center;
+  line-height: 20px;
+  color: #666;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+/* different states */
+/* line 463, sass/pm.scss */
+.calweek a:hover, .calfocus {
+  background-color: #ddd;
+}
+
+/* sunday */
+/* line 468, sass/pm.scss */
+a.calsun {
+  color: red;
+}
+
+/* offmonth day */
+/* line 473, sass/pm.scss */
+a.caloff {
+  color: #ccc;
+}
+
+/* line 477, sass/pm.scss */
+a.caloff:hover {
+  background-color: #f5f5fa;
+}
+
+/* unselecteble day */
+/* line 483, sass/pm.scss */
+a.caldisabled {
+  background-color: #efefef !important;
+  color: #ccc  !important;
+  cursor: default;
+}
+
+/* current day */
+/* line 490, sass/pm.scss */
+#calcurrent {
+  background-color: #498CE2;
+  color: #fff;
+}
+
+/* today */
+/* line 496, sass/pm.scss */
+#caltoday {
+  background-color: #333;
+  color: #fff;
+}
+
+/* line 502, sass/pm.scss */
+.error {
+  height: 15px;
+  background-color: #FFFE36;
+  font-size: 11px;
+  border: 1px solid #E1E16D;
+  padding: 4px 10px;
+  color: #000;
+  display: none;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius-bottomleft: 0;
+  -moz-border-radius-topleft: 0;
+  -webkit-border-bottom-left-radius: 0;
+  -webkit-border-top-left-radius: 0;
+  -moz-box-shadow: 0 0 6px #ddd;
+  -webkit-box-shadow: 0 0 6px #ddd;
+}
+
+/* line 522, sass/pm.scss */
+.error p {
+  margin: 0;
 }

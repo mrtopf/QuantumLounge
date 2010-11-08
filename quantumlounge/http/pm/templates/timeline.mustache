@@ -58,10 +58,24 @@
 
         <div id="attachment"></div>
 
-        <p><input type="submit" id="status-send" value="Send"></p>
+<div id="submitbar">
+    <div id="pubdate-field">
+        <label for="publication-date">Publication Date:</label>
+        <input type="text" 
+            value="" 
+            class="dateinput"
+            name="publication_date" id="publication-date" />
+    </div>
+    <div id="depubdate-field">
+        <label for="depublication-date">Depublication Date:</label>
+        <input type="text" 
+            value="" 
+            class="dateinput"
+            name="depublication_date" id="depublication-date" />
+    </div>
+    <input type="submit" id="status-send" value="Send">
+</div>
     </form>
-
-    <hr />
 
     <div id="timeline">
         <header>

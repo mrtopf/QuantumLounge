@@ -43,10 +43,44 @@
   };
   STATUS = {
     init: function() {},
+    convert_dates: function(params) {
+      var data, depublication_date, publication_date, s, today;
+      today = new Date();
+      publication_date = params.publication_date;
+      depublication_date = params.depublication_date;
+      if (!publication_date) {
+        publication_date = "";
+      } else {
+        s = publication_date.split(".");
+        s = s[2] + "-" + s[1] + "-" + s[0];
+        publication_date = s;
+      }
+      if (!depublication_date) {
+        depublication_date = "";
+      } else {
+        s = depublication_date.split(".");
+        s = s[2] + "-" + s[1] + "-" + s[0];
+        depublication_date = s;
+      }
+      data = {
+        publication_date: publication_date.toString(),
+        depublication_date: depublication_date.toString()
+      };
+      return data;
+    },
     to_form: function(params) {
-      return {
+      var _a, a, data, v;
+      data = {
         content: params.content
       };
+      _a = STATUS.convert_dates(params);
+      for (a in _a) {
+        if (!__hasProp.call(_a, a)) continue;
+        v = _a[a];
+        data[a] = v;
+      }
+      console.log(data);
+      return data;
     }
   };
   LINKS = {
@@ -66,7 +100,12 @@
         link_description: LINKS.data.content,
         link_image: LINKS.active_image
       };
-      console.log("sending: " + data);
+      if (params.publication_date !== "Today") {
+        data.publication_date = params.publication_date;
+      }
+      if (params.depublication_date !== "Today") {
+        data.depublication_date = params.depublication_date;
+      }
       return data;
     },
     process: function() {
@@ -172,8 +211,8 @@
               obj = _a[name];
               obj.init();
             }
-            $('#status-content').NobleCount('#status-content-count', {
-              block_negative: true
+            $(".dateinput").datepicker({
+              dateFormat: 'dd.mm.yy'
             });
             statuslist = $("#statuslist").detach();
             return this.load(base_url + "?r=children&oauth_token=" + VAR.token).then(function(context) {
