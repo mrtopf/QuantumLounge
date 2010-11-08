@@ -34,8 +34,11 @@ TABS = {
         TABS.active_pane.slideDown()
 }
 
-STATUS = {
-    init: () ->
+class Status
+
+
+    prepare: (item) ->
+        item
 
     convert_dates: (params) ->
         today = new Date
@@ -63,42 +66,48 @@ STATUS = {
         data = {
                 content: params.content
             }
-        for a,v of STATUS.convert_dates(params)
+        for a,v of @convert_dates(params)
             data[a]=v
-        console.log(data)
         data
-}
 
-LINKS = {
-    url: null
-    img_idx: 0
-    img_url: null
-    img_amount: 0
-    data: null
-    active_image: null
+class Link extends Status
+
+    constructor: () ->
+        @url = null
+        @img_idx = 0
+        @img_url = null
+        @img_amount = 0
+        @data = null
+        @active_image = null
+        $("#link-submit").click( () =>
+            @process()
+        )
+        $("#link").keydown( (event) =>
+            if event.keyCode == 13
+                @process()
+                event.preventDefault()
+                false
+        )
 
     to_form: (params) ->
-        console.log(LINKS.active_image)
         data = {
             content: params.content
             link: params.link
-            link_title: LINKS.data.title
-            link_description: LINKS.data.content
-            link_image: LINKS.active_image
+            link_title: @data.title
+            link_description: @data.content
+            link_image: @active_image
         }
-        if params.publication_date!="Today"
-            data.publication_date = params.publication_date
-        if params.depublication_date!="Today"
-            data.depublication_date = params.depublication_date
+        for a,v of @convert_dates(params)
+            data[a]=v
         data
 
     process: () ->
-        LINKS.data = null
+        console.log("process")
+        @data = null
         $("#link-box").slideUp()
         url = $("#link").val()
         if url.length<5
             return false
-        console.log(url.startsWith("http://"))
         if not url.startsWith("http://")
             url = "http://"+url
             $("#link").val(url)
@@ -106,63 +115,71 @@ LINKS = {
         $.ajax({
             url: VAR.scraper+"?url="+url
             dataType: "jsonp"
-            success: (data) ->
-                LINKS.data = data
-                LINKS.img_amount = data.all_image_urls.length
+            success: (data) =>
+                @data = data
+                @img_amount = data.all_image_urls.length
                 $("#link-box-title").text(data.title)
                 $("#link-box-description").text(data.content)
                 $("#link-box-url").text(url)
                 $("#link-box").slideDown()
                 $("#link-submit").text("Load")
-                $("#link-box-image-next").click(LINKS.next_image)
-                $("#link-box-image-prev").click(LINKS.prev_image)
-                LINKS.set_image(0)
+                $("#link-box-image-next").click(@next_image)
+                $("#link-box-image-prev").click(@prev_image)
+                @set_image(0)
             error: ->
                 $("#link-submit").text("Load")
         })
         false
 
-    next_image: () ->
-        idx = LINKS.img_idx
+    next_image: () =>
+        idx = @img_idx
         idx++
-        if idx>(LINKS.img_amount-1)
-            idx= LINKS.img_amount-1
-        LINKS.set_image(idx)
+        if idx>(@img_amount-1)
+            idx= @img_amount-1
+        @set_image(idx)
         false
 
-    prev_image: () ->
-        idx = LINKS.img_idx
+    prev_image: () =>
+        idx = @img_idx
         idx--
         if idx<0
             idx= 0
-        LINKS.set_image(idx)
+        @set_image(idx)
         false
 
-    set_image: (idx) ->
-        LINKS.img_idx = idx
-        imgurl = LINKS.data.all_image_urls[idx]
-        img = LINKS.data.images[imgurl]
-        LINKS.active_image = img.thumb.url
-        console.log(img)
-        console.log(LINKS.active_image)
+    set_image: (idx) =>
+        @img_idx = idx
+        imgurl = @data.all_image_urls[idx]
+        img = @data.images[imgurl]
+        @active_image = img.thumb.url
         $("#link-box-image").attr("src",img.thumb.url)
 
-    init: () ->
-        $("#link-submit").click( () ->
-            LINKS.process()
-        )
-        $("#link").keydown( (event) ->
-            if event.keyCode == 13
-                console.log("ok")
-                LINKS.process()
-                event.preventDefault()
-                false
-        )
-}
+class Poll extends Status
+
+    to_form: (params) ->
+        console.log(params)
+        data = {
+            content: params.content
+            answers: params.poll_answers.split("\n")
+        }
+        for a,v of @convert_dates(params)
+            data[a]=v
+        console.log(data)
+        data
+
+    prepare: (item) ->
+        answers = item.answers
+        new_answers = []
+        for a in answers
+            new_answers.push({title: a})
+        item.answers = new_answers
+        item
 
 TYPES = {
-    link: LINKS
-    status: STATUS
+    status: Status
+    link: Link
+    poll: Poll
+    folder: Status
 }
 
 PAGE = {
@@ -178,9 +195,8 @@ PAGE = {
                 context.partial('/pm/templates/timeline.mustache', data)
                 .then(() ->
                     TABS.init()
-                    for name, obj of TYPES
-                        obj.init()
-                    #$('#status-content').NobleCount('#status-content-count',{block_negative: true})
+                    for a,v of TYPES
+                        TYPES[a] = new v
                     $( ".dateinput" ).datepicker({dateFormat: 'dd.mm.yy'});
                     statuslist = $("#statuslist").detach()
                     @load(base_url+"?r=children&oauth_token="+VAR.token)
@@ -198,7 +214,8 @@ PAGE = {
                                 res = []
                                 _.each(items, (item) ->
                                     item.username = data[item.user]
-                                    that.render('/pm/templates/entry.'+item._type+'.mustache', item)
+                                    repr = TYPES[item._type].prepare(item)
+                                    that.render('/pm/templates/entry.'+item._type+'.mustache', repr)
                                     .appendTo(statuslist)
                                 )
                                 statuslist.appendTo("#timeline")
@@ -238,17 +255,21 @@ app = $.sammy(
         data.user = VAR.poco.id
         data.oauth_token = VAR.token
         base_url = CONTENT_API+PAGE.id
+        data = JSON.stringify(data)
         $.ajax({
-            'url' : base_url
-            'type' : 'POST',
-            'data' : data,
-            'dataType' : 'json',
-            'success' : (data, textResponse) ->
+            url : base_url
+            type : 'POST'
+            data : data
+            dataType : 'json'
+            processData : false
+            contentType: 'application/json'
+            success : (data, textResponse) ->
                 console.log(data)
                 data.id = data._id
                 data.username = VAR.poco.name.formatted
                 data.profile = VAR.poco.thumbnailUrl
-                context.render('/pm/templates/entry.'+active+'.mustache', data)
+                repr = TYPES[active].prepare(data)
+                context.render('/pm/templates/entry.'+active+'.mustache', repr)
                 .then( (content) ->
                     $(content).prependTo("#statuslist")
                     .slideDown()

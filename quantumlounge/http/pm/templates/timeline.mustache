@@ -14,6 +14,7 @@
     <ul id="tabs">
         <li><a id="tab-status" href="#">Message</a></li>
         <li><a id="tab-link" href="#">Link</a></li>
+        <li><a id="tab-poll" href="#">Poll</a></li>
     </ul>
     <form id="entrybox" name="status" action="#/submit" method="POST" accept-charset="utf-8">
         <div id="status-headline">
@@ -47,6 +48,10 @@
                     <a href="#" id="link-box-image-next">next</a>
                     </div>
                 </div>
+            </div>
+            <div class="pane" id="pane-poll">
+            <label class="headline" for="poll-answers">Answers (one per line)</label>
+            <textarea name="poll_answers" cols="78" rows="10" id="poll-answers" />
             </div>
         </div>
 
