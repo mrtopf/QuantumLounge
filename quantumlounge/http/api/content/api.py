@@ -151,17 +151,21 @@ class Item(RESTfulHandler):
     @role("admin")
     def post(self, content_id, format = None):
         """POSTing to an item means creating a new one"""
-        d = self.request.values.to_dict()
+        d = simplejson.loads(self.request.data)
         d['_parent_id'] = content_id
         _type = d['_type']
         ct = self.settings['content1'][_type]
+        print ct.required_fields
         for field in ct.required_fields:
             if field not in d.keys():
                 self.settings.log.error("required field '%s' missing" %field)
                 return self.error("required field '%s' missing" %field)
        
         # create a new tweet and store it
-        item = ct.cls(**d)
+        r = {}
+        for a,v in d.items():
+            r[str(a)]=v
+        item = ct.cls(**r)
         item.oid = unicode(uuid.uuid4())
         i = ct.mgr.put(item)
         item = ct.mgr[i]
