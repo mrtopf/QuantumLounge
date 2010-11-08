@@ -24,6 +24,7 @@ JS = [
     js_from_pkg_stream(__name__, 'static/js/jquery.NobleCount.min.js', name="", merge=True, prio=1,),
 
     js_from_pkg_stream(__name__, 'static/js/jsuri-1.0.2-min.js', name="", merge=True, prio=1,),
+    js_from_pkg_stream(__name__, 'static/js/jquery.ui.min.js', name="", merge=True, prio=2,),
     js_from_pkg_stream(__name__, 'static/js/sammy.js', name="", merge=True, prio=2,),
     js_from_pkg_stream(__name__, 'static/js/sammy.mustache.min.js', name="", merge=True, prio=3,),
     js_from_pkg_stream(__name__, 'static/js/sammy.title.min.js', name="", merge=True, prio=3,),
@@ -40,6 +41,7 @@ JS = [
 
 CSS = [
     css_from_pkg_stream(__name__, 'static/css/screen.css', merge=True, prio=1, auto_reload=True),
+    css_from_pkg_stream(__name__, 'static/css/jquery.ui.css', merge=True, prio=1, auto_reload=True),
     css_from_pkg_stream(__name__, 'static/css/handheld.css', media="handheld", merge=True, prio=10, auto_reload=True),
 
     #css_from_pkg_stream(__name__, 'static/css/ie.css', merge=True, prio=11, auto_reload=True),
