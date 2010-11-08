@@ -1,4 +1,5 @@
 import os
+import simplejson
 from paste.urlparser import StaticURLParser
 from paste.fileapp import FileApp
 
@@ -90,10 +91,14 @@ class RESTfulHandler(Handler):
         # check header for oauth token
         # TODO
         # check URI parameters
-        at = self.request.args.get("oauth_token", None)
-        if at is None:
-            # check POST values
-            at = self.request.form.get("oauth_token", None)
+        if self.request.content_type=="application/json":
+            print self.request.data
+            d = simplejson.loads(self.request.data)
+            print d, type(d)
+            at = d.get("oauth_token", None)
+        else:
+            # TODO: Split GET and POST!
+            at = self.request.values.get("oauth_token", None)
         if at is None:
             self.session = None
         else:
