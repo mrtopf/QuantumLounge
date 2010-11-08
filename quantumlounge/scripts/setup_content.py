@@ -35,15 +35,15 @@ def do():
     fm.put(f1)
     fm.put(f2)
 
-    f = Folder(user=uid, content="A", _parent_id=rfid)
+    f = Folder(user=uid, content="Folder A", _parent_id=rfid)
     fid = fm.put(f)
-    f = Folder(user=uid, content="B", _parent_id=fid)
+    f = Folder(user=uid, content="Folder B", _parent_id=fid)
     fid = fm.put(f)
-    f = Folder(user=uid, content="C", _parent_id=fid)
+    f = Folder(user=uid, content="Folder C", _parent_id=fid)
     fid = fm.put(f)
-    f = Folder(user=uid, content="D", _parent_id=fid)
+    f = Folder(user=uid, content="Folder D", _parent_id=fid)
     fid = fm.put(f)
-    f = Folder(user=uid, content="E", _parent_id=fid)
+    f = Folder(user=uid, content="Folder E", _parent_id=fid)
     fid = fm.put(f)
 
 if __name__ == '__main__':
