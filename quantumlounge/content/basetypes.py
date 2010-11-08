@@ -61,3 +61,82 @@ def LinkType(db, coll):
     )
 
 
+class Poll(Status):
+    """a poll object. It stores the question as the main status message and
+    the answers as a list of lines. It also stores votes in a vote dictionary.
+    There's a list of userids for each answer::
+
+        votes = {
+            0 : [uid1, uid2, ...],
+            1 : [uid1, uid2, ...],
+        }
+
+    There is an additional field ``voters`` which stores the list of all voting uids.
+    
+    """
+    TYPE = "poll"
+    _attribs = Status._attribs+['answers','votes','voters']
+    _defaults = Status._defaults
+    _defaults.update({
+        'answers' : [],
+        'votes' : {},
+        'voters' : [],
+        })
+
+    def vote(self, answer_no, uid):
+        """vote with uid for answer number ``answer_no``
+        TODO: Check if answer_no is valid (number and in range)
+        """
+        self.votes.setdefault(answer_no,[]).append(uid)
+
+    @property
+    def results(self):
+        """return all results of the poll in the following form::
+            'question' : "This is the question",
+            'answers' :[
+                {
+                    'title' : 'Answer Text 3',
+                    'votes' : 123,
+                },
+                {
+                    'title' : 'Answer Text 1',
+                    'votes' : 98,
+                },
+                ...
+            ],
+            'total' : 397
+
+            """
+        data = {
+                'question' : self.status,
+        }
+        answers = []
+        for answer_no, uids in self.votes.items():
+            title = self._answers[answer_no]
+            answer = {
+                    'title' : title,
+                    'votes' : len(uids),
+            }
+            answers.append(answer)
+        answers.sort(lambda x,y: cmp(x['votes'],y['votes']))
+        data['answers'] = answers
+        data['votes'] = len(self.voters)
+        return data
+
+class PollCollection(StatusCollection):
+    """manages Polls"""
+    data_class = Poll
+
+def PollType(db, coll):
+    pc = PollCollection(db, coll)
+    return ContentType(
+        u"poll",
+        name = u"Poll",
+        description = "a poll",
+        fields = Link._attribs,
+        required_fields = ['answers'],
+        mgr = pc,
+        cls = Poll,
+        reprs = ['default', 'atom'],
+        default_repr = "default"
+    )
