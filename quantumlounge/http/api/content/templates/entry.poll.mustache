@@ -1,0 +1,13 @@
+<div class="ql-poll" id="ql-poll-{{ id }}">
+    <div class="ql-poll-body">
+        <h4>{{ content }}</h4>
+        <form>
+            {{#answers}}
+                <div class="ql-poll-answer">
+                    <input type="checkbox" value="{{.}}" />
+                    <label>{{ title }} {{.}}</label>
+                </div>
+            {{/answers}}
+        </form>
+    </div>
+</div>
