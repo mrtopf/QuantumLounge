@@ -6,7 +6,8 @@ import uuid
 import functools
 import pprint
 
-import poll
+import common
+import registry
 
 class Item(RESTfulHandler):
     """handle all methods for an item
@@ -75,32 +76,6 @@ class Item(RESTfulHandler):
             '_parent_id' : content_id
         }
         return self._query_objs(query)
-        so = self.request.values.get("so","date") # sort order
-        sd = self.request.values.get("sd","down") # sort direction
-        try:
-            l = int(self.request.values.get("l","10")) # limit
-        except:
-            return self.error("wrong value for 'l'")
-        try:
-            o = int(self.request.values.get("o","0")) #offset
-        except:
-            return self.error("wrong value for 'o'")
-    
-        # we need to find all sub objects of this object
-        # and sort the results accordingly
-        query = {
-            '_parent_id' : content_id
-        }
-        
-        items = self.settings.contentmanager.index(
-            query = query,
-            sort_on = so,
-            sort_order = sd,
-            limit = l,
-            offset = o
-        )
-        items = [i.json for i in items]
-        return items
 
     @role("admin")
     def r_default(self, content_id):
@@ -149,14 +124,6 @@ class Item(RESTfulHandler):
 class Method(Handler):
     """call a method
     """
-
-    # TODO: This needs to be in some registry of course!
-    methods = {
-        'poll' : {
-                'vote' : poll.Vote,
-                'results' : poll.Results
-            }
-    }
     
     def __init__(self, **kw):
         """initialize RESTful handler by checking access token and session"""
@@ -166,9 +133,7 @@ class Method(Handler):
         # TODO
         # check URI parameters
         if self.request.content_type=="application/json":
-            print self.request.data
             d = simplejson.loads(self.request.data)
-            print d, type(d)
             at = d.get("oauth_token", None)
         else:
             # TODO: Split GET and POST!
@@ -198,7 +163,7 @@ class Method(Handler):
 
         # retrieve the adapter for this object
         _type = item._type
-        methods = self.methods.get(_type, {})
+        methods = registry.type_registry.get(_type, {})
         adapter = methods.get(rest_method, None)(item, **self.kw)
         if adapter is None:
             return werkzeug.exceptions.NotFound()
