@@ -25,14 +25,15 @@ class Processor
     }
     constructor: (@baseurl) ->
     display_items: ->
-        document.write("<div id='jsview'></div>")
         $.ajax({
             url: "http://localhost:9991/api/1/content/0?r=jsview&jsview_type=link&so=date&sd=down"
             dataType: "jsonp"
             success: (data) =>
-                    for key, item of data.jsview
-                        t = @tmpls[item._type]
-                        $(Mustache.to_html(t, item)).appendTo("#jsview")
+                console.log("ok")
+                console.log(data)
+                for key, item of data.jsview
+                    t = @tmpls[item._type]
+                    $(Mustache.to_html(t, item)).appendTo("#jsview")
         })
 
 

@@ -14,12 +14,13 @@
     status: '<div class="activity" id="a-{{ id }}">\n    <div class="body">\n        {{ content }}\n    </div>\n</div>'
   };
   Processor.prototype.display_items = function() {
-    document.write("<div id='jsview'></div>");
     return $.ajax({
       url: "http://localhost:9991/api/1/content/0?r=jsview&jsview_type=link&so=date&sd=down",
       dataType: "jsonp",
       success: __bind(function(data) {
         var _a, _b, item, key, t;
+        console.log("ok");
+        console.log(data);
         _a = []; _b = data.jsview;
         for (key in _b) {
           if (!__hasProp.call(_b, key)) continue;
