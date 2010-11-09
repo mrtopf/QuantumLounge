@@ -10,7 +10,8 @@ from quantumcore.resources import JSResourceManager, js_from_pkg_stream, jst_fro
 from quantumlounge.usermanager.users import UserManager
 from quantumlounge.usermanager.authorization import AuthorizationManager
 from quantumlounge.content.basetypedefs import StatusType
-from quantumlounge.content.basetypes import FolderType, LinkType, PollType
+from quantumlounge.content.basetypes import FolderType, LinkType
+from quantumlounge.content.poll import PollType
 from quantumlounge.content.base import ContentManager
 from quantumlounge.content.contenttypes import ContentTypeManager
 
