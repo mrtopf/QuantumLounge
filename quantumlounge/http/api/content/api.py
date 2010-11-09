@@ -1,38 +1,12 @@
-from quantumlounge.framework import RESTfulHandler, json, html
+from quantumlounge.framework import RESTfulHandler, json, html, Handler
+from quantumlounge.framework import role
 import werkzeug
 import simplejson
 import uuid
 import functools
 import pprint
 
-class role(object):
-    """check if roles are present in the session"""
-    def __init__(self, *roles):
-        self.roles = roles
-
-    def __call__(self, method):
-        """creating a wrapper to check roles. We do this as follows:
-            
-        * get the session via the access token
-        * retrieve the roles of the user from the session
-        * check if one of the roles given to the decorator is inside the session
-        """
-   
-        possible_roles = self.roles
-        @functools.wraps(method)
-        def wrapper(self, *args, **kwargs):
-            session = self.session
-            if session is None:
-                roles = []
-            else:
-                roles = session.roles
-            if len(set(possible_roles).intersection(set(roles)))==0:
-                # TODO: find a better way
-                self.settings.log.error("access for session %s not authorized: roles needed: %s, roles found: %s"
-                        %(session, possible_roles, roles))
-                return None
-            return method(self, *args, **kwargs)
-        return wrapper
+import poll
 
 class Item(RESTfulHandler):
     """handle all methods for an item
@@ -172,4 +146,66 @@ class Item(RESTfulHandler):
         # post the new item back
         return item.json
 
+class Method(Handler):
+    """call a method
+    """
+
+    # TODO: This needs to be in some registry of course!
+    methods = {
+        'poll' : {
+                'vote' : poll.Vote,
+                'results' : poll.Results
+            }
+    }
     
+    def __init__(self, **kw):
+        """initialize RESTful handler by checking access token and session"""
+        super(Method, self).__init__(**kw)
+        at = None
+        # check header for oauth token
+        # TODO
+        # check URI parameters
+        if self.request.content_type=="application/json":
+            print self.request.data
+            d = simplejson.loads(self.request.data)
+            print d, type(d)
+            at = d.get("oauth_token", None)
+        else:
+            # TODO: Split GET and POST!
+            at = self.request.values.get("oauth_token", None)
+        if at is None:
+            self.session = None
+        else:
+            am = self.settings.authmanager
+            self.session = am.get(at)
+        self.kw = kw
+
+    def handle(self, **m):
+        """handle a single request. This means checking the method to use, looking up
+        the method for it and calling it. We have to return a WSGI application"""
+        http_method = self.request.method.lower()
+
+        rest_method = m['method']
+        content_id = m['content_id']
+        handler = m['handler']
+        del m['method']
+        del m['content_id']
+        del m['handler']
+
+        # retrieve the object
+        cm = self.settings.contentmanager
+        item = cm.get(content_id)
+
+        # retrieve the adapter for this object
+        _type = item._type
+        methods = self.methods.get(_type, {})
+        adapter = methods.get(rest_method, None)(item, **self.kw)
+        if adapter is None:
+            return werkzeug.exceptions.NotFound()
+        self.settings.log.debug("found adapter %s" %adapter)
+
+        if hasattr(adapter, http_method):
+            self.settings.log.debug("calling HTTP method %s and REST method %s on adapter '%s' " %(http_method, rest_method, adapter))
+            return getattr(adapter, http_method)(**m)
+        return werkzeug.exceptions.MethodNotAllowed()
+
