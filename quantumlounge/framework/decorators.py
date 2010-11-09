@@ -51,3 +51,31 @@ class json(object):
 
         return wrapper
         
+class role(object):
+    """check if roles are present in the session"""
+    def __init__(self, *roles):
+        self.roles = roles
+
+    def __call__(self, method):
+        """creating a wrapper to check roles. We do this as follows:
+            
+        * get the session via the access token
+        * retrieve the roles of the user from the session
+        * check if one of the roles given to the decorator is inside the session
+        """
+   
+        possible_roles = self.roles
+        @functools.wraps(method)
+        def wrapper(self, *args, **kwargs):
+            session = self.session
+            if session is None:
+                roles = []
+            else:
+                roles = session.roles
+            if len(set(possible_roles).intersection(set(roles)))==0:
+                # TODO: find a better way
+                self.settings.log.error("access for session %s not authorized: roles needed: %s, roles found: %s"
+                        %(session, possible_roles, roles))
+                return None
+            return method(self, *args, **kwargs)
+        return wrapper
