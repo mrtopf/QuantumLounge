@@ -30,6 +30,13 @@ class Poll(Status):
         votes = votes +1
         self.votes[answer_no] = votes
 
+    def jsonify(self, data):
+        """add the results to the JSON represenation"""
+        data = super(Poll, self).jsonify(data)
+        r = self.results
+        data.update(r)
+        return data
+
     @property
     def results(self):
         """return all results of the poll in the following form::
