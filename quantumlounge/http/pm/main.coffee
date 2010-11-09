@@ -167,41 +167,36 @@ class Poll extends Status
         console.log(data)
         data
 
-    prepare: (item) ->
-        answers = item.answers
-        new_answers = []
-        for a in answers
-            new_answers.push({title: a})
-        item.answers = new_answers
-        item
-
-TYPES = {
+TYPEDEFS = {
     status: Status
     link: Link
     poll: Poll
     folder: Status
 }
 
+TYPES = {}
+
 PAGE = {
     id: null,
     render: (context, content_id) ->
         base_url = CONTENT_API+content_id
-        $.getJSON(base_url+'?r=parents&oauth_token='+VAR.token, (data) ->
-            $.getJSON(base_url+'?r=default&oauth_token='+VAR.token, (details) ->
-                if (data.parents.length>0)
-                    data.title = details.default.content
+        $.getJSON(base_url+';parents?oauth_token='+VAR.token, (parents) ->
+            $.getJSON(base_url+';default?oauth_token='+VAR.token, (details) ->
+                data = {}
+                if (parents.length>0)
+                    data.title = details.content
                 # remove root node
-                data.parents = data.parents.slice(1, data.parents.length)
+                data.parents = parents.slice(1, parents.length)
                 context.partial('/pm/templates/timeline.mustache', data)
                 .then(() ->
                     TABS.init()
-                    for a,v of TYPES
+                    for a,v of TYPEDEFS
                         TYPES[a] = new v
                     $( ".dateinput" ).datepicker({dateFormat: 'dd.mm.yy'});
                     statuslist = $("#statuslist").detach()
-                    @load(base_url+"?r=children&oauth_token="+VAR.token)
+                    @load(base_url+";children?oauth_token="+VAR.token)
                     .then( (context) ->
-                        items = @content.children
+                        items = @content
                         users = _.uniq(_.pluck(items, 'user'))
                         that = this
                         $.ajax({
@@ -215,6 +210,7 @@ PAGE = {
                                 _.each(items, (item) ->
                                     item.username = data[item.user]
                                     repr = TYPES[item._type].prepare(item)
+                                    console.log(repr)
                                     that.render('/pm/templates/entry.'+item._type+'.mustache', repr)
                                     .appendTo(statuslist)
                                 )

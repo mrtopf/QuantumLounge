@@ -1,5 +1,5 @@
 (function() {
-  var CONTENT_API, Link, PAGE, Poll, Status, TABS, TYPES, VAR, app;
+  var CONTENT_API, Link, PAGE, Poll, Status, TABS, TYPEDEFS, TYPES, VAR, app;
   var __hasProp = Object.prototype.hasOwnProperty, __bind = function(func, context) {
     return function(){ return func.apply(context, arguments); };
   }, __extends = function(child, parent) {
@@ -217,41 +217,30 @@
     console.log(data);
     return data;
   };
-  Poll.prototype.prepare = function(item) {
-    var _a, _b, _c, a, answers, new_answers;
-    answers = item.answers;
-    new_answers = [];
-    _b = answers;
-    for (_a = 0, _c = _b.length; _a < _c; _a++) {
-      a = _b[_a];
-      new_answers.push({
-        title: a
-      });
-    }
-    item.answers = new_answers;
-    return item;
-  };
-  TYPES = {
+  TYPEDEFS = {
     status: Status,
     link: Link,
     poll: Poll,
     folder: Status
   };
+  TYPES = {};
   PAGE = {
     id: null,
     render: function(context, content_id) {
       var base_url;
       base_url = CONTENT_API + content_id;
-      return $.getJSON(base_url + '?r=parents&oauth_token=' + VAR.token, function(data) {
-        return $.getJSON(base_url + '?r=default&oauth_token=' + VAR.token, function(details) {
-          if (data.parents.length > 0) {
-            data.title = details["default"].content;
+      return $.getJSON(base_url + ';parents?oauth_token=' + VAR.token, function(parents) {
+        return $.getJSON(base_url + ';default?oauth_token=' + VAR.token, function(details) {
+          var data;
+          data = {};
+          if (parents.length > 0) {
+            data.title = details.content;
           }
-          data.parents = data.parents.slice(1, data.parents.length);
+          data.parents = parents.slice(1, parents.length);
           return context.partial('/pm/templates/timeline.mustache', data).then(function() {
             var _a, a, statuslist, v;
             TABS.init();
-            _a = TYPES;
+            _a = TYPEDEFS;
             for (a in _a) {
               if (!__hasProp.call(_a, a)) continue;
               v = _a[a];
@@ -261,9 +250,9 @@
               dateFormat: 'dd.mm.yy'
             });
             statuslist = $("#statuslist").detach();
-            return this.load(base_url + "?r=children&oauth_token=" + VAR.token).then(function(context) {
+            return this.load(base_url + ";children?oauth_token=" + VAR.token).then(function(context) {
               var items, that, users;
-              items = this.content.children;
+              items = this.content;
               users = _.uniq(_.pluck(items, 'user'));
               that = this;
               return $.ajax({
@@ -279,6 +268,7 @@
                     var repr;
                     item.username = data[item.user];
                     repr = TYPES[item._type].prepare(item);
+                    console.log(repr);
                     return that.render('/pm/templates/entry.' + item._type + '.mustache', repr).appendTo(statuslist);
                   });
                   return statuslist.appendTo("#timeline");
