@@ -1,12 +1,5 @@
-from quantumlounge.framework import RESTfulHandler, json, html, role
-
-class MethodAdapter(RESTfulHandler):
-    """an adapter for using methods"""
-
-    def __init__(self, item, **kw):
-        """initialize this adapter"""
-        super(MethodAdapter, self).__init__(**kw)
-        self.item = item
+from common import MethodAdapter
+from quantumlounge.framework import json
 
 class Vote(MethodAdapter):
     """a voting adapter for polls"""
