@@ -37,7 +37,6 @@ class json(object):
             data = method(self, *args, **kwargs)
             s = simplejson.dumps(data)
             if self.request.args.has_key("callback"):
-                print "callback"
                 callback = self.request.args.get("callback")
                 s = "%s(%s)" %(callback, s)
                 response = werkzeug.Response(s)
