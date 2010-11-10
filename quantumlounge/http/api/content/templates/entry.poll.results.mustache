@@ -1,0 +1,18 @@
+<div class="ql-poll" id="ql-poll-{{ _id }}">
+    <div class="ql-poll-body">
+        <h4>Results: {{ question }}</h4>
+        <table class="ql-poll-answer">
+            {{#answers}}
+            <tr>
+                <td>
+                    {{title}}
+                </td>
+                <td>
+                    {{votes}}
+                </td>
+            </tr>
+            {{/answers}}
+        </table>
+        <div class="ql-poll-total">Total: {{votes}}</div>
+    </div>
+</div>
