@@ -30,13 +30,6 @@ class Poll(Status):
         votes = votes +1
         self.votes[answer_no] = votes
 
-    def jsonify(self, data):
-        """add the results to the JSON represenation"""
-        data = super(Poll, self).jsonify(data)
-        r = self.results
-        data.update(r)
-        return data
-
     @property
     def results(self):
         """return all results of the poll in the following form::
@@ -70,6 +63,9 @@ class Poll(Status):
             total=total + votes
             answers.append(answer)
             i=i+1
+        # compute percent
+        for answer in answers:
+            answer['percent'] = int((100.0/total)*answer['votes'])
         answers.sort(lambda x,y: cmp(y['votes'],x['votes']))
         data['answers'] = answers
         data['votes'] = total
