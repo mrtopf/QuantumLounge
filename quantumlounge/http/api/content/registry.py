@@ -11,6 +11,7 @@ r_common = {
 
 r_poll = {
         'vote' : poll.Vote,
+        'voted' : poll.Voted,
         'results' : poll.Results,
 }
 r_poll.update(r_common)
