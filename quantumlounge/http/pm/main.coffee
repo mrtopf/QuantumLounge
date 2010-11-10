@@ -38,6 +38,8 @@ class Status
 
 
     prepare: (item) ->
+        console.log(item._type)
+        console.log(item)
         item
 
     convert_dates: (params) ->
@@ -211,8 +213,10 @@ PAGE = {
                                     item.username = data[item.user]
                                     repr = TYPES[item._type].prepare(item)
                                     console.log(repr)
+                                    console.log("render")
                                     that.render('/pm/templates/entry.'+item._type+'.mustache', repr)
                                     .appendTo(statuslist)
+                                    console.log("done")
                                 )
                                 statuslist.appendTo("#timeline")
                         })

@@ -52,6 +52,8 @@
   };
   Status = function() {};
   Status.prototype.prepare = function(item) {
+    console.log(item._type);
+    console.log(item);
     return item;
   };
   Status.prototype.convert_dates = function(params) {
@@ -269,7 +271,9 @@
                     item.username = data[item.user];
                     repr = TYPES[item._type].prepare(item);
                     console.log(repr);
-                    return that.render('/pm/templates/entry.' + item._type + '.mustache', repr).appendTo(statuslist);
+                    console.log("render");
+                    that.render('/pm/templates/entry.' + item._type + '.mustache', repr).appendTo(statuslist);
+                    return console.log("done");
                   });
                   return statuslist.appendTo("#timeline");
                 }
