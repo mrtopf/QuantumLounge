@@ -1,12 +1,10 @@
-class PollProcessor
+
+class Poll
     content_api: "/api/1/content/"
     template_api: "/api/templates/"
 
-    constructor: (@baseurl) ->
-        @template = ""
-        @voted = false
+    constructor: (@baseurl, @elem) ->
 
-        # retrieve the most recent object and initialize the template then
         $.ajax({
             url: @baseurl+@content_api+"0?r=jsview&jsview_type=poll&so=date&sd=down&l=1"
             dataType: "jsonp"
@@ -50,8 +48,8 @@ class PollProcessor
             i=i+1
         @item.answers = new_answers
         h = $(Mustache.to_html(@template, @item))
-        $("#poll").html(h)
-        $(".ql-poll-box").change(@vote)
+        $(@elem).html(h)
+        $("#ql-poll-form-"+@item._id).change(@vote)
 
     display_results: ->
         $.ajax({
@@ -59,7 +57,7 @@ class PollProcessor
             dataType: "jsonp"
             success: (data) =>
                 h = $(Mustache.to_html(@template, data))
-                $("#poll").html(h)
+                $(@elem).html(h)
         })
 
     vote: (ev) =>
@@ -78,8 +76,22 @@ class PollProcessor
                 @load_template()
         })
 
+class PollProcessor
+
+    constructor: () ->
+        @template = ""
+        @voted = false
+        @polls = []
+
+        # retrieve the polls
+        poll_elements = $(".ql-poll")
+        for elem in poll_elements
+            baseurl = $(elem).attr("data-baseurl")
+            poll = new Poll baseurl, elem
+            polls.push(poll)
+
 
 $(document).ready(
   ->
-      p = new PollProcessor "http://localhost:9991"
+      p = new PollProcessor
 )
