@@ -106,7 +106,7 @@
       elem = _b[_a];
       baseurl = $(elem).attr("data-baseurl");
       poll = new Poll(baseurl, elem);
-      polls.push(poll);
+      this.polls.push(poll);
     }
     return this;
   };
