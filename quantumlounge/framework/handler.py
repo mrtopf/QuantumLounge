@@ -92,10 +92,11 @@ class RESTfulHandler(Handler):
         # check header for oauth token
         # TODO
         # check URI parameters
-        if self.request.content_type=="application/json":
-            print self.request.data
+        ct = self.request.content_type
+        if ct is None:
+            ct=""
+        if ct.startswith("application/json"):
             d = simplejson.loads(self.request.data)
-            print d, type(d)
             at = d.get("oauth_token", None)
         else:
             # TODO: Split GET and POST!
