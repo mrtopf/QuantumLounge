@@ -14,6 +14,7 @@ class MainHandler(Handler):
     
     @html
     def get(self):
+        print self.context.keys()
         return self.app.settings.templates['templates/master.pt'].render(
             pc = self.context
             )
@@ -35,16 +36,19 @@ class App(Application):
 
     def setup_handlers(self, map):
         """setup the mapper"""
-        map.connect(None, "/", handler=MainHandler)
-        map.connect(None, "/js2/{path_info:.*}", handler=StaticHandler)
-        map.connect(None, "/css/{path_info:.*}", handler=CSSResourceHandler)
-        map.connect(None, "/js/{path_info:.*}", handler=JSResourceHandler)
-        map.connect(None, "/img/{path_info:.*}", handler=StaticHandler)
-        map.connect(None, "/jst/{path_info:.*}", handler=StaticHandler)
+        with map.submapper(path_prefix=self.settings.virtual_path) as m:
+            print self.settings.virtual_path 
+            m.connect(None, "", handler=MainHandler)
+            m.connect(None, "/", handler=MainHandler)
+            m.connect(None, "/js2/{path_info:.*}", handler=StaticHandler)
+            m.connect(None, "/css/{path_info:.*}", handler=CSSResourceHandler)
+            m.connect(None, "/js/{path_info:.*}", handler=JSResourceHandler)
+            m.connect(None, "/img/{path_info:.*}", handler=StaticHandler)
+            m.connect(None, "/jst/{path_info:.*}", handler=StaticHandler)
 
-        api.setup_handlers(map)
-        usermanager.setup_handlers(map)
-        pm.setup_handlers(map)
+            api.setup_handlers(m)
+            usermanager.setup_handlers(m)
+            pm.setup_handlers(m)
     
 def main():
     port = 9991

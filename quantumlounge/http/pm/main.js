@@ -258,7 +258,7 @@
               users = _.uniq(_.pluck(items, 'user'));
               that = this;
               return $.ajax({
-                url: '/api/1/users/names',
+                url: virtual_path + '/api/1/users/names',
                 data: JSON.stringify(users),
                 type: 'POST',
                 processData: false,
@@ -335,7 +335,8 @@
   });
   VAR = {};
   $(document).ready(function() {
-    return $.getJSON('/pm/var', function(data) {
+    return $.getJSON(virtual_path + '/pm/var', function(data) {
+      CONTENT_API = virtual_path + "/api/1/content/";
       VAR = data;
       return app.run("#/");
     });

@@ -202,7 +202,7 @@ PAGE = {
                         users = _.uniq(_.pluck(items, 'user'))
                         that = this
                         $.ajax({
-                            url:'/api/1/users/names'
+                            url: virtual_path+'/api/1/users/names'
                             data: JSON.stringify(users)
                             type: 'POST'
                             processData: false
@@ -288,7 +288,8 @@ VAR = {}
 
 $(document).ready(
   ->
-    $.getJSON('/pm/var', (data) ->
+    $.getJSON(virtual_path+'/pm/var', (data) ->
+        CONTENT_API = virtual_path+"/api/1/content/"
         VAR = data
         app.run("#/")
     )

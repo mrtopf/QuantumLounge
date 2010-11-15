@@ -48,6 +48,7 @@ class Handler(object):
             js_head_link = self.settings['js_resources']("head"),
             jslinks = self.settings['js_resources'](),
             csslinks = self.settings['css_resources'](),
+            virtual_path = self.settings.virtual_path,
         )
         return PageContext(d)
 

@@ -51,7 +51,7 @@ CSS = [
 ]
 
 # TODO: Use URL object
-DOMAIN = "http://localhost:9991"
+DOMAIN = "http://localhost:9991/external"
 
 import quantumlounge.http.usermanager
 import quantumlounge.http.pm
@@ -75,8 +75,6 @@ def setup(**kw):
     settings['staticapp'] = get_static_urlparser(pkg_resources.resource_filename(__name__, 'static'))
     tmpls = settings['templates'] = TemplateHandler(__name__)
     
-    settings['css_resources'] = CSSResourceManager(CSS, prefix_url="/css", auto_reload=True)
-    settings['js_resources'] = JSResourceManager(JS, prefix_url="/js", auto_reload=True)
     
     settings['secret_key'] = "czs7s8c6c8976c89c7s6s8976cs87d6" #os.urandom(20)
     
@@ -103,8 +101,16 @@ def setup(**kw):
     settings['authmanager'] = AuthorizationManager(db, "tokens")
     settings['contentmanager'] = ContentManager(db, "contents", ctm, "0")
 
+    # path
+    settings['virtual_path'] = "/external"
+
     # TODO: enable updating of sub settings via dot notation (pm.client_id)
     settings.update(kw)
+
+    vpath = settings.virtual_path
+
+    settings['css_resources'] = CSSResourceManager(CSS, prefix_url=vpath+"/css", auto_reload=True)
+    settings['js_resources'] = JSResourceManager(JS, prefix_url=vpath+"/js", auto_reload=True)
     return settings
 
 

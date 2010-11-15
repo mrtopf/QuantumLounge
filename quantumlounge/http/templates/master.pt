@@ -60,7 +60,7 @@
       <div id="page">
         <div class="bigcolumn" id="content">
           <div>
-          Go to the <a href="/pm">Project Manager</a>
+              Go to the <a href="{{pc.virtual_path}}/pm">Project Manager</a>
           </div>
         </div>
         <aside>
@@ -96,6 +96,7 @@
   
   <script language="JavaScript">
     var content_id = "{{content_id}}";
+    var virtual_path = "{{pc.virtual_path}}";
   </script>
 
 
