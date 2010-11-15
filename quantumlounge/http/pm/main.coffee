@@ -5,6 +5,7 @@ String::startsWith = (str) ->
     (r[0]==str)
 
 CONTENT_API = "/api/1/content/"
+TEMPLATES = "/pm/templates/"
 
 TABS = {
     active_name: null       # name of active type
@@ -189,7 +190,7 @@ PAGE = {
                     data.title = details.content
                 # remove root node
                 data.parents = parents.slice(1, parents.length)
-                context.partial('/pm/templates/timeline.mustache', data)
+                context.partial(TEMPLATES+'timeline.mustache', data)
                 .then(() ->
                     TABS.init()
                     for a,v of TYPEDEFS
@@ -214,7 +215,7 @@ PAGE = {
                                     repr = TYPES[item._type].prepare(item)
                                     console.log(repr)
                                     console.log("render")
-                                    that.render('/pm/templates/entry.'+item._type+'.mustache', repr)
+                                    that.render(TEMPLATES+'entry.'+item._type+'.mustache', repr)
                                     .appendTo(statuslist)
                                     console.log("done")
                                 )
@@ -269,7 +270,7 @@ app = $.sammy(
                 data.username = VAR.poco.name.formatted
                 data.profile = VAR.poco.thumbnailUrl
                 repr = TYPES[active].prepare(data)
-                context.render('/pm/templates/entry.'+active+'.mustache', repr)
+                context.render(TEMPLATES+'entry.'+active+'.mustache', repr)
                 .then( (content) ->
                     $(content).prependTo("#statuslist")
                     .slideDown()
@@ -290,6 +291,7 @@ $(document).ready(
   ->
     $.getJSON(virtual_path+'/pm/var', (data) ->
         CONTENT_API = virtual_path+"/api/1/content/"
+        TEMPLATES = virtual_path+"/pm/templates/"
         VAR = data
         app.run("#/")
     )

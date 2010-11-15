@@ -51,7 +51,6 @@ CSS = [
 ]
 
 # TODO: Use URL object
-DOMAIN = "http://localhost:9991/external"
 
 import quantumlounge.http.usermanager
 import quantumlounge.http.pm
@@ -72,19 +71,14 @@ for module in MODULES:
 def setup(**kw):
     """initialize the setup"""
     settings = AttributeMapper()
+    # wo liegt der User Server?
+    settings['userserver'] = "http://localhost:9991"
     settings['staticapp'] = get_static_urlparser(pkg_resources.resource_filename(__name__, 'static'))
     tmpls = settings['templates'] = TemplateHandler(__name__)
     
     
     settings['secret_key'] = "czs7s8c6c8976c89c7s6s8976cs87d6" #os.urandom(20)
     
-    # settings for the project manager
-    pm = AttributeMapper()
-    pm.client_id = "pm"
-    pm.um_authorize_uri = DOMAIN+"/users/authorize"
-    pm.um_token_endpoint = DOMAIN+"/api/1/users/token"
-    pm.um_poco_endpoint = DOMAIN+"/api/1/users/u/@me/profile"
-    settings['pm'] = pm
     
     settings['log'] = logbook.Logger("quantumlounge")
 
@@ -107,8 +101,17 @@ def setup(**kw):
     # TODO: enable updating of sub settings via dot notation (pm.client_id)
     settings.update(kw)
 
+    # settings for the project manager
+    userserver = settings.userserver
+    pm = AttributeMapper()
+    pm.client_id = "pm"
+    pm.um_authorize_uri = userserver+"/users/authorize"
+    pm.um_token_endpoint = userserver+"/api/1/users/token"
+    pm.um_poco_endpoint = userserver+"/api/1/users/u/@me/profile"
+    settings['pm'] = pm
+    
+    # setup CSS and JS according to the vpath
     vpath = settings.virtual_path
-
     settings['css_resources'] = CSSResourceManager(CSS, prefix_url=vpath+"/css", auto_reload=True)
     settings['js_resources'] = JSResourceManager(JS, prefix_url=vpath+"/js", auto_reload=True)
     return settings

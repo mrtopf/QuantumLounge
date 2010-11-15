@@ -1,5 +1,5 @@
 (function() {
-  var CONTENT_API, Link, PAGE, Poll, Status, TABS, TYPEDEFS, TYPES, VAR, app;
+  var CONTENT_API, Link, PAGE, Poll, Status, TABS, TEMPLATES, TYPEDEFS, TYPES, VAR, app;
   var __hasProp = Object.prototype.hasOwnProperty, __bind = function(func, context) {
     return function(){ return func.apply(context, arguments); };
   }, __extends = function(child, parent) {
@@ -19,6 +19,7 @@
     return r[0] === str;
   };
   CONTENT_API = "/api/1/content/";
+  TEMPLATES = "/pm/templates/";
   TABS = {
     active_name: null,
     tab_element: null,
@@ -82,24 +83,24 @@
     return data;
   };
   Status.prototype.to_form = function(params) {
-    var _a, a, data, v;
+    var _ref, a, data, v;
     data = {
       content: params.content
     };
-    _a = this.convert_dates(params);
-    for (a in _a) {
-      if (!__hasProp.call(_a, a)) continue;
-      v = _a[a];
+    _ref = this.convert_dates(params);
+    for (a in _ref) {
+      if (!__hasProp.call(_ref, a)) continue;
+      v = _ref[a];
       data[a] = v;
     }
     return data;
   };
   Link = function() {
-    var _a;
-    _a = this;
-    this.set_image = function(){ return Link.prototype.set_image.apply(_a, arguments); };
-    this.prev_image = function(){ return Link.prototype.prev_image.apply(_a, arguments); };
-    this.next_image = function(){ return Link.prototype.next_image.apply(_a, arguments); };
+    var _this;
+    _this = this;
+    this.set_image = function(){ return Link.prototype.set_image.apply(_this, arguments); };
+    this.prev_image = function(){ return Link.prototype.prev_image.apply(_this, arguments); };
+    this.next_image = function(){ return Link.prototype.next_image.apply(_this, arguments); };
     this.url = null;
     this.img_idx = 0;
     this.img_url = null;
@@ -120,7 +121,7 @@
   };
   __extends(Link, Status);
   Link.prototype.to_form = function(params) {
-    var _a, a, data, v;
+    var _ref, a, data, v;
     data = {
       content: params.content,
       link: params.link,
@@ -128,10 +129,10 @@
       link_description: this.data.content,
       link_image: this.active_image
     };
-    _a = this.convert_dates(params);
-    for (a in _a) {
-      if (!__hasProp.call(_a, a)) continue;
-      v = _a[a];
+    _ref = this.convert_dates(params);
+    for (a in _ref) {
+      if (!__hasProp.call(_ref, a)) continue;
+      v = _ref[a];
       data[a] = v;
     }
     return data;
@@ -204,16 +205,16 @@
   };
   __extends(Poll, Status);
   Poll.prototype.to_form = function(params) {
-    var _a, a, data, v;
+    var _ref, a, data, v;
     console.log(params);
     data = {
       content: params.content,
       answers: params.poll_answers.split("\n")
     };
-    _a = this.convert_dates(params);
-    for (a in _a) {
-      if (!__hasProp.call(_a, a)) continue;
-      v = _a[a];
+    _ref = this.convert_dates(params);
+    for (a in _ref) {
+      if (!__hasProp.call(_ref, a)) continue;
+      v = _ref[a];
       data[a] = v;
     }
     console.log(data);
@@ -239,13 +240,13 @@
             data.title = details.content;
           }
           data.parents = parents.slice(1, parents.length);
-          return context.partial('/pm/templates/timeline.mustache', data).then(function() {
-            var _a, a, statuslist, v;
+          return context.partial(TEMPLATES + 'timeline.mustache', data).then(function() {
+            var _ref, a, statuslist, v;
             TABS.init();
-            _a = TYPEDEFS;
-            for (a in _a) {
-              if (!__hasProp.call(_a, a)) continue;
-              v = _a[a];
+            _ref = TYPEDEFS;
+            for (a in _ref) {
+              if (!__hasProp.call(_ref, a)) continue;
+              v = _ref[a];
               TYPES[a] = new v();
             }
             $(".dateinput").datepicker({
@@ -272,7 +273,7 @@
                     repr = TYPES[item._type].prepare(item);
                     console.log(repr);
                     console.log("render");
-                    that.render('/pm/templates/entry.' + item._type + '.mustache', repr).appendTo(statuslist);
+                    that.render(TEMPLATES + 'entry.' + item._type + '.mustache', repr).appendTo(statuslist);
                     return console.log("done");
                   });
                   return statuslist.appendTo("#timeline");
@@ -324,7 +325,7 @@
           data.username = VAR.poco.name.formatted;
           data.profile = VAR.poco.thumbnailUrl;
           repr = TYPES[active].prepare(data);
-          context.render('/pm/templates/entry.' + active + '.mustache', repr).then(function(content) {
+          context.render(TEMPLATES + 'entry.' + active + '.mustache', repr).then(function(content) {
             return $(content).prependTo("#statuslist").slideDown();
           });
           return $(':input', '#entrybox').not(':button, :submit, :reset, :hidden').val('').removeAttr('checked').removeAttr('selected');
@@ -337,8 +338,9 @@
   $(document).ready(function() {
     return $.getJSON(virtual_path + '/pm/var', function(data) {
       CONTENT_API = virtual_path + "/api/1/content/";
+      TEMPLATES = virtual_path + "/pm/templates/";
       VAR = data;
       return app.run("#/");
     });
   });
-})();
+}).call(this);

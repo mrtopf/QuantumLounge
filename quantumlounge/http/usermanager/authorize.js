@@ -2,6 +2,8 @@
 
 */
 
+VPATH = ""
+
 
 function LoginView() {    
 
@@ -14,7 +16,7 @@ function LoginView() {
         // call the login view to log the user in
         // TODO: add error handler for network and login failed
         $.ajax({
-            url: "/users/authorize/login",
+            url: BASEURL+"/users/authorize/login",
             data: data,
             type: "POST",
             success: function (data, textResponse) {
@@ -26,7 +28,7 @@ function LoginView() {
                 }
                 // retrieve the code and redirect to the redirect uri
                 var u = uri.clone();
-                u.setPath("/users/authorize/authcode")
+                u.setPath(BASEURL+"/users/authorize/authcode")
                   .replaceQueryParam('redirect_uri', redirect_uri);
                 
                 // login is correct, now lets retrieve the auth code
@@ -53,7 +55,7 @@ function LoginView() {
 
     // render the login form
     function render() {
-        tm.render('login', function (d) {
+        tm.render(BASEURL+'login', function (d) {
             $("#content").html(d);
             $("#loginform").submit(submit);
         },{})
@@ -71,7 +73,7 @@ function LoginView() {
       this.use(Sammy.Template);
       
       this.get('#/', function(context) {
-          context.partial('/users/templates/login.tmpl', {}, function(rendered) {
+          context.partial(BASEURL+'/users/templates/login.tmpl', {}, function(rendered) {
               context.$element().html(rendered);
           });
       })
@@ -82,7 +84,7 @@ function LoginView() {
           var state = uri.getQueryParamValue("state");
           var data = $("#loginform").serialize(); // serialize the form to urlencoded form
           $.ajax({
-              url: "/users/authorize/login",
+              url: BASEURL+"/users/authorize/login",
               data: data,
               type: "POST",
               success: function (data, textResponse) {
@@ -95,7 +97,7 @@ function LoginView() {
                   // retrieve the code and redirect to the redirect uri
                   context.log("creating new URL");
                   var u = new jsUri(document.location.href);
-                  u.setPath("/users/authorize/authcode");
+                  u.setPath(BASEURL+"/users/authorize/authcode");
                   u.replaceQueryParam('redirect_uri', redirect_uri);
                   context.log("created URL: "+u.toString());
                   
@@ -127,7 +129,8 @@ function LoginView() {
   });
 
   $(function() {
-    app.run("#/");
+    BASEURL = virtual_path
+    app.run("#/")
   });
 })(jQuery);
 

@@ -91,6 +91,7 @@ class Main(Handler):
         """retrieve the access token for an auth code"""
         self.settings.log.debug("retrieving token for code %s" %code)        
         url = self.settings.pm.um_token_endpoint
+        print url
         q = {
             'code' : code,
             'client_id' : self.settings.pm.client_id
