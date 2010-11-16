@@ -97,7 +97,7 @@ def setup(**kw):
     settings['contentmanager'] = ContentManager(db, "contents", ctm, "0")
 
     # path
-    settings['virtual_path'] = "/external"
+    settings['virtual_path'] = ""
 
     # TODO: enable updating of sub settings via dot notation (pm.client_id)
     settings.update(kw)
