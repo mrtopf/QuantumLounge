@@ -5,6 +5,7 @@
 *.orig
 *.swp
 *.rej
+._*
 *~
 *.o
 .build
