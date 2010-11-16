@@ -53,8 +53,6 @@
   };
   Status = function() {};
   Status.prototype.prepare = function(item) {
-    console.log(item._type);
-    console.log(item);
     return item;
   };
   Status.prototype.convert_dates = function(params) {
@@ -139,7 +137,6 @@
   };
   Link.prototype.process = function() {
     var url;
-    console.log("process");
     this.data = null;
     $("#link-box").slideUp();
     url = $("#link").val();
@@ -206,7 +203,6 @@
   __extends(Poll, Status);
   Poll.prototype.to_form = function(params) {
     var _ref, a, data, v;
-    console.log(params);
     data = {
       content: params.content,
       answers: params.poll_answers.split("\n")
@@ -217,7 +213,6 @@
       v = _ref[a];
       data[a] = v;
     }
-    console.log(data);
     return data;
   };
   TYPEDEFS = {
@@ -271,10 +266,7 @@
                     var repr;
                     item.username = data[item.user];
                     repr = TYPES[item._type].prepare(item);
-                    console.log(repr);
-                    console.log("render");
-                    that.render(TEMPLATES + 'entry.' + item._type + '.mustache', repr).appendTo(statuslist);
-                    return console.log("done");
+                    return that.render(TEMPLATES + 'entry.' + item._type + '.mustache', repr).appendTo(statuslist);
                   });
                   return statuslist.appendTo("#timeline");
                 }
@@ -320,7 +312,6 @@
         contentType: 'application/json',
         success: function(data, textResponse) {
           var repr;
-          console.log(data);
           data.id = data._id;
           data.username = VAR.poco.name.formatted;
           data.profile = VAR.poco.thumbnailUrl;
