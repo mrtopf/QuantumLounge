@@ -1,42 +1,43 @@
-CONTENT_API = "/api/1/content/"
 
-class Processor
-    templates: ['link','status']
-    tmpls: {
-        link: '''
-                <div class="activity" id="a-{{id}}">
-                    <div class="body">
-                        {{content}}
-                        <div class="link-info">
-                            <img class="link-box-image" src="{{link_image}}" />
-                            <strong class="link-box-title"><a href="{{link_url}}">{{link_title}}</a></strong>
-                            <div class="link-box-description">{{link_description}}</div>
-                        </div>
-                    </div>
-                </div>
-         '''
-        status: '''
-                <div class="activity" id="a-{{ id }}">
-                    <div class="body">
-                        {{ content }}
-                    </div>
-                </div>
-        '''
-    }
-    constructor: (@baseurl) ->
-    display_items: ->
+class Item
+
+    constructor: (@baseurl, @apiurl, @templateurl, @type, @amount, @elem) ->
+
         $.ajax({
-            url: "http://localhost:9991/api/1/content/0?r=jsview&jsview_type=link&so=date&sd=down"
+            url: @apiurl+"0?r=jsview&jsview_type="+@type+"&so=date&sd=down&l="+@amount
             dataType: "jsonp"
             success: (data) =>
-                for key, item of data.jsview
-                    t = @tmpls[item._type]
-                    $(Mustache.to_html(t, item)).appendTo("#jsview")
-        })
+                @item = data.jsview[0]
+                @load_template()
+            })
+
+    load_template: () =>
+        $.ajax {
+            url: @templateurl
+            dataType: 'jsonp'
+            success: (data) =>
+                h = $(Mustache.to_html(data, @item))
+                $(@elem).html(h)
+        }
+
+class Processor
+
+    constructor: () ->
+        @items = []
+
+        # retrieve the polls
+        item_elems = $(".ql-item")
+        for elem in item_elems
+            baseurl = $(elem).attr("data-baseurl")
+            apiurl = $(elem).attr("data-api")
+            templateurl = $(elem).attr("data-template")
+            type = $(elem).attr("data-type")
+            amount = $(elem).attr("data-amount")
+            item = new Item(baseurl, apiurl, templateurl, type, amount, elem)
+            @items.push(item)
 
 
 $(document).ready(
   ->
-      p = new Processor "http://localhost:9991"
-      p.display_items()
+      p = new Processor
 )

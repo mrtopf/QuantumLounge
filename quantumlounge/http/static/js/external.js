@@ -1,40 +1,58 @@
 (function() {
-  var CONTENT_API, Processor;
-  var __hasProp = Object.prototype.hasOwnProperty, __bind = function(func, context) {
+  var Item, Processor;
+  var __bind = function(func, context) {
     return function(){ return func.apply(context, arguments); };
   };
-  CONTENT_API = "/api/1/content/";
-  Processor = function(_arg) {
-    this.baseurl = _arg;
-    return this;
-  };
-  Processor.prototype.templates = ['link', 'status'];
-  Processor.prototype.tmpls = {
-    link: '<div class="activity" id="a-{{id}}">\n    <div class="body">\n        {{content}}\n        <div class="link-info">\n            <img class="link-box-image" src="{{link_image}}" />\n            <strong class="link-box-title"><a href="{{link_url}}">{{link_title}}</a></strong>\n            <div class="link-box-description">{{link_description}}</div>\n        </div>\n    </div>\n</div>',
-    status: '<div class="activity" id="a-{{ id }}">\n    <div class="body">\n        {{ content }}\n    </div>\n</div>'
-  };
-  Processor.prototype.display_items = function() {
-    return $.ajax({
-      url: "http://localhost:9991/api/1/content/0?r=jsview&jsview_type=link&so=date&sd=down",
+  Item = function(_b, _c, _d, _e, _f, _g) {
+    var _a;
+    this.elem = _g;
+    this.amount = _f;
+    this.type = _e;
+    this.templateurl = _d;
+    this.apiurl = _c;
+    this.baseurl = _b;
+    _a = this;
+    this.load_template = function(){ return Item.prototype.load_template.apply(_a, arguments); };
+    $.ajax({
+      url: this.apiurl + "0?r=jsview&jsview_type=" + this.type + "&so=date&sd=down&l=" + this.amount,
       dataType: "jsonp",
       success: __bind(function(data) {
-        var _ref, _result, item, key, t;
-        _result = []; _ref = data.jsview;
-        for (key in _ref) {
-          if (!__hasProp.call(_ref, key)) continue;
-          item = _ref[key];
-          _result.push((function() {
-            t = this.tmpls[item._type];
-            return $(Mustache.to_html(t, item)).appendTo("#jsview");
-          }).call(this));
-        }
-        return _result;
+        this.item = data.jsview[0];
+        return this.load_template();
+      }, this)
+    });
+    return this;
+  };
+  Item.prototype.load_template = function() {
+    return $.ajax({
+      url: this.templateurl,
+      dataType: 'jsonp',
+      success: __bind(function(data) {
+        var h;
+        h = $(Mustache.to_html(data, this.item));
+        return $(this.elem).html(h);
       }, this)
     });
   };
+  Processor = function() {
+    var _a, _b, _c, amount, apiurl, baseurl, elem, item, item_elems, templateurl, type;
+    this.items = [];
+    item_elems = $(".ql-item");
+    _b = item_elems;
+    for (_a = 0, _c = _b.length; _a < _c; _a++) {
+      elem = _b[_a];
+      baseurl = $(elem).attr("data-baseurl");
+      apiurl = $(elem).attr("data-api");
+      templateurl = $(elem).attr("data-template");
+      type = $(elem).attr("data-type");
+      amount = $(elem).attr("data-amount");
+      item = new Item(baseurl, apiurl, templateurl, type, amount, elem);
+      this.items.push(item);
+    }
+    return this;
+  };
   $(document).ready(function() {
     var p;
-    p = new Processor("http://localhost:9991");
-    return p.display_items();
+    return (p = new Processor());
   });
-}).call(this);
+})();

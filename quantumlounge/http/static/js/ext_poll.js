@@ -3,13 +3,13 @@
   var __bind = function(func, context) {
     return function(){ return func.apply(context, arguments); };
   };
-  Poll = function(_arg, _arg2) {
-    var _this;
-    this.elem = _arg2;
-    this.baseurl = _arg;
-    _this = this;
-    this.vote = function(){ return Poll.prototype.vote.apply(_this, arguments); };
-    this.load_template = function(){ return Poll.prototype.load_template.apply(_this, arguments); };
+  Poll = function(_b, _c) {
+    var _a;
+    this.elem = _c;
+    this.baseurl = _b;
+    _a = this;
+    this.vote = function(){ return Poll.prototype.vote.apply(_a, arguments); };
+    this.load_template = function(){ return Poll.prototype.load_template.apply(_a, arguments); };
     $.ajax({
       url: this.baseurl + this.content_api + "0?r=jsview&jsview_type=poll&so=date&sd=down&l=1",
       dataType: "jsonp",
@@ -47,12 +47,12 @@
     });
   };
   Poll.prototype.display_poll = function() {
-    var _i, _len, _ref, answer, h, i, new_answers;
+    var _a, _b, _c, answer, h, i, new_answers;
     new_answers = [];
     i = 0;
-    _ref = this.item.answers;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      answer = _ref[_i];
+    _b = this.item.answers;
+    for (_a = 0, _c = _b.length; _a < _c; _a++) {
+      answer = _b[_a];
       new_answers.push({
         title: answer,
         no: i
@@ -96,14 +96,14 @@
     });
   };
   PollProcessor = function() {
-    var _i, _len, _ref, baseurl, elem, poll, poll_elements;
+    var _a, _b, _c, baseurl, elem, poll, poll_elements;
     this.template = "";
     this.voted = false;
     this.polls = [];
     poll_elements = $(".ql-poll");
-    _ref = poll_elements;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      elem = _ref[_i];
+    _b = poll_elements;
+    for (_a = 0, _c = _b.length; _a < _c; _a++) {
+      elem = _b[_a];
       baseurl = $(elem).attr("data-baseurl");
       poll = new Poll(baseurl, elem);
       this.polls.push(poll);
@@ -114,4 +114,4 @@
     var p;
     return (p = new PollProcessor());
   });
-}).call(this);
+})();
