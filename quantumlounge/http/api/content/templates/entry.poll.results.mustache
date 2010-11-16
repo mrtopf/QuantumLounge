@@ -1,34 +1,20 @@
-<table class="portletborder" cellpadding="0" cellspacing="0">
-      <tbody valign="top">
-        <tr>
-          <td class="portletHeader" colspan="2">
-            <a class="portletArchiveIcon" href="polls/polls_list" title="polls archive">
-                <h3>Poll</h3>
-            </a>
-            </td>
-        </tr>
-        <tr>
-          <td id="popoll_viewlet">
-            <h5>{{content}}</h5>
-            
-            <table cellpadding="3">
-            <tbody>
-            {{#answers}}
-            <tr>
-                <td width="115">
-                    {{title}}
-                </td>
-                <td width="135">
-                    {{votes}}
-                    <img src="bar_1_10.gif" alt="{{title}}" width="{{percent}}" height="10">
-                    {{percent}}%
-                </td>
-            </tr>
-            {{/answers}}
-            </tbody></table>
-            Votes : {{votes}} <br />
-          </td>
-        </tr>
-      </tbody>
-    </table>
+<h5>{{content}}</h5>
+
+<table cellpadding="3">
+<tbody>
+{{#answers}}
+<tr>
+    <td width="115">
+        {{title}}
+    </td>
+    <td width="135">
+        {{votes}}
+        <img src="bar_1_10.gif" alt="{{title}}" width="{{percent}}" height="10">
+        {{percent}}%
+    </td>
+</tr>
+{{/answers}}
+</tbody>
+</table>
+Votes : {{votes}} <br />
 
