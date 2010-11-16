@@ -88,7 +88,7 @@ class PollProcessor
         for elem in poll_elements
             baseurl = $(elem).attr("data-baseurl")
             poll = new Poll baseurl, elem
-            polls.push(poll)
+            @polls.push(poll)
 
 
 $(document).ready(
