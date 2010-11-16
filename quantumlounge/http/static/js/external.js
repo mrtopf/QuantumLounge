@@ -4,8 +4,8 @@
     return function(){ return func.apply(context, arguments); };
   };
   CONTENT_API = "/api/1/content/";
-  Processor = function(_a) {
-    this.baseurl = _a;
+  Processor = function(_arg) {
+    this.baseurl = _arg;
     return this;
   };
   Processor.prototype.templates = ['link', 'status'];
@@ -18,19 +18,17 @@
       url: "http://localhost:9991/api/1/content/0?r=jsview&jsview_type=link&so=date&sd=down",
       dataType: "jsonp",
       success: __bind(function(data) {
-        var _a, _b, item, key, t;
-        console.log("ok");
-        console.log(data);
-        _a = []; _b = data.jsview;
-        for (key in _b) {
-          if (!__hasProp.call(_b, key)) continue;
-          item = _b[key];
-          _a.push((function() {
+        var _ref, _result, item, key, t;
+        _result = []; _ref = data.jsview;
+        for (key in _ref) {
+          if (!__hasProp.call(_ref, key)) continue;
+          item = _ref[key];
+          _result.push((function() {
             t = this.tmpls[item._type];
             return $(Mustache.to_html(t, item)).appendTo("#jsview");
           }).call(this));
         }
-        return _a;
+        return _result;
       }, this)
     });
   };
@@ -39,4 +37,4 @@
     p = new Processor("http://localhost:9991");
     return p.display_items();
   });
-})();
+}).call(this);
