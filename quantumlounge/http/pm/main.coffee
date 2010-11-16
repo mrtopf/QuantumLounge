@@ -39,8 +39,6 @@ class Status
 
 
     prepare: (item) ->
-        console.log(item._type)
-        console.log(item)
         item
 
     convert_dates: (params) ->
@@ -105,7 +103,6 @@ class Link extends Status
         data
 
     process: () ->
-        console.log("process")
         @data = null
         $("#link-box").slideUp()
         url = $("#link").val()
@@ -160,14 +157,12 @@ class Link extends Status
 class Poll extends Status
 
     to_form: (params) ->
-        console.log(params)
         data = {
             content: params.content
             answers: params.poll_answers.split("\n")
         }
         for a,v of @convert_dates(params)
             data[a]=v
-        console.log(data)
         data
 
 TYPEDEFS = {
@@ -213,11 +208,8 @@ PAGE = {
                                 _.each(items, (item) ->
                                     item.username = data[item.user]
                                     repr = TYPES[item._type].prepare(item)
-                                    console.log(repr)
-                                    console.log("render")
                                     that.render(TEMPLATES+'entry.'+item._type+'.mustache', repr)
                                     .appendTo(statuslist)
-                                    console.log("done")
                                 )
                                 statuslist.appendTo("#timeline")
                         })
@@ -265,7 +257,6 @@ app = $.sammy(
             processData : false
             contentType: 'application/json'
             success : (data, textResponse) ->
-                console.log(data)
                 data.id = data._id
                 data.username = VAR.poco.name.formatted
                 data.profile = VAR.poco.thumbnailUrl
