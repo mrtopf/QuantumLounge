@@ -81,24 +81,24 @@
     return data;
   };
   Status.prototype.to_form = function(params) {
-    var _ref, a, data, v;
+    var _a, a, data, v;
     data = {
       content: params.content
     };
-    _ref = this.convert_dates(params);
-    for (a in _ref) {
-      if (!__hasProp.call(_ref, a)) continue;
-      v = _ref[a];
+    _a = this.convert_dates(params);
+    for (a in _a) {
+      if (!__hasProp.call(_a, a)) continue;
+      v = _a[a];
       data[a] = v;
     }
     return data;
   };
   Link = function() {
-    var _this;
-    _this = this;
-    this.set_image = function(){ return Link.prototype.set_image.apply(_this, arguments); };
-    this.prev_image = function(){ return Link.prototype.prev_image.apply(_this, arguments); };
-    this.next_image = function(){ return Link.prototype.next_image.apply(_this, arguments); };
+    var _a;
+    _a = this;
+    this.set_image = function(){ return Link.prototype.set_image.apply(_a, arguments); };
+    this.prev_image = function(){ return Link.prototype.prev_image.apply(_a, arguments); };
+    this.next_image = function(){ return Link.prototype.next_image.apply(_a, arguments); };
     this.url = null;
     this.img_idx = 0;
     this.img_url = null;
@@ -119,7 +119,7 @@
   };
   __extends(Link, Status);
   Link.prototype.to_form = function(params) {
-    var _ref, a, data, v;
+    var _a, a, data, v;
     data = {
       content: params.content,
       link: params.link,
@@ -127,10 +127,10 @@
       link_description: this.data.content,
       link_image: this.active_image
     };
-    _ref = this.convert_dates(params);
-    for (a in _ref) {
-      if (!__hasProp.call(_ref, a)) continue;
-      v = _ref[a];
+    _a = this.convert_dates(params);
+    for (a in _a) {
+      if (!__hasProp.call(_a, a)) continue;
+      v = _a[a];
       data[a] = v;
     }
     return data;
@@ -202,15 +202,15 @@
   };
   __extends(Poll, Status);
   Poll.prototype.to_form = function(params) {
-    var _ref, a, data, v;
+    var _a, a, data, v;
     data = {
       content: params.content,
       answers: params.poll_answers.split("\n")
     };
-    _ref = this.convert_dates(params);
-    for (a in _ref) {
-      if (!__hasProp.call(_ref, a)) continue;
-      v = _ref[a];
+    _a = this.convert_dates(params);
+    for (a in _a) {
+      if (!__hasProp.call(_a, a)) continue;
+      v = _a[a];
       data[a] = v;
     }
     return data;
@@ -236,12 +236,12 @@
           }
           data.parents = parents.slice(1, parents.length);
           return context.partial(TEMPLATES + 'timeline.mustache', data).then(function() {
-            var _ref, a, statuslist, v;
+            var _a, a, statuslist, v;
             TABS.init();
-            _ref = TYPEDEFS;
-            for (a in _ref) {
-              if (!__hasProp.call(_ref, a)) continue;
-              v = _ref[a];
+            _a = TYPEDEFS;
+            for (a in _a) {
+              if (!__hasProp.call(_a, a)) continue;
+              v = _a[a];
               TYPES[a] = new v();
             }
             $(".dateinput").datepicker({
@@ -334,4 +334,4 @@
       return app.run("#/");
     });
   });
-}).call(this);
+})();
