@@ -211,16 +211,18 @@ class Collection(MongoObjectStore):
 class Status(Model):
     """example content type defining our own base type"""
     TYPE = "status"
-    _attribs = ['content','date','user', 'publication_date', 'depublication_date']
+    _attribs = ['_cid', 'content','date','user', 'publication_date', 'depublication_date']
     _defaults = {
-            'content' : u'',
-            'date' : None,
-            'user' : u'',
-            'publication_date' : u'',
-            'depublication_date' : u'',
+            '_cid' : u'',               # "filename" inside the container
+            'content' : u'',            # main content (status message)
+            'date' : None,              # creation date of this item
+            'user' : u'',               # owner
+            'publication_date' : u'',   # when to publish or None (immediately)
+            'depublication_date' : u'', # when to depublish or None (forever)
         }
 
     _processors = {
+            '_cid' : [processors.EmptyToUUID()],
             'publication_date' : [processors.EmptyToNone(),processors.DateParser()],
             'depublication_date' : [processors.EmptyToNone(),processors.DateParser()],
     }
@@ -243,6 +245,8 @@ class Status(Model):
     def _after_init(self):
         """fix data"""
         t = datetime.datetime.now()
+        if self.date in (types.UnicodeType, types.StringType):
+            self.date = dateutil.parser.parse(self.date)
         if self.date is None:
             self.date = datetime.datetime.now()
         errors = self.process()
@@ -256,7 +260,8 @@ class Status(Model):
         # TODO: this should be in the content API, not DB API
         
         """
-        data['date'] = data['date'].strftime("%d.%m.%Y %H:%M")
+        if type(data['date']) not in (types.UnicodeType, types.StringType):
+            data['date'] = data['date'].strftime("%d.%m.%Y %H:%M")
         t=type(datetime.datetime.now())
         if type(data['publication_date'])==t:
             data['publication_date'] = data['publication_date'].strftime("%d.%m.%Y %H:%M")
