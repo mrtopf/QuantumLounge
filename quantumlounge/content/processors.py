@@ -1,6 +1,7 @@
 import formencode
 import types
 import dateutil.parser
+import uuid
 
 
 class ProcessingError(Exception):
@@ -108,6 +109,15 @@ class EmptyToNone(Processor):
         """try to convert the string"""
         if value=="" or value==u"":
             return None
+        return value
+
+class EmptyToUUID(Processor):
+    """converts empty strings to a unique uuid"""
+
+    def process(self, value, field=None, **kw):
+        """try to convert the string"""
+        if value=="" or value==u"":
+            return unicode(uuid.uuid4())
         return value
 
 class Int(FormEncodeProcessor):
