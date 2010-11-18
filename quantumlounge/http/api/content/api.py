@@ -13,8 +13,12 @@ class Item(RESTfulHandler):
     """handle all methods for an item
     """
 
-    def error(self, msg):
-        return { 'error' : msg }
+    def error(self, code, msg):
+        self.settings.log.error("%s: %s" %(code, msg))
+        return { 
+            'error' : code, 
+            'error_msg' : msg 
+            }
 
     def _query_objs(self, query):
         """perform the query using the sort order etc. passed in to the 
@@ -24,11 +28,11 @@ class Item(RESTfulHandler):
         try:
             l = int(self.request.values.get("l","10")) # limit
         except:
-            return self.error("wrong value for 'l'")
+            return self.error(400, "wrong value for 'l'")
         try:
             o = int(self.request.values.get("o","0")) #offset
         except:
-            return self.error("wrong value for 'o'")
+            return self.error(400, "wrong value for 'o'")
     
         items = self.settings.contentmanager.index(
             query = query,
@@ -93,7 +97,7 @@ class Item(RESTfulHandler):
         m = getattr(self, rname, None)
         if m is not None:
             return {r : m(content_id)}
-        return {'error' : 'representation not found'}
+        return self.error(404, "representation not found")
 
     
     @json(content_type="application/json")
@@ -104,11 +108,17 @@ class Item(RESTfulHandler):
         d['_parent_id'] = content_id
         _type = d['_type']
         ct = self.settings['content1'][_type]
-        print ct.required_fields
         for field in ct.required_fields:
             if field not in d.keys():
-                self.settings.log.error("required field '%s' missing" %field)
-                return self.error("required field '%s' missing" %field)
+                return self.error(400, "required field '%s' missing" %field)
+
+        # check if _cid already exists in parent node
+        cids = ct.mgr.collection.find({ 
+                '_cid' : d['_cid'],
+                '_parent_id' : content_id
+            }).count()
+        if cids>0:
+            return self.error(400, "cid already exists")
        
         # create a new tweet and store it
         r = {}
