@@ -1,6 +1,6 @@
 <div class="activity" id="a-{{ id }}">
     <div class="body">
-        <strong>{{ content }}</strong>
+        <span class="title">{{ content }}</span>
         <ul class="answers">
         {{#answers}}
           <li>{{.}}</li>
@@ -8,5 +8,8 @@
         
         </ul>
     </div>
-    <span class="time">{{ date }}</span>
+    <div class="meta">
+        <span class="fullname"><a href="#">{{ username }}</a></span>
+        <span class="time">{{ date }}</span>
+    </div>
 </div>

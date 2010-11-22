@@ -1,6 +1,5 @@
 <div class="activity" id="a-{{ id }}">
-    <span class="body">
-        <a href="" class="name">{{ username }}</a>
+    <div class="body">
         {{ content }}
         <div class="link-info">
         {{#link_image}}
@@ -9,6 +8,9 @@
             <strong class="link-box-title"><a href="{{link_url}}">{{ link_title }}</a></strong>
             <div class="link-box-description">{{link_description}}</div>
         </div>
+    </div>
+    <div class="meta">
+        <span class="fullname"><a href="#">{{ username }}</a></span>
         <span class="time">{{ date }}</span>
-    </span>
+    </div>
 </div>

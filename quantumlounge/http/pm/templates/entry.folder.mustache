@@ -1,6 +1,9 @@
-    <div class="activity" id="a-{{ _id }}">
-        <span class="body folder">
-            <a href="/pm#/{{_id}}" class="title">{{ content }}</a>
-            <span class="time">{{ date }}</span>
-        </span>
+<div class="activity" id="a-{{ _id }}">
+    <div class="body folder">
+        <a href="/pm#/{{_id}}" class="title">{{ content }}</a>
     </div>
+    <div class="meta">
+        <span class="fullname"><a href="#">{{ username }}</a></span>
+        <span class="time">{{ date }}</span>
+    </div>
+</div>
