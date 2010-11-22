@@ -38,8 +38,8 @@
 
   #entrybox {
     overflow: auto;
-    border: 1px solid #ddd;
-    border-top: 0;
+    background: #ddd;
+    border-bottom: 1px solid #aaa;
     padding:15px 10px;
   }
 
@@ -63,7 +63,7 @@
       border: 1px solid #fa0;
     }
   }
-  #status-content {
+  textarea, #status-content {
     width: 98%;
     font-size: 1.3em;
     font-weight: normal;
@@ -142,18 +142,31 @@
 
   .body {
     display: block;  
+    padding-right: 4px;
   }
 
-  .name {
-    font-weight: bold;
-    color: #113;
-    text-decoration: none;
+  .folder a {
+      font-size: 2em;
+      text-decoration: none;
+      color: #03a;
   }
 
-  .time {
-    display: block;
-    font-size: 0.9em;
+  .meta {
     color: #aaa;
+    padding-right: 4px;
+    padding-bottom: 4px;
+
+      .fullname a {
+        text-decoration: none;
+        color: #aaa;
+        font-size: 9px;
+      }
+
+      .time {
+        float: right;
+        display: block;
+        font-size: 9px;
+      }
   }
   
   nav {
@@ -179,13 +192,16 @@
     height: auto;
   }
 
-  // everything for the input box tabs
+//
+// TABS
+//
+  
   #tabs { 
       list-style:none; 
       margin:0 !important; 
       padding:0;
       height:30px;
-      border-bottom:1px solid #666;   
+      border-bottom:1px solid #ddd;   
   }
 
   /* single tab */
@@ -199,19 +215,20 @@
 
   /* link inside the tab. uses a background image */
   #tabs a { 
-      background: url(http://flowplayer.org//img/global/tabs.png) no-repeat -652px 0;
+      @include linear-gradient(color_stops(#eee,#ccc));
       font-size:11px;
       display:block;
-      height: 30px;  
-      line-height:30px;
-      width: 111px;
+      line-height:20px;
+      height: 20px;  
+      width: 60px;
       text-align:center;  
       text-decoration:none;
-      color:#000;
+      color:#333;
       padding:0px;
       margin:0px; 
+      margin-right: 5px;
       position:relative;
-      top:1px;
+      top:10px;
   }
 
   #tabs a:active {
@@ -220,41 +237,23 @@
 
   /* when mouse enters the tab move the background image */
   #tabs a:hover {
-      background-position: -652px -31px;  
-      color:#fff; 
+      @include linear-gradient(color_stops(#fff,#ddd));
+      color:#000; 
   }
 
   /* active tab uses a class name "current". it's highlight is also done by moving the background image. */
   #tabs .current, #tabs .current:hover, #tabs li.current a {
-      background-position: -652px -62px;      
       cursor:default !important; 
-      color:#000 !important;
+      color:#222 !important;
+      font-weight: bold;
   }
-
-  /* Different widths for tabs: use a class name: w1, w2, w3 or w2 */
-
-
-  /* width 1 */
-  #tabs .w1           { background-position: -519px 0; width:134px; }
-  #tabs .w1:hover     { background-position: -519px -31px; }
-  #tabs .w1.current { background-position: -519px -62px; }
-
-  /* width 2 */
-  #tabs .w2           { background-position: -366px -0px; width:154px; }
-  #tabs .w2:hover     { background-position: -366px -31px; }
-  #tabs .w2.current { background-position: -366px -62px; }
-
-
-  /* width 3 */
-  #tabs .w3           { background-position: -193px -0px; width:174px; }
-  #tabs .w3:hover     { background-position: -193px -31px; }
-  #tabs .w3.current { background-position: -193px -62px; }
-
-  /* width 4 */
-  #tabs .w4           { background-position: -0px -0px; width:194px; }
-  #tabs .w4:hover     { background-position: -0px -31px; }
-  #tabs .w4.current { background-position: -0px -62px; }
-
+  #tabs li.current a{
+      @include linear-gradient(color_stops(#eee,#ddd));
+      color: #222;
+      top: 1px;
+      height: 30px;
+      line-height: 30px;
+  }
 
   /* initially all panes are hidden */ 
   #panes .pane {
@@ -283,12 +282,12 @@
   #link {
     display: inline-block;
     width: 80%;
-    height: 20px;
+    height: 23px;
     @include border-radius(2px);
     border: none;
     font-size: 1.1em;
     margin-right: 0;
-    float:left;
+    float: left;
     outline: none;
   }
 
@@ -358,6 +357,11 @@
     background: #eee;
     cursor: pointer;
     color: #888;
+    float: left;
+    .removebutton {
+        float: right;
+        width: 16px;
+    }
 }
 
 /* calendar root element */
@@ -523,5 +527,12 @@ a.caldisabled {
     margin:0;       
 }
 
+.title{
+    font-size: 1.3em;
+    font-weight: bold;
+}
 
+.answers {
+    margin-bottom: 0;
+}
 

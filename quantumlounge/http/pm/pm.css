@@ -5,11 +5,6 @@
   /* link inside the tab. uses a background image */
   /* when mouse enters the tab move the background image */
   /* active tab uses a class name "current". it's highlight is also done by moving the background image. */
-  /* Different widths for tabs: use a class name: w1, w2, w3 or w2 */
-  /* width 1 */
-  /* width 2 */
-  /* width 3 */
-  /* width 4 */
   /* initially all panes are hidden */
 }
 /* line 5, sass/pm.scss */
@@ -66,8 +61,8 @@
 /* line 39, sass/pm.scss */
 #activities #entrybox {
   overflow: auto;
-  border: 1px solid #ddd;
-  border-top: 0;
+  background: #ddd;
+  border-bottom: 1px solid #aaa;
   padding: 15px 10px;
 }
 /* line 46, sass/pm.scss */
@@ -99,7 +94,7 @@
   border: 1px solid #fa0;
 }
 /* line 66, sass/pm.scss */
-#activities #status-content {
+#activities textarea, #activities #status-content {
   width: 98%;
   font-size: 1.3em;
   font-weight: normal;
@@ -124,7 +119,7 @@
   -webkit-transition: border 0.2s linear, -webkit-box-shadow 0.2s linear;
 }
 /* line 82, sass/pm.scss */
-#activities #status-content:focus {
+#activities textarea:focus, #activities #status-content:focus {
   border: 1px solid #8ac;
   -moz-box-shadow: #00aaff 0 0 3px 0;
   -webkit-box-shadow: #00aaff 0 0 3px 0;
@@ -197,28 +192,41 @@
 /* line 143, sass/pm.scss */
 #activities .body {
   display: block;
+  padding-right: 4px;
 }
-/* line 147, sass/pm.scss */
-#activities .name {
-  font-weight: bold;
-  color: #113;
+/* line 148, sass/pm.scss */
+#activities .folder a {
+  font-size: 2em;
   text-decoration: none;
+  color: #03a;
 }
-/* line 153, sass/pm.scss */
-#activities .time {
-  display: block;
-  font-size: 0.9em;
+/* line 154, sass/pm.scss */
+#activities .meta {
   color: #aaa;
+  padding-right: 4px;
+  padding-bottom: 4px;
 }
 /* line 159, sass/pm.scss */
+#activities .meta .fullname a {
+  text-decoration: none;
+  color: #aaa;
+  font-size: 9px;
+}
+/* line 165, sass/pm.scss */
+#activities .meta .time {
+  float: right;
+  display: block;
+  font-size: 9px;
+}
+/* line 172, sass/pm.scss */
 #activities nav {
   float: right;
 }
-/* line 163, sass/pm.scss */
+/* line 176, sass/pm.scss */
 #activities #searchbar {
   float: left;
 }
-/* line 165, sass/pm.scss */
+/* line 178, sass/pm.scss */
 #activities #searchbar input {
   -moz-border-radius: 100px;
   -webkit-border-radius: 100px;
@@ -230,7 +238,7 @@
   border: 1px solid #888;
   font-size: 1.2em;
 }
-/* line 173, sass/pm.scss */
+/* line 186, sass/pm.scss */
 #activities header {
   overflow: auto;
   background: none;
@@ -239,15 +247,15 @@
   border: 0;
   height: auto;
 }
-/* line 183, sass/pm.scss */
+/* line 199, sass/pm.scss */
 #activities #tabs {
   list-style: none;
   margin: 0 !important;
   padding: 0;
   height: 30px;
-  border-bottom: 1px solid #666;
+  border-bottom: 1px solid #ddd;
 }
-/* line 192, sass/pm.scss */
+/* line 208, sass/pm.scss */
 #activities #tabs li {
   float: left;
   text-indent: 0;
@@ -255,105 +263,68 @@
   margin: 0 !important;
   list-style-image: none !important;
 }
-/* line 201, sass/pm.scss */
+/* line 217, sass/pm.scss */
 #activities #tabs a {
-  background: url(http://flowplayer.org//img/global/tabs.png) no-repeat -652px 0;
+  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #eeeeee), color-stop(100%, #cccccc));
+  background-image: -moz-linear-gradient(top, #eeeeee 0%, #cccccc 100%);
+  background-image: linear-gradient(top, #eeeeee 0%, #cccccc 100%);
   font-size: 11px;
   display: block;
-  height: 30px;
-  line-height: 30px;
-  width: 111px;
+  line-height: 20px;
+  height: 20px;
+  width: 60px;
   text-align: center;
   text-decoration: none;
-  color: #000;
+  color: #333;
   padding: 0px;
   margin: 0px;
+  margin-right: 5px;
   position: relative;
-  top: 1px;
+  top: 10px;
 }
-/* line 217, sass/pm.scss */
+/* line 234, sass/pm.scss */
 #activities #tabs a:active {
   outline: none;
 }
-/* line 222, sass/pm.scss */
-#activities #tabs a:hover {
-  background-position: -652px -31px;
-  color: #fff;
-}
-/* line 228, sass/pm.scss */
-#activities #tabs .current, #activities #tabs .current:hover, #activities #tabs li.current a {
-  background-position: -652px -62px;
-  cursor: default !important;
-  color: #000 !important;
-}
-/* line 238, sass/pm.scss */
-#activities #tabs .w1 {
-  background-position: -519px 0;
-  width: 134px;
-}
 /* line 239, sass/pm.scss */
-#activities #tabs .w1:hover {
-  background-position: -519px -31px;
-}
-/* line 240, sass/pm.scss */
-#activities #tabs .w1.current {
-  background-position: -519px -62px;
-}
-/* line 243, sass/pm.scss */
-#activities #tabs .w2 {
-  background-position: -366px 0px;
-  width: 154px;
-}
-/* line 244, sass/pm.scss */
-#activities #tabs .w2:hover {
-  background-position: -366px -31px;
+#activities #tabs a:hover {
+  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #ffffff), color-stop(100%, #dddddd));
+  background-image: -moz-linear-gradient(top, #ffffff 0%, #dddddd 100%);
+  background-image: linear-gradient(top, #ffffff 0%, #dddddd 100%);
+  color: #000;
 }
 /* line 245, sass/pm.scss */
-#activities #tabs .w2.current {
-  background-position: -366px -62px;
-}
-/* line 249, sass/pm.scss */
-#activities #tabs .w3 {
-  background-position: -193px 0px;
-  width: 174px;
+#activities #tabs .current, #activities #tabs .current:hover, #activities #tabs li.current a {
+  cursor: default !important;
+  color: #222 !important;
+  font-weight: bold;
 }
 /* line 250, sass/pm.scss */
-#activities #tabs .w3:hover {
-  background-position: -193px -31px;
+#activities #tabs li.current a {
+  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #eeeeee), color-stop(100%, #dddddd));
+  background-image: -moz-linear-gradient(top, #eeeeee 0%, #dddddd 100%);
+  background-image: linear-gradient(top, #eeeeee 0%, #dddddd 100%);
+  color: #222;
+  top: 1px;
+  height: 30px;
+  line-height: 30px;
 }
-/* line 251, sass/pm.scss */
-#activities #tabs .w3.current {
-  background-position: -193px -62px;
-}
-/* line 254, sass/pm.scss */
-#activities #tabs .w4 {
-  background-position: 0px 0px;
-  width: 194px;
-}
-/* line 255, sass/pm.scss */
-#activities #tabs .w4:hover {
-  background-position: 0px -31px;
-}
-/* line 256, sass/pm.scss */
-#activities #tabs .w4.current {
-  background-position: 0px -62px;
-}
-/* line 260, sass/pm.scss */
+/* line 259, sass/pm.scss */
 #activities #panes .pane {
   display: none;
 }
-/* line 265, sass/pm.scss */
+/* line 264, sass/pm.scss */
 #activities .field {
   margin: 0 2px 10px 0;
 }
-/* line 267, sass/pm.scss */
+/* line 266, sass/pm.scss */
 #activities .field label {
   padding: 4px;
   display: inline-block;
   float: left;
   font-weight: bold;
 }
-/* line 275, sass/pm.scss */
+/* line 274, sass/pm.scss */
 #activities #link-container {
   border: 1px solid #777;
   border-top: 1px solid #aaa;
@@ -361,11 +332,11 @@
   overflow: auto;
   width: 92%;
 }
-/* line 283, sass/pm.scss */
+/* line 282, sass/pm.scss */
 #activities #link {
   display: inline-block;
   width: 80%;
-  height: 20px;
+  height: 23px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
   -o-border-radius: 2px;
@@ -378,7 +349,7 @@
   float: left;
   outline: none;
 }
-/* line 295, sass/pm.scss */
+/* line 294, sass/pm.scss */
 #activities #link-submit {
   display: inline-block;
   padding: 3px 14px;
@@ -393,7 +364,7 @@
   margin: 0;
   float: right;
 }
-/* line 308, sass/pm.scss */
+/* line 307, sass/pm.scss */
 #activities #link-box, #activities .link-info {
   display: none;
   border: 1px solid #888;
@@ -401,7 +372,7 @@
   padding: 5px;
   overflow: auto;
 }
-/* line 315, sass/pm.scss */
+/* line 314, sass/pm.scss */
 #activities #link-box img, #activities .link-info img {
   width: 100px;
   height: 100px;
@@ -409,16 +380,16 @@
   float: left;
   margin-right: 3px;
 }
-/* line 323, sass/pm.scss */
+/* line 322, sass/pm.scss */
 #activities #link-box h4, #activities .link-info h4 {
   margin: 0;
 }
-/* line 326, sass/pm.scss */
+/* line 325, sass/pm.scss */
 #activities #link-box #link-box-url, #activities .link-info #link-box-url {
   font-size: 0.9em;
   color: #777;
 }
-/* line 331, sass/pm.scss */
+/* line 330, sass/pm.scss */
 #activities .link-info {
   display: block;
   border: none;
@@ -426,7 +397,7 @@
 
 /* For the details, see: http://flowplayer.org/tools/dateinput/index.html#skinning */
 /* the input field */
-/* line 347, sass/pm.scss */
+/* line 346, sass/pm.scss */
 #pubdate-field, #depubdate-field {
   font-size: 0.8em;
   color: #888;
@@ -434,7 +405,7 @@
   margin-right: 10px;
 }
 
-/* line 354, sass/pm.scss */
+/* line 353, sass/pm.scss */
 .dateinput {
   border: none;
   text-align: left;
@@ -442,10 +413,16 @@
   background: #eee;
   cursor: pointer;
   color: #888;
+  float: left;
+}
+/* line 361, sass/pm.scss */
+.dateinput .removebutton {
+  float: right;
+  width: 16px;
 }
 
 /* calendar root element */
-/* line 364, sass/pm.scss */
+/* line 368, sass/pm.scss */
 #calroot {
   /* place on top of other elements. set a higher value if nessessary */
   z-index: 10000;
@@ -462,13 +439,13 @@
 }
 
 /* head. contains title, prev/next month controls and possible month/year selectors */
-/* line 383, sass/pm.scss */
+/* line 387, sass/pm.scss */
 #calhead {
   padding: 2px 0;
   height: 22px;
 }
 
-/* line 388, sass/pm.scss */
+/* line 392, sass/pm.scss */
 #caltitle {
   font-size: 14px;
   color: #0150D1;
@@ -479,7 +456,7 @@
   text-shadow: 0 1px 0 #ddd;
 }
 
-/* line 398, sass/pm.scss */
+/* line 402, sass/pm.scss */
 #calnext, #calprev {
   display: block;
   width: 20px;
@@ -489,31 +466,31 @@
   cursor: pointer;
 }
 
-/* line 407, sass/pm.scss */
+/* line 411, sass/pm.scss */
 #calnext {
   background-image: url(next.gif);
   float: right;
 }
 
-/* line 412, sass/pm.scss */
+/* line 416, sass/pm.scss */
 #calprev.caldisabled, #calnext.caldisabled {
   visibility: hidden;
 }
 
 /* year/month selector */
-/* line 417, sass/pm.scss */
+/* line 421, sass/pm.scss */
 #caltitle select {
   font-size: 10px;
 }
 
 /* names of the days */
-/* line 422, sass/pm.scss */
+/* line 426, sass/pm.scss */
 #caldays {
   height: 14px;
   border-bottom: 1px solid #ddd;
 }
 
-/* line 427, sass/pm.scss */
+/* line 431, sass/pm.scss */
 #caldays span {
   display: block;
   float: left;
@@ -522,21 +499,21 @@
 }
 
 /* container for weeks */
-/* line 435, sass/pm.scss */
+/* line 439, sass/pm.scss */
 #calweeks {
   background-color: #fff;
   margin-top: 4px;
 }
 
 /* single week */
-/* line 441, sass/pm.scss */
+/* line 445, sass/pm.scss */
 .calweek {
   clear: left;
   height: 22px;
 }
 
 /* single day */
-/* line 447, sass/pm.scss */
+/* line 451, sass/pm.scss */
 .calweek a {
   display: block;
   float: left;
@@ -553,30 +530,30 @@
 }
 
 /* different states */
-/* line 463, sass/pm.scss */
+/* line 467, sass/pm.scss */
 .calweek a:hover, .calfocus {
   background-color: #ddd;
 }
 
 /* sunday */
-/* line 468, sass/pm.scss */
+/* line 472, sass/pm.scss */
 a.calsun {
   color: red;
 }
 
 /* offmonth day */
-/* line 473, sass/pm.scss */
+/* line 477, sass/pm.scss */
 a.caloff {
   color: #ccc;
 }
 
-/* line 477, sass/pm.scss */
+/* line 481, sass/pm.scss */
 a.caloff:hover {
   background-color: #f5f5fa;
 }
 
 /* unselecteble day */
-/* line 483, sass/pm.scss */
+/* line 487, sass/pm.scss */
 a.caldisabled {
   background-color: #efefef !important;
   color: #ccc  !important;
@@ -584,20 +561,20 @@ a.caldisabled {
 }
 
 /* current day */
-/* line 490, sass/pm.scss */
+/* line 494, sass/pm.scss */
 #calcurrent {
   background-color: #498CE2;
   color: #fff;
 }
 
 /* today */
-/* line 496, sass/pm.scss */
+/* line 500, sass/pm.scss */
 #caltoday {
   background-color: #333;
   color: #fff;
 }
 
-/* line 502, sass/pm.scss */
+/* line 506, sass/pm.scss */
 .error {
   height: 15px;
   background-color: #FFFE36;
@@ -616,7 +593,18 @@ a.caldisabled {
   -webkit-box-shadow: 0 0 6px #ddd;
 }
 
-/* line 522, sass/pm.scss */
+/* line 526, sass/pm.scss */
 .error p {
   margin: 0;
+}
+
+/* line 530, sass/pm.scss */
+.title {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+/* line 535, sass/pm.scss */
+.answers {
+  margin-bottom: 0;
 }
