@@ -113,12 +113,20 @@ class Item(RESTfulHandler):
                 return self.error(400, "required field '%s' missing" %field)
 
         # check if _cid already exists in parent node
-        cids = ct.mgr.collection.find({ 
-                '_cid' : d['_cid'],
-                '_parent_id' : content_id
-            }).count()
-        if cids>0:
-            return self.error(400, "cid already exists")
+        # but only if a _cid is posted 
+        if d.has_key("_cid"):
+            cids = ct.mgr.collection.find({ 
+                    '_cid' : d['_cid'],
+                    '_parent_id' : content_id
+                }).count()
+            if cids>0:
+                return self.error(400, "cid already exists")
+
+        # check if subtype is allowed
+        content = ct.mgr.get(content_id)
+        if content._subtypes is not None:
+            if d['_type'] not in content._subtypes:
+                return self.error(400, "subtype not allowed")
        
         # create a new tweet and store it
         r = {}
