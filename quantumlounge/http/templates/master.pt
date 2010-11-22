@@ -48,10 +48,15 @@
 <!--[if IE 9 ]>    <body class="ie9"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--> <body> <!--<![endif]-->
 
+  <div id="error">
+      <div id="error-message">Message</div>
+      <a href="#close" class="closebutton ui-icon ui-icon-circle-close"></a>
+  </div>
+
   <div id="container">
-    <header>
+    <header id="topheader">
       <div id="headercontent">
-        <h1 id="logofont">quantumLOUNGE</h1>
+        <h1 id="logofont">quantum.LOUNGE</h1>
       </div>
 
     </header>
@@ -64,13 +69,13 @@
           </div>
         </div>
         <aside>
-          <div class="portlet">
+          <div class="portlet" style="display:none">
             <h2>Portlet</h2>
             <div class="content">
               Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
             </div>
           </div>
-          <div class="portlet">
+          <div class="portlet" style="display:none">
             <h2>Portlet</h2>
             <div class="content">
               Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
