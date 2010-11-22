@@ -81,6 +81,9 @@ class FormEncodeProcessor(Processor):
 
 class Email(FormEncodeProcessor):
     validator = formencode.validators.Email
+
+class URL(FormEncodeProcessor):
+    validator = formencode.validators.URL
     
 class DateConverter(FormEncodeProcessor):
     validator = formencode.validators.DateConverter
