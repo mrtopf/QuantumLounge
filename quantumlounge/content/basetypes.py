@@ -1,14 +1,10 @@
 from base import Status, StatusCollection
 from contenttypes import ContentType
+import processors
 
 class Folder(Status):
     """a folder"""
     TYPE = "folder"
-    _attribs = Status._attribs+['subtypes']
-    _defaults = Status._defaults
-    _defaults.update({
-        'subtypes' : None # means all are allowed
-    })
 
 class FolderCollection(StatusCollection):
     """manages folders"""
@@ -26,6 +22,20 @@ class Link(Status):
         'link_description' : u'',
         })
 
+    _processors = {
+            '_cid' : [processors.EmptyToUUID()],
+            'link' : [processors.URL()],
+            'publication_date' : [processors.EmptyToNone(),processors.DateParser()],
+            'depublication_date' : [processors.EmptyToNone(),processors.DateParser()],
+    }
+
+    def _after_init(self):
+        """fix data if necessary"""
+        super(Link, self)._after_init()
+        if self.content=="":
+            self.content = self.link
+
+
 class LinkCollection(StatusCollection):
     """manages links"""
     data_class = Link
@@ -38,7 +48,7 @@ def FolderType(db, coll):
         name = u"Folder",
         description = "a folder",
         fields = Folder._attribs,
-        required_fields = ['content', 'user'],
+        required_fields = ['content'],
         mgr = tm,
         cls = Folder,
         reprs = ['default', 'atom'],
@@ -53,7 +63,7 @@ def LinkType(db, coll):
         name = u"Link",
         description = "a link",
         fields = Link._attribs,
-        required_fields = ['content', 'user', 'link', 'link_title'],
+        required_fields = ['content', 'link'],
         mgr = tm,
         cls = Link,
         reprs = ['default', 'atom'],
