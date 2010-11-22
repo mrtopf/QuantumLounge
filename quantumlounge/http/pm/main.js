@@ -1,5 +1,5 @@
 (function() {
-  var CONTENT_API, Link, PAGE, Poll, Status, TABS, TEMPLATES, TYPEDEFS, TYPES, VAR, app;
+  var CONTENT_API, ERROR, Link, PAGE, Poll, Status, TABS, TEMPLATES, TYPEDEFS, TYPES, VAR, app;
   var __hasProp = Object.prototype.hasOwnProperty, __bind = function(func, context) {
     return function(){ return func.apply(context, arguments); };
   }, __extends = function(child, parent) {
@@ -20,6 +20,37 @@
   };
   CONTENT_API = "/api/1/content/";
   TEMPLATES = "/pm/templates/";
+  ERROR = {
+    status: false,
+    on: function() {
+      return $("#error").animate({
+        top: -8
+      }, 200, function() {
+        return (ERROR.status = true);
+      });
+    },
+    off: function() {
+      return $("#error").animate({
+        top: -68
+      }, 200, function() {
+        return (ERROR.status = false);
+      });
+    },
+    error: function(msg) {
+      $("#error-message").text(msg + "");
+      ERROR.on();
+      $("#error .closebutton").click(function() {
+        ERROR.off();
+        return false;
+      });
+      setTimeout(function() {
+        return ERROR.off();
+      }, 5000);
+      return $(document).keyup(function(e) {
+        return e.keyCode === 27 ? ERROR.off() : null;
+      });
+    }
+  };
   TABS = {
     active_name: null,
     tab_element: null,
@@ -27,8 +58,24 @@
     tabs: null,
     active_tab: null,
     active_pane: null,
-    init: function() {
+    init: function(_subtypes) {
+      var _a, _b, _c, _d, _e, _type, alltabs, tab;
+      if (_subtypes) {
+        alltabs = $("#tabs").children();
+        _b = alltabs;
+        for (_a = 0, _c = _b.length; _a < _c; _a++) {
+          tab = _b[_a];
+          _type = $(tab).attr("data-type");
+          if (!(function(){ for (var _d=0, _e=_subtypes.length; _d<_e; _d++) { if (_subtypes[_d] === _type) return true; } return false; }).call(this)) {
+            $("#tab-" + _type).remove();
+          }
+        }
+      }
       TABS.tab_element = $("#tabs");
+      if (TABS.tab_element.children().length === 0) {
+        $("#entryarea").remove();
+        return false;
+      }
       TABS.active_tab = TABS.tab_element.children().first();
       TABS.set();
       return $("#tabs li > a").click(function() {
@@ -44,7 +91,7 @@
         TABS.active_pane.slideUp();
       }
       TABS.active_tab.addClass("current");
-      mid = TABS.active_tab.children().first().attr("id");
+      mid = TABS.active_tab.attr("id");
       tabname = mid.slice(4, mid.length);
       TABS.active_name = tabname;
       TABS.active_pane = $("#pane-" + tabname);
@@ -74,6 +121,12 @@
       s = s[2] + "-" + s[1] + "-" + s[0];
       depublication_date = s;
     }
+    if (publication_date !== "" && depublication_date !== "") {
+      if (depublication_date < publication_date) {
+        throw "Publication Date must be earlier than depublication\
+            date";
+      }
+    }
     data = {
       publication_date: publication_date.toString(),
       depublication_date: depublication_date.toString()
@@ -82,6 +135,9 @@
   };
   Status.prototype.to_form = function(params) {
     var _a, a, data, v;
+    if (params.content === "") {
+      throw "Please enter a status message";
+    }
     data = {
       content: params.content
     };
@@ -119,19 +175,25 @@
   };
   __extends(Link, Status);
   Link.prototype.to_form = function(params) {
-    var _a, a, data, v;
+    var data;
     data = {
       content: params.content,
-      link: params.link,
-      link_title: this.data.title,
-      link_description: this.data.content,
-      link_image: this.active_image
+      link: params.link
     };
-    _a = this.convert_dates(params);
-    for (a in _a) {
-      if (!__hasProp.call(_a, a)) continue;
-      v = _a[a];
-      data[a] = v;
+    if (params.content === "") {
+      if (this.data) {
+        data.content = this.data.title;
+      } else {
+        throw "Please enter a link title";
+      }
+    }
+    if (params.link === "") {
+      throw "Please enter a link";
+    }
+    if (this.data) {
+      data.link_title = this.data.title;
+      data.link_description = this.data.content;
+      data.link_image = this.active_image;
     }
     return data;
   };
@@ -202,15 +264,29 @@
   };
   __extends(Poll, Status);
   Poll.prototype.to_form = function(params) {
-    var _a, a, data, v;
+    var _a, _b, _c, _d, a, answers, data, line, v;
+    if (params.content === "") {
+      throw "Please enter a poll title";
+    }
+    if (params.poll_answers === "") {
+      throw "Please enter some answers";
+    }
+    answers = [];
+    _b = params.poll_answers.split("\n");
+    for (_a = 0, _c = _b.length; _a < _c; _a++) {
+      line = _b[_a];
+      if (line !== "") {
+        answers.push(line);
+      }
+    }
     data = {
       content: params.content,
-      answers: params.poll_answers.split("\n")
+      answers: answers
     };
-    _a = this.convert_dates(params);
-    for (a in _a) {
-      if (!__hasProp.call(_a, a)) continue;
-      v = _a[a];
+    _d = this.convert_dates(params);
+    for (a in _d) {
+      if (!__hasProp.call(_d, a)) continue;
+      v = _d[a];
       data[a] = v;
     }
     return data;
@@ -235,9 +311,10 @@
             data.title = details.content;
           }
           data.parents = parents.slice(1, parents.length);
+          data.virtual_path = virtual_path;
           return context.partial(TEMPLATES + 'timeline.mustache', data).then(function() {
             var _a, a, statuslist, v;
-            TABS.init();
+            TABS.init(details._subtypes);
             _a = TYPEDEFS;
             for (a in _a) {
               if (!__hasProp.call(_a, a)) continue;
@@ -247,8 +324,18 @@
             $(".dateinput").datepicker({
               dateFormat: 'dd.mm.yy'
             });
+            $("#depubdate-remove").click(function() {
+              $("#depublication-date").val("");
+              return false;
+            });
+            $("#pubdate-remove").click(function() {
+              $("#publication-date").val("");
+              return false;
+            });
             statuslist = $("#statuslist").detach();
-            return this.load(base_url + ";children?oauth_token=" + VAR.token).then(function(context) {
+            return this.load(base_url + ";children?oauth_token=" + VAR.token, {
+              cache: false
+            }).then(function(context) {
               var items, that, users;
               items = this.content;
               users = _.uniq(_.pluck(items, 'user'));
@@ -297,12 +384,18 @@
       var active, active_type, base_url, data;
       active = TABS.active_name;
       active_type = TYPES[active];
-      data = active_type.to_form(this.params);
+      try {
+        data = active_type.to_form(this.params);
+      } catch (error) {
+        ERROR.error(error);
+        false;
+      }
       data._type = active;
       data.user = VAR.poco.id;
       data.oauth_token = VAR.token;
       base_url = CONTENT_API + PAGE.id;
       data = JSON.stringify(data);
+      ERROR.off();
       $.ajax({
         url: base_url,
         type: 'POST',
@@ -312,14 +405,18 @@
         contentType: 'application/json',
         success: function(data, textResponse) {
           var repr;
-          data.id = data._id;
-          data.username = VAR.poco.name.formatted;
-          data.profile = VAR.poco.thumbnailUrl;
-          repr = TYPES[active].prepare(data);
-          context.render(TEMPLATES + 'entry.' + active + '.mustache', repr).then(function(content) {
-            return $(content).prependTo("#statuslist").slideDown();
-          });
-          return $(':input', '#entrybox').not(':button, :submit, :reset, :hidden').val('').removeAttr('checked').removeAttr('selected');
+          if (!data.error) {
+            data.id = data._id;
+            data.username = VAR.poco.name.formatted;
+            data.profile = VAR.poco.thumbnailUrl;
+            repr = TYPES[active].prepare(data);
+            context.render(TEMPLATES + 'entry.' + active + '.mustache', repr).then(function(content) {
+              return $(content).prependTo("#statuslist").slideDown();
+            });
+            return $(':input', '#entrybox').not(':button, :submit, :reset, :hidden').val('').removeAttr('checked').removeAttr('selected');
+          } else {
+            return ERROR.error(data.error_msg);
+          }
         }
       });
       return false;

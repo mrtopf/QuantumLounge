@@ -7,6 +7,32 @@ String::startsWith = (str) ->
 CONTENT_API = "/api/1/content/"
 TEMPLATES = "/pm/templates/"
 
+ERROR = {
+    status: false
+    on: () ->
+        $("#error").animate({
+            top: -8
+        },200, () -> ERROR.status=true)
+    off: () ->
+        $("#error").animate({
+            top: -68
+        },200, () -> ERROR.status=false)
+    error: (msg) ->
+        $("#error-message").text(msg+"")
+        ERROR.on()
+        $("#error .closebutton").click( () ->
+            ERROR.off()
+            false
+        )
+        setTimeout( () ->
+                ERROR.off()
+            , 5000)
+        $(document).keyup( (e) ->
+            if e.keyCode == 27
+                ERROR.off()
+        )
+}
+
 TABS = {
     active_name: null       # name of active type
     tab_element: null       # the tab element object containing the tabs
@@ -14,8 +40,19 @@ TABS = {
     tabs: null
     active_tab: null        # the active tab object (li)
     active_pane: null       # the active pane object
-    init: () ->
+    init: (_subtypes) ->
+        # remove tabs which are not allowed
+        if _subtypes
+            alltabs = $("#tabs").children()
+            for tab in alltabs
+                _type = $(tab).attr("data-type")
+                if _type not in _subtypes
+                    $("#tab-"+_type).remove()
+
         TABS.tab_element = $("#tabs")
+        if TABS.tab_element.children().length==0
+            $("#entryarea").remove()
+            return false
         TABS.active_tab = TABS.tab_element.children().first()
         TABS.set()
         $("#tabs li > a").click( () ->
@@ -28,7 +65,7 @@ TABS = {
         if (TABS.active_pane)
             TABS.active_pane.slideUp()
         TABS.active_tab.addClass("current")
-        mid = TABS.active_tab.children().first().attr("id")
+        mid = TABS.active_tab.attr("id")
         tabname = mid.slice(4, mid.length)
         TABS.active_name = tabname
         TABS.active_pane = $("#pane-"+tabname)
@@ -36,7 +73,6 @@ TABS = {
 }
 
 class Status
-
 
     prepare: (item) ->
         item
@@ -57,6 +93,10 @@ class Status
             s = depublication_date.split(".")
             s=s[2]+"-"+s[1]+"-"+s[0]
             depublication_date = s
+        if publication_date!="" and depublication_date!=""
+            if depublication_date<publication_date
+                throw "Publication Date must be earlier than depublication
+            date"
         data = {
             publication_date : publication_date.toString()
             depublication_date : depublication_date.toString()
@@ -64,6 +104,8 @@ class Status
         data
 
     to_form: (params) ->
+        if params.content==""
+            throw "Please enter a status message"
         data = {
                 content: params.content
             }
@@ -94,12 +136,18 @@ class Link extends Status
         data = {
             content: params.content
             link: params.link
-            link_title: @data.title
-            link_description: @data.content
-            link_image: @active_image
         }
-        for a,v of @convert_dates(params)
-            data[a]=v
+        if params.content == ""
+            if @data
+                data.content = @data.title
+            else
+                throw "Please enter a link title"
+        if params.link==""
+            throw "Please enter a link"
+        if @data
+            data.link_title = @data.title
+            data.link_description = @data.content
+            data.link_image = @active_image
         data
 
     process: () ->
@@ -157,9 +205,17 @@ class Link extends Status
 class Poll extends Status
 
     to_form: (params) ->
+        if params.content == ""
+                throw "Please enter a poll title"
+        if params.poll_answers == ""
+                throw "Please enter some answers"
+        answers = []
+        for line in params.poll_answers.split("\n")
+            if line != ""
+                answers.push(line)
         data = {
             content: params.content
-            answers: params.poll_answers.split("\n")
+            answers: answers
         }
         for a,v of @convert_dates(params)
             data[a]=v
@@ -185,14 +241,28 @@ PAGE = {
                     data.title = details.content
                 # remove root node
                 data.parents = parents.slice(1, parents.length)
+                data.virtual_path = virtual_path
                 context.partial(TEMPLATES+'timeline.mustache', data)
                 .then(() ->
-                    TABS.init()
+                    # initialize tabs and types
+                    TABS.init(details._subtypes)
                     for a,v of TYPEDEFS
                         TYPES[a] = new v
-                    $( ".dateinput" ).datepicker({dateFormat: 'dd.mm.yy'});
+
+                    # setup the date fields
+                    $(".dateinput" ).datepicker({dateFormat: 'dd.mm.yy'});
+                    $("#depubdate-remove" ).click(() ->
+                        $("#depublication-date").val("")
+                        false
+                    )
+                    $("#pubdate-remove" ).click(() ->
+                        $("#publication-date").val("")
+                        false
+                    )
+
+                    # fill the status list
                     statuslist = $("#statuslist").detach()
-                    @load(base_url+";children?oauth_token="+VAR.token)
+                    @load(base_url+";children?oauth_token="+VAR.token, {cache:false})
                     .then( (context) ->
                         items = @content
                         users = _.uniq(_.pluck(items, 'user'))
@@ -243,12 +313,17 @@ app = $.sammy(
         # call some view or so which returns the payload 
         active = TABS.active_name
         active_type = TYPES[active]
-        data = active_type.to_form(@params)
+        try
+            data = active_type.to_form(@params)
+        catch error
+            ERROR.error(error)
+            false
         data._type = active
         data.user = VAR.poco.id
         data.oauth_token = VAR.token
         base_url = CONTENT_API+PAGE.id
         data = JSON.stringify(data)
+        ERROR.off()
         $.ajax({
             url : base_url
             type : 'POST'
@@ -257,20 +332,23 @@ app = $.sammy(
             processData : false
             contentType: 'application/json'
             success : (data, textResponse) ->
-                data.id = data._id
-                data.username = VAR.poco.name.formatted
-                data.profile = VAR.poco.thumbnailUrl
-                repr = TYPES[active].prepare(data)
-                context.render(TEMPLATES+'entry.'+active+'.mustache', repr)
-                .then( (content) ->
-                    $(content).prependTo("#statuslist")
-                    .slideDown()
-                )
-                $(':input','#entrybox')
-                 .not(':button, :submit, :reset, :hidden')
-                 .val('')
-                 .removeAttr('checked')
-                 .removeAttr('selected')
+                if not data.error
+                    data.id = data._id
+                    data.username = VAR.poco.name.formatted
+                    data.profile = VAR.poco.thumbnailUrl
+                    repr = TYPES[active].prepare(data)
+                    context.render(TEMPLATES+'entry.'+active+'.mustache', repr)
+                    .then( (content) ->
+                        $(content).prependTo("#statuslist")
+                        .slideDown()
+                    )
+                    $(':input','#entrybox')
+                     .not(':button, :submit, :reset, :hidden')
+                     .val('')
+                     .removeAttr('checked')
+                     .removeAttr('selected')
+                else
+                    ERROR.error(data.error_msg)
         })
         false
       )
