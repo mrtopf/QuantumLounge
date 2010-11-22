@@ -34,11 +34,12 @@ class Model(object):
     ###
 
     # base attributes we always need
-    _base_attribs = ['_id','_type','_parent_id','_ancestors']
+    _base_attribs = ['_id','_type','_parent_id','_ancestors','_subtypes']
     # additional attributes a type can define
     _base_defaults = {
             '_parent_id' : None,
             '_ancestors' : [],
+            '_subtypes' : None,
     }
 
     def __init__(self, _id=None, _store = None, **kwargs):
@@ -81,9 +82,12 @@ class Model(object):
     
     @property
     def json(self):
-        """return the JSON representation excluding internal attributes"""
+        """return the JSON representation excluding internal attributes
+        TODO: Now what is external and internal?!? Why do we select this here?
+        Why not in the RESTful API?
+        """
         d={}
-        for attrib in self._attribs+['_id','_type']:
+        for attrib in self._attribs+['_id','_type','_subtypes']:
             d[attrib] = getattr(self, attrib, u'')
         return self.jsonify(d) # eventually convert data
 
