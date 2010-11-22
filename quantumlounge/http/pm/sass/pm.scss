@@ -344,25 +344,33 @@
 
 /* the input field */
 #pubdate-field, #depubdate-field {
+    display: block;
     font-size: 0.8em;
     color: #888;
     float: left;
     margin-right: 10px;
-}
 
-.dateinput {
-    border: none;
-    text-align:left;
-    width:100px;
-    background: #eee;
-    cursor: pointer;
-    color: #888;
-    float: left;
+    label {
+        margin-right: 3px;
+        float: left;
+    }
+
+    .dateinput {
+        border: none;
+        text-align:left;
+        width:80px;
+        background: #eee;
+        cursor: pointer;
+        color: #888;
+        float: left;
+    }
+
     .removebutton {
         float: right;
         width: 16px;
     }
 }
+
 
 /* calendar root element */
 #calroot {
