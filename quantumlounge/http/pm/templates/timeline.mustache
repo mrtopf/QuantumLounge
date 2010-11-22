@@ -1,3 +1,4 @@
+
 <div id="activities">  
     <div id="breadcrumbbox">
         <a href="#/" class="bc">/</a>
@@ -10,11 +11,11 @@
         {{/title}}
         <a href="#add_folder" class="add">+</a> 
     </div>
-
+  <div id="entryarea">
     <ul id="tabs">
-        <li><a id="tab-status" href="#">Message</a></li>
-        <li><a id="tab-link" href="#">Link</a></li>
-        <li><a id="tab-poll" href="#">Poll</a></li>
+        <li class="type-tab" data-type="status" id="tab-status"><a href="#">Message</a></li>
+        <li class="type-tab" data-type="link" id="tab-link"><a href="#">Link</a></li>
+        <li class="type-tab" data-type="poll" id="tab-poll"><a href="#">Poll</a></li>
     </ul>
     <form id="entrybox" name="status" action="#/submit" method="POST" accept-charset="utf-8">
         <div id="status-headline">
@@ -44,14 +45,14 @@
                     <span id="link-box-url">Link URL</span>
                     <div id="link-box-description">Description</div>
                     <div id="imageselector">
-                    <a href="#" id="link-box-image-prev">prev</a>
-                    <a href="#" id="link-box-image-next">next</a>
+                        <a href="#" id="link-box-image-prev">prev</a>
+                        <a href="#" id="link-box-image-next">next</a>
                     </div>
                 </div>
             </div>
             <div class="pane" id="pane-poll">
-            <label class="headline" for="poll-answers">Answers (one per line)</label>
-            <textarea name="poll_answers" cols="78" rows="10" id="poll-answers" />
+                <label class="headline" for="poll-answers">Answers (one per line)</label>
+                <textarea name="poll_answers" cols="74" rows="10" id="poll-answers" />
             </div>
         </div>
 
@@ -63,41 +64,28 @@
 
         <div id="attachment"></div>
 
-<div id="submitbar">
-    <div id="pubdate-field">
-        <label for="publication-date">Publication Date:</label>
-        <input type="text" 
-            value="" 
-            class="dateinput"
-            name="publication_date" id="publication-date" />
-    </div>
-    <div id="depubdate-field">
-        <label for="depublication-date">Depublication Date:</label>
-        <input type="text" 
-            value="" 
-            class="dateinput"
-            name="depublication_date" id="depublication-date" />
-    </div>
-    <input type="submit" id="status-send" value="Send">
-</div>
-    </form>
-
-    <div id="timeline">
-        <header>
-            <div id="searchbar">
-                <form id="search">
-                    <input type="text" maxlength="200" size="20" value="" />
-                </form>
+        <div id="submitbar">
+            <div id="pubdate-field">
+                <label for="publication-date">Publication Date:</label>
+                <input type="text" 
+                    value="" 
+                    class="dateinput"
+                    name="publication_date" id="publication-date" />
+                <a href="#" id="pubdate-remove" class="removebutton ui-icon ui-icon-trash"></a>
             </div>
-            <nav>
-                <a class="active" href="#/all">All</a>
-                <a href="#/note">Notes</a>
-                <a href="#/link">Links</a>
-                <a href="#/file">Files</a>
-                <a href="#/event">Events</a>
-            </nav>
-        </header>
-
+            <div id="depubdate-field">
+                <label for="depublication-date">Depublication Date:</label>
+                <input type="text" 
+                    value="" 
+                    class="dateinput"
+                    name="depublication_date" id="depublication-date" />
+                <a href="#" id="depubdate-remove" class="removebutton ui-icon ui-icon-trash"></a>
+            </div>
+            <input type="submit" id="status-send" value="Send">
+        </div>
+    </form>
+  </div><!-- entryarea -->
+    <div id="timeline">
         <div id="statuslist"> </div>
 
     </div><!-- timeline -->
