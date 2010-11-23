@@ -115,7 +115,7 @@
   }
   
   .status-type {
-    padding: 10px 0;
+    padding: 0px 0;
   }
   
   hr {
@@ -126,8 +126,8 @@
   
   .activity {
     overflow: auto;
-    margin: 5px 0;
-    padding: 3px 0;
+    margin: 0;
+    padding: 0 0;
     border-bottom: 1px solid #eee;
   }
 
@@ -166,6 +166,11 @@
         float: right;
         display: block;
         font-size: 9px;
+      }
+
+      .effective {
+          font-size: 9px;
+          margin-left: 20px;
       }
   }
   
@@ -277,6 +282,7 @@
     border-left: 1px solid #aaa;
     overflow: auto;
     width: 92%;
+    background: white;
   }
 
   #link {
@@ -310,10 +316,10 @@
     margin: 10px 0;
     padding: 5px;
     overflow: auto;
+    background: white;
 
     img {
-      width: 100px;
-      height: 100px;
+      max-width: 100px;
       padding: 3px;
       float: left;
       margin-right: 3px;
@@ -330,6 +336,7 @@
   .link-info {
     display: block;
     border: none;
+    background: white;
   }
 
 }
