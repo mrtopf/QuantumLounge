@@ -5,6 +5,14 @@ some useful decorators
 import werkzeug
 import functools
 import simplejson
+import datetime
+
+def jsonconverter(obj):
+    if isinstance(obj, datetime.datetime):
+        return obj.isoformat()
+    else:
+        raise TypeError, 'Object of type %s with value of %s is not JSON serializable' % (type(Obj), repr(Obj))
+
 
 def html(method):
     """takes a string output of a view and wraps it into a text/html response"""
@@ -35,7 +43,7 @@ class json(object):
         @functools.wraps(method)
         def wrapper(self, *args, **kwargs):
             data = method(self, *args, **kwargs)
-            s = simplejson.dumps(data)
+            s = simplejson.dumps(data, default = jsonconverter)
             if self.request.args.has_key("callback"):
                 callback = self.request.args.get("callback")
                 s = "%s(%s)" %(callback, s)
