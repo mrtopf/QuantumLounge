@@ -24,7 +24,38 @@ def html(method):
         return response
 
     return wrapper
-        
+
+class jsonp(object):
+    """a decorator for converting a JSON response to JSONP in case
+    a callback is given in the request args and the type is JSON
+    """
+
+    def __init__(self, **headers):
+        self.headers = {}
+        for a,v in headers.items():
+            ps = a.split("_")
+            ps = [p.capitalize() for p in ps]
+            self.headers["-".join(ps)] = v
+
+    def __call__(self, method):
+        """takes a dict output of a handler method and returns it as JSON"""
+
+        that = self
+    
+        @functools.wraps(method)
+        def wrapper(self, *args, **kwargs):
+            # first call the original method
+            res = method(self, *args, **kwargs)
+
+            # now check if we have the content type "application/javascript"
+            if type(res) == werkzeug.Response:
+                if self.request.args.has_key("callback"):
+                    print "change"
+                    callback = self.request.args.get("callback")
+                    res.data = "%s(%s)" %(callback, res.data)
+                    res.content_type = "application/javascript"
+            return res
+        return wrapper
 
 class json(object):
     
@@ -74,6 +105,7 @@ class role(object):
         possible_roles = self.roles
         @functools.wraps(method)
         def wrapper(self, *args, **kwargs):
+            print "role"
             session = self.session
             if session is None:
                 roles = []
