@@ -264,13 +264,6 @@ class Status(Model):
         # TODO: this should be in the content API, not DB API
         
         """
-        if type(data['date']) not in (types.UnicodeType, types.StringType):
-            data['date'] = data['date'].strftime("%d.%m.%Y %H:%M")
-        t=type(datetime.datetime.now())
-        if type(data['publication_date'])==t:
-            data['publication_date'] = data['publication_date'].strftime("%d.%m.%Y %H:%M")
-        if type(data['depublication_date'])==t:
-            data['depublication_date'] = data['depublication_date'].strftime("%d.%m.%Y %H:%M")
         return data
 
 class StatusCollection(Collection):
