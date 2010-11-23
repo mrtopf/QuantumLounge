@@ -32,8 +32,8 @@ class Link(Status):
     def _after_init(self):
         """fix data if necessary"""
         super(Link, self)._after_init()
-        if self.content=="":
-            self.content = self.link
+        if self.link_title=="":
+            self.link_title = self.link
 
 
 class LinkCollection(StatusCollection):
