@@ -1,4 +1,7 @@
-from quantumlounge.framework import RESTfulHandler, json, html, role
+from quantumlounge.framework import RESTfulHandler, json, html, role, jsonp
+import werkzeug
+import datetime
+import pymongo
 
 class MethodAdapter(RESTfulHandler):
     """an adapter for using methods"""
@@ -50,19 +53,31 @@ class SubTree(ExtendedMethodAdapter):
         }
         return self._query_objs(query)
 
-class JSView(ExtendedMethodAdapter):
+class Query(ExtendedMethodAdapter):
     """return a JSON structure of the most recent item of the given
     type which is passed in as ``jsview_type`` in the request"""
 
-    @json(content_type="application/json")
-    @role("admin")
+    @json()
     def get(self, **kw):
-        t = self.request.args.get("jsview_type","status")
+        import registry # here because of loops
+        now = datetime.datetime.now()
+        t = self.request.args.get("type","status").split(",") # types
+        fmt = self.request.args.get("fmt","html") # which repr you want
+        s = """
+            (this.publication_date < new Date() || !this.publication_date) &&
+            (this.depublication_date > new Date() || !this.depublication_date) 
+        """
+        code=pymongo.code.Code(s)
         query = {
-            '_ancestors' : "0",
-            '_type' : t
+            '_ancestors' : self.item._id,
+            '_type' : {"$in" : t},
+            '$where' : code,
         }
-        return self._query_objs(query)
+        print query
+        res = self._query_objs(query) # list of dictionaries
+        out = registry.fmt_registry[fmt](res)()
+        print out
+        return out
 
 class Parents(ExtendedMethodAdapter):
     """all recursively all nodes in the subtree of this object"""

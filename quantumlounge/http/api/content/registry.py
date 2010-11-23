@@ -1,9 +1,10 @@
 import common
 import poll
+import reprs
 
 r_common = {
         'subtree' : common.SubTree,
-        'jsview' : common.JSView,
+        'query' : common.Query,
         'parents' : common.Parents,
         'children' : common.Children,
         'default' : common.Default,
@@ -23,4 +24,14 @@ type_registry = {
     'poll' : r_poll,
      
 }
-__all__ = ['type_registry']
+
+###
+### representations
+###
+
+fmt_registry = {
+        'json' : reprs.Representation,
+        'html' : reprs.GenericHTML
+}
+
+__all__ = ['type_registry', 'fmt_registry']
