@@ -100,8 +100,37 @@
   };
   Status = function() {};
   Status.prototype.prepare = function(item) {
+    var d, d1, d2, effective;
+    item.meta = {
+      user: item.user
+    };
+    if (item.date) {
+      d = item.date.slice(0, 19);
+      d = $D(d);
+      item.meta.date = d.strftime("%d.%m.%y");
+    } else {
+      item.meta.date = "n/a";
+    }
+    effective = "";
+    if (item.publication_date && !item.depublication_date) {
+      d = $D(item.publication_date);
+      effective = d.strftime("%d.%m.%Y -");
+    }
+    if (item.depublication_date && !item.publication_date) {
+      d = $D(item.publication_date);
+      effective = d.strftime("- %d.%m.%Y");
+    }
+    if (item.depublication_date && item.publication_date) {
+      d1 = $D(item.publication_date);
+      d2 = $D(item.depublication_date);
+      effective = d1.strftime("%d.%m.%Y") + " - " + d2.strftime("%d.%m.%Y");
+    }
+    if (effective) {
+      item.meta.effective = "Published: " + effective;
+    }
     return item;
   };
+  Status.prototype.reset = function() {};
   Status.prototype.convert_dates = function(params) {
     var data, depublication_date, publication_date, s, today;
     today = new Date();
@@ -174,26 +203,29 @@
     return this;
   };
   __extends(Link, Status);
+  Link.prototype.reset = function() {
+    Link.__super__.reset.apply(this, arguments);
+    $("#link-box").slideUp();
+    $("#link-box-title").text("");
+    $("#link-box-description").text("");
+    $("#link-box-url").text("");
+    return $("#link-submit").text("Load");
+  };
   Link.prototype.to_form = function(params) {
     var data;
     data = {
       content: params.content,
       link: params.link
     };
-    if (params.content === "") {
-      if (this.data) {
-        data.content = this.data.title;
-      } else {
-        throw "Please enter a link title";
-      }
-    }
     if (params.link === "") {
-      throw "Please enter a link";
+      throw "Well, you have to enter a link actually";
     }
     if (this.data) {
       data.link_title = this.data.title;
       data.link_description = this.data.content;
       data.link_image = this.active_image;
+    } else {
+      data.link_title = params.link;
     }
     return data;
   };
@@ -214,6 +246,13 @@
       url: VAR.scraper + "?url=" + url,
       dataType: "jsonp",
       success: __bind(function(data) {
+        if (data.error) {
+          $("#link-submit").text("Cannot load!");
+          setTimeout(function() {
+            return $("#link-submit").text("Load");
+          }, 2000);
+          return null;
+        }
         this.data = data;
         this.img_amount = data.all_image_urls.length;
         $("#link-box-title").text(data.title);
@@ -253,6 +292,13 @@
   };
   Link.prototype.set_image = function(idx) {
     var img, imgurl;
+    if (this.img_amount === 0) {
+      $("#imageselector").hide();
+      $("#link-box-image-container").hide();
+      return null;
+    }
+    $("#imageselector").show();
+    $("#link-box-image-container").show();
     this.img_idx = idx;
     imgurl = this.data.all_image_urls[idx];
     img = this.data.images[imgurl];
@@ -333,6 +379,7 @@
               return false;
             });
             statuslist = $("#statuslist").detach();
+            statuslist.hide();
             return this.load(base_url + ";children?oauth_token=" + VAR.token, {
               cache: false
             }).then(function(context) {
@@ -340,6 +387,9 @@
               items = this.content;
               users = _.uniq(_.pluck(items, 'user'));
               that = this;
+              setTimeout(function() {
+                return statuslist.fadeIn();
+              }, 300);
               return $.ajax({
                 url: virtual_path + '/api/1/users/names',
                 data: JSON.stringify(users),
@@ -351,9 +401,11 @@
                   res = [];
                   _.each(items, function(item) {
                     var repr;
-                    item.username = data[item.user];
                     repr = TYPES[item._type].prepare(item);
-                    return that.render(TEMPLATES + 'entry.' + item._type + '.mustache', repr).appendTo(statuslist);
+                    repr.meta.username = data[item.user];
+                    return that.render(TEMPLATES + 'meta.mustache', repr.meta).then(function(context2) {
+                      return (repr.meta = context2);
+                    }).render(TEMPLATES + 'entry.' + item._type + '.mustache', repr).appendTo(statuslist);
                   });
                   return statuslist.appendTo("#timeline");
                 }
@@ -411,7 +463,12 @@
             data.profile = VAR.poco.thumbnailUrl;
             repr = TYPES[active].prepare(data);
             context.render(TEMPLATES + 'entry.' + active + '.mustache', repr).then(function(content) {
-              return $(content).prependTo("#statuslist").slideDown();
+              var a;
+              a = $("<div/>").html(content);
+              a.hide();
+              a.prependTo("#statuslist");
+              a.slideDown();
+              return TYPES[active].reset();
             });
             return $(':input', '#entrybox').not(':button, :submit, :reset, :hidden').val('').removeAttr('checked').removeAttr('selected');
           } else {

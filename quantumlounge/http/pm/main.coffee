@@ -75,7 +75,31 @@ TABS = {
 class Status
 
     prepare: (item) ->
+        item.meta = {
+            user: item.user
+        }
+        if item.date
+            d = item.date.slice(0,19)
+            d = $D(d)
+            item.meta.date = d.strftime("%d.%m.%y")
+        else
+            item.meta.date = "n/a"
+        effective = ""
+        if item.publication_date and not item.depublication_date
+            d = $D(item.publication_date)
+            effective = d.strftime("%d.%m.%Y -")
+        if item.depublication_date and not item.publication_date
+            d = $D(item.publication_date)
+            effective = d.strftime("- %d.%m.%Y")
+        if item.depublication_date and item.publication_date
+            d1 = $D(item.publication_date)
+            d2 = $D(item.depublication_date)
+            effective = d1.strftime("%d.%m.%Y")+" - "+d2.strftime("%d.%m.%Y")
+        if effective
+            item.meta.effective = "Published: "+effective
         item
+
+    reset: () ->
 
     convert_dates: (params) ->
         today = new Date
@@ -115,6 +139,14 @@ class Status
 
 class Link extends Status
 
+    reset: () ->
+        super
+        $("#link-box").slideUp()
+        $("#link-box-title").text("")
+        $("#link-box-description").text("")
+        $("#link-box-url").text("")
+        $("#link-submit").text("Load")
+
     constructor: () ->
         @url = null
         @img_idx = 0
@@ -137,17 +169,14 @@ class Link extends Status
             content: params.content
             link: params.link
         }
-        if params.content == ""
-            if @data
-                data.content = @data.title
-            else
-                throw "Please enter a link title"
         if params.link==""
-            throw "Please enter a link"
+            throw "Well, you have to enter a link actually"
         if @data
             data.link_title = @data.title
             data.link_description = @data.content
             data.link_image = @active_image
+        else
+            data.link_title = params.link
         data
 
     process: () ->
@@ -164,6 +193,12 @@ class Link extends Status
             url: VAR.scraper+"?url="+url
             dataType: "jsonp"
             success: (data) =>
+                if data.error
+                    $("#link-submit").text("Cannot load!")
+                    setTimeout( () ->
+                        $("#link-submit").text("Load")
+                    , 2000)
+                    return
                 @data = data
                 @img_amount = data.all_image_urls.length
                 $("#link-box-title").text(data.title)
@@ -196,6 +231,12 @@ class Link extends Status
         false
 
     set_image: (idx) =>
+        if @img_amount == 0
+            $("#imageselector").hide()
+            $("#link-box-image-container").hide()
+            return
+        $("#imageselector").show()
+        $("#link-box-image-container").show()
         @img_idx = idx
         imgurl = @data.all_image_urls[idx]
         img = @data.images[imgurl]
@@ -262,11 +303,15 @@ PAGE = {
 
                     # fill the status list
                     statuslist = $("#statuslist").detach()
+                    statuslist.hide()
                     @load(base_url+";children?oauth_token="+VAR.token, {cache:false})
                     .then( (context) ->
                         items = @content
                         users = _.uniq(_.pluck(items, 'user'))
                         that = this
+                        setTimeout( () ->
+                            statuslist.fadeIn()
+                        , 300)
                         $.ajax({
                             url: virtual_path+'/api/1/users/names'
                             data: JSON.stringify(users)
@@ -276,9 +321,13 @@ PAGE = {
                             success: (data) ->
                                 res = []
                                 _.each(items, (item) ->
-                                    item.username = data[item.user]
                                     repr = TYPES[item._type].prepare(item)
-                                    that.render(TEMPLATES+'entry.'+item._type+'.mustache', repr)
+                                    repr.meta.username = data[item.user]
+                                    that.render(TEMPLATES+'meta.mustache', repr.meta)
+                                    .then( (context2) ->
+                                        repr.meta = context2
+                                    )
+                                    .render(TEMPLATES+'entry.'+item._type+'.mustache', repr )
                                     .appendTo(statuslist)
                                 )
                                 statuslist.appendTo("#timeline")
@@ -339,8 +388,11 @@ app = $.sammy(
                     repr = TYPES[active].prepare(data)
                     context.render(TEMPLATES+'entry.'+active+'.mustache', repr)
                     .then( (content) ->
-                        $(content).prependTo("#statuslist")
-                        .slideDown()
+                        a = $("<div/>").html(content)
+                        a.hide()
+                        a.prependTo("#statuslist")
+                        a.slideDown()
+                        TYPES[active].reset()
                     )
                     $(':input','#entrybox')
                      .not(':button, :submit, :reset, :hidden')
