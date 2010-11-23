@@ -86,14 +86,14 @@ class Status
             item.meta.date = "n/a"
         effective = ""
         if item.publication_date and not item.depublication_date
-            d = $D(item.publication_date)
+            d = $D(item.publication_date.slice(0,19))
             effective = d.strftime("%d.%m.%Y -")
         if item.depublication_date and not item.publication_date
-            d = $D(item.publication_date)
+            d = $D(item.depublication_date.slice(0,19))
             effective = d.strftime("- %d.%m.%Y")
         if item.depublication_date and item.publication_date
-            d1 = $D(item.publication_date)
-            d2 = $D(item.depublication_date)
+            d1 = $D(item.publication_date.slice(0,19))
+            d2 = $D(item.depublication_date.slice(0,19))
             effective = d1.strftime("%d.%m.%Y")+" - "+d2.strftime("%d.%m.%Y")
         if effective
             item.meta.effective = "Published: "+effective

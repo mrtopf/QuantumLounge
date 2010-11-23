@@ -193,45 +193,46 @@
 #activities .body {
   display: block;
   padding-right: 4px;
+  margin-top: 4px;
 }
-/* line 148, sass/pm.scss */
+/* line 149, sass/pm.scss */
 #activities .folder a {
   font-size: 2em;
   text-decoration: none;
   color: #03a;
 }
-/* line 154, sass/pm.scss */
+/* line 155, sass/pm.scss */
 #activities .meta {
   color: #aaa;
   padding-right: 4px;
   padding-bottom: 4px;
 }
-/* line 159, sass/pm.scss */
+/* line 160, sass/pm.scss */
 #activities .meta .fullname a {
   text-decoration: none;
   color: #aaa;
   font-size: 9px;
 }
-/* line 165, sass/pm.scss */
+/* line 166, sass/pm.scss */
 #activities .meta .time {
   float: right;
   display: block;
   font-size: 9px;
 }
-/* line 171, sass/pm.scss */
+/* line 172, sass/pm.scss */
 #activities .meta .effective {
   font-size: 9px;
   margin-left: 20px;
 }
-/* line 177, sass/pm.scss */
+/* line 178, sass/pm.scss */
 #activities nav {
   float: right;
 }
-/* line 181, sass/pm.scss */
+/* line 182, sass/pm.scss */
 #activities #searchbar {
   float: left;
 }
-/* line 183, sass/pm.scss */
+/* line 184, sass/pm.scss */
 #activities #searchbar input {
   -moz-border-radius: 100px;
   -webkit-border-radius: 100px;
@@ -243,7 +244,7 @@
   border: 1px solid #888;
   font-size: 1.2em;
 }
-/* line 191, sass/pm.scss */
+/* line 192, sass/pm.scss */
 #activities header {
   overflow: auto;
   background: none;
@@ -252,7 +253,7 @@
   border: 0;
   height: auto;
 }
-/* line 204, sass/pm.scss */
+/* line 205, sass/pm.scss */
 #activities #tabs {
   list-style: none;
   margin: 0 !important;
@@ -260,7 +261,7 @@
   height: 30px;
   border-bottom: 1px solid #ddd;
 }
-/* line 213, sass/pm.scss */
+/* line 214, sass/pm.scss */
 #activities #tabs li {
   float: left;
   text-indent: 0;
@@ -268,7 +269,7 @@
   margin: 0 !important;
   list-style-image: none !important;
 }
-/* line 222, sass/pm.scss */
+/* line 223, sass/pm.scss */
 #activities #tabs a {
   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #eeeeee), color-stop(100%, #cccccc));
   background-image: -moz-linear-gradient(top, #eeeeee 0%, #cccccc 100%);
@@ -287,24 +288,24 @@
   position: relative;
   top: 10px;
 }
-/* line 239, sass/pm.scss */
+/* line 240, sass/pm.scss */
 #activities #tabs a:active {
   outline: none;
 }
-/* line 244, sass/pm.scss */
+/* line 245, sass/pm.scss */
 #activities #tabs a:hover {
   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #ffffff), color-stop(100%, #dddddd));
   background-image: -moz-linear-gradient(top, #ffffff 0%, #dddddd 100%);
   background-image: linear-gradient(top, #ffffff 0%, #dddddd 100%);
   color: #000;
 }
-/* line 250, sass/pm.scss */
+/* line 251, sass/pm.scss */
 #activities #tabs .current, #activities #tabs .current:hover, #activities #tabs li.current a {
   cursor: default !important;
   color: #222 !important;
   font-weight: bold;
 }
-/* line 255, sass/pm.scss */
+/* line 256, sass/pm.scss */
 #activities #tabs li.current a {
   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(0%, #eeeeee), color-stop(100%, #dddddd));
   background-image: -moz-linear-gradient(top, #eeeeee 0%, #dddddd 100%);
@@ -314,22 +315,22 @@
   height: 30px;
   line-height: 30px;
 }
-/* line 264, sass/pm.scss */
+/* line 265, sass/pm.scss */
 #activities #panes .pane {
   display: none;
 }
-/* line 269, sass/pm.scss */
+/* line 270, sass/pm.scss */
 #activities .field {
   margin: 0 2px 10px 0;
 }
-/* line 271, sass/pm.scss */
+/* line 272, sass/pm.scss */
 #activities .field label {
   padding: 4px;
   display: inline-block;
   float: left;
   font-weight: bold;
 }
-/* line 279, sass/pm.scss */
+/* line 280, sass/pm.scss */
 #activities #link-container {
   border: 1px solid #777;
   border-top: 1px solid #aaa;
@@ -338,7 +339,7 @@
   width: 92%;
   background: white;
 }
-/* line 288, sass/pm.scss */
+/* line 289, sass/pm.scss */
 #activities #link {
   display: inline-block;
   width: 80%;
@@ -355,7 +356,7 @@
   float: left;
   outline: none;
 }
-/* line 300, sass/pm.scss */
+/* line 301, sass/pm.scss */
 #activities #link-submit {
   display: inline-block;
   padding: 3px 14px;
@@ -370,7 +371,7 @@
   margin: 0;
   float: right;
 }
-/* line 313, sass/pm.scss */
+/* line 314, sass/pm.scss */
 #activities #link-box, #activities .link-info {
   display: none;
   border: 1px solid #888;
@@ -379,23 +380,23 @@
   overflow: auto;
   background: white;
 }
-/* line 321, sass/pm.scss */
+/* line 322, sass/pm.scss */
 #activities #link-box img, #activities .link-info img {
   max-width: 100px;
   padding: 3px;
   float: left;
   margin-right: 3px;
 }
-/* line 328, sass/pm.scss */
+/* line 329, sass/pm.scss */
 #activities #link-box h4, #activities .link-info h4 {
   margin: 0;
 }
-/* line 331, sass/pm.scss */
+/* line 332, sass/pm.scss */
 #activities #link-box #link-box-url, #activities .link-info #link-box-url {
   font-size: 0.9em;
   color: #777;
 }
-/* line 336, sass/pm.scss */
+/* line 337, sass/pm.scss */
 #activities .link-info {
   display: block;
   border: none;
@@ -404,7 +405,7 @@
 
 /* For the details, see: http://flowplayer.org/tools/dateinput/index.html#skinning */
 /* the input field */
-/* line 353, sass/pm.scss */
+/* line 354, sass/pm.scss */
 #pubdate-field, #depubdate-field {
   display: block;
   font-size: 0.8em;
@@ -412,12 +413,12 @@
   float: left;
   margin-right: 10px;
 }
-/* line 360, sass/pm.scss */
+/* line 361, sass/pm.scss */
 #pubdate-field label, #depubdate-field label {
   margin-right: 3px;
   float: left;
 }
-/* line 365, sass/pm.scss */
+/* line 366, sass/pm.scss */
 #pubdate-field .dateinput, #depubdate-field .dateinput {
   border: none;
   text-align: left;
@@ -427,14 +428,14 @@
   color: #888;
   float: left;
 }
-/* line 375, sass/pm.scss */
+/* line 376, sass/pm.scss */
 #pubdate-field .removebutton, #depubdate-field .removebutton {
   float: right;
   width: 16px;
 }
 
 /* calendar root element */
-/* line 383, sass/pm.scss */
+/* line 384, sass/pm.scss */
 #calroot {
   /* place on top of other elements. set a higher value if nessessary */
   z-index: 10000;
@@ -451,13 +452,13 @@
 }
 
 /* head. contains title, prev/next month controls and possible month/year selectors */
-/* line 402, sass/pm.scss */
+/* line 403, sass/pm.scss */
 #calhead {
   padding: 2px 0;
   height: 22px;
 }
 
-/* line 407, sass/pm.scss */
+/* line 408, sass/pm.scss */
 #caltitle {
   font-size: 14px;
   color: #0150D1;
@@ -468,7 +469,7 @@
   text-shadow: 0 1px 0 #ddd;
 }
 
-/* line 417, sass/pm.scss */
+/* line 418, sass/pm.scss */
 #calnext, #calprev {
   display: block;
   width: 20px;
@@ -478,31 +479,31 @@
   cursor: pointer;
 }
 
-/* line 426, sass/pm.scss */
+/* line 427, sass/pm.scss */
 #calnext {
   background-image: url(next.gif);
   float: right;
 }
 
-/* line 431, sass/pm.scss */
+/* line 432, sass/pm.scss */
 #calprev.caldisabled, #calnext.caldisabled {
   visibility: hidden;
 }
 
 /* year/month selector */
-/* line 436, sass/pm.scss */
+/* line 437, sass/pm.scss */
 #caltitle select {
   font-size: 10px;
 }
 
 /* names of the days */
-/* line 441, sass/pm.scss */
+/* line 442, sass/pm.scss */
 #caldays {
   height: 14px;
   border-bottom: 1px solid #ddd;
 }
 
-/* line 446, sass/pm.scss */
+/* line 447, sass/pm.scss */
 #caldays span {
   display: block;
   float: left;
@@ -511,21 +512,21 @@
 }
 
 /* container for weeks */
-/* line 454, sass/pm.scss */
+/* line 455, sass/pm.scss */
 #calweeks {
   background-color: #fff;
   margin-top: 4px;
 }
 
 /* single week */
-/* line 460, sass/pm.scss */
+/* line 461, sass/pm.scss */
 .calweek {
   clear: left;
   height: 22px;
 }
 
 /* single day */
-/* line 466, sass/pm.scss */
+/* line 467, sass/pm.scss */
 .calweek a {
   display: block;
   float: left;
@@ -542,30 +543,30 @@
 }
 
 /* different states */
-/* line 482, sass/pm.scss */
+/* line 483, sass/pm.scss */
 .calweek a:hover, .calfocus {
   background-color: #ddd;
 }
 
 /* sunday */
-/* line 487, sass/pm.scss */
+/* line 488, sass/pm.scss */
 a.calsun {
   color: red;
 }
 
 /* offmonth day */
-/* line 492, sass/pm.scss */
+/* line 493, sass/pm.scss */
 a.caloff {
   color: #ccc;
 }
 
-/* line 496, sass/pm.scss */
+/* line 497, sass/pm.scss */
 a.caloff:hover {
   background-color: #f5f5fa;
 }
 
 /* unselecteble day */
-/* line 502, sass/pm.scss */
+/* line 503, sass/pm.scss */
 a.caldisabled {
   background-color: #efefef !important;
   color: #ccc  !important;
@@ -573,20 +574,20 @@ a.caldisabled {
 }
 
 /* current day */
-/* line 509, sass/pm.scss */
+/* line 510, sass/pm.scss */
 #calcurrent {
   background-color: #498CE2;
   color: #fff;
 }
 
 /* today */
-/* line 515, sass/pm.scss */
+/* line 516, sass/pm.scss */
 #caltoday {
   background-color: #333;
   color: #fff;
 }
 
-/* line 521, sass/pm.scss */
+/* line 522, sass/pm.scss */
 .error {
   height: 15px;
   background-color: #FFFE36;
@@ -605,18 +606,18 @@ a.caldisabled {
   -webkit-box-shadow: 0 0 6px #ddd;
 }
 
-/* line 541, sass/pm.scss */
+/* line 542, sass/pm.scss */
 .error p {
   margin: 0;
 }
 
-/* line 545, sass/pm.scss */
+/* line 546, sass/pm.scss */
 .title {
   font-size: 1.3em;
   font-weight: bold;
 }
 
-/* line 550, sass/pm.scss */
+/* line 551, sass/pm.scss */
 .answers {
   margin-bottom: 0;
 }
