@@ -3,36 +3,25 @@
   var __bind = function(func, context) {
     return function(){ return func.apply(context, arguments); };
   };
-  Item = function(_b, _c, _d, _e, _f, _g) {
-    var _a;
-    this.elem = _g;
-    this.amount = _f;
-    this.type = _e;
-    this.templateurl = _d;
-    this.apiurl = _c;
-    this.baseurl = _b;
-    _a = this;
-    this.load_template = function(){ return Item.prototype.load_template.apply(_a, arguments); };
+  Item = function(_a, _b, _c, _d, _e, _f) {
+    this.elem = _f;
+    this.amount = _e;
+    this.type = _d;
+    this.templateurl = _c;
+    this.apiurl = _b;
+    this.baseurl = _a;
     $.ajax({
-      url: this.apiurl + "0?r=jsview&jsview_type=" + this.type + "&so=date&sd=down&l=" + this.amount,
+      url: this.apiurl + "0;query?type=" + this.type + "&so=date&sd=down&l=" + this.amount + "&fmt=html",
       dataType: "jsonp",
       success: __bind(function(data) {
-        this.item = data.jsview[0];
-        return this.load_template();
+        var e;
+        e = $("<div />").html(data.html);
+        e.hide();
+        $(this.elem).html(e);
+        return e.fadeIn();
       }, this)
     });
     return this;
-  };
-  Item.prototype.load_template = function() {
-    return $.ajax({
-      url: this.templateurl,
-      dataType: 'jsonp',
-      success: __bind(function(data) {
-        var h;
-        h = $(Mustache.to_html(data, this.item));
-        return $(this.elem).html(h);
-      }, this)
-    });
   };
   Processor = function() {
     var _a, _b, _c, amount, apiurl, baseurl, elem, item, item_elems, templateurl, type;

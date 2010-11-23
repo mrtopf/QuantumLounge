@@ -2,23 +2,16 @@
 class Item
 
     constructor: (@baseurl, @apiurl, @templateurl, @type, @amount, @elem) ->
-
         $.ajax({
-            url: @apiurl+"0?r=jsview&jsview_type="+@type+"&so=date&sd=down&l="+@amount
+            url:
+                @apiurl+"0;query?type="+@type+"&so=date&sd=down&l="+@amount+"&fmt=html"
             dataType: "jsonp"
             success: (data) =>
-                @item = data.jsview[0]
-                @load_template()
+                e = $("<div />").html(data.html)
+                e.hide()
+                $(@elem).html(e)
+                e.fadeIn()
             })
-
-    load_template: () =>
-        $.ajax {
-            url: @templateurl
-            dataType: 'jsonp'
-            success: (data) =>
-                h = $(Mustache.to_html(data, @item))
-                $(@elem).html(h)
-        }
 
 class Processor
 
