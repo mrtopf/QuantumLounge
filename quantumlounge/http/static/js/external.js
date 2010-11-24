@@ -16,8 +16,6 @@
       dataType: "jsonp",
       success: __bind(function(data) {
         var e;
-        console.log(this.node_id);
-        console.log(data.html);
         e = $("<div />").html(data.html);
         e.hide();
         $(this.elem).html(e);

@@ -7,8 +7,6 @@ class Item
                 @apiurl+@node_id+";query?type="+@type+"&so=date&sd=down&l="+@amount+"&fmt=html"
             dataType: "jsonp"
             success: (data) =>
-                console.log(@node_id)
-                console.log(data.html)
                 e = $("<div />").html(data.html)
                 e.hide()
                 $(@elem).html(e)
