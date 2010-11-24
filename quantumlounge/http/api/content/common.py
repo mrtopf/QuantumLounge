@@ -69,14 +69,12 @@ class Query(ExtendedMethodAdapter):
         """
         code=pymongo.code.Code(s)
         query = {
-            '_ancestors' : self.item._id,
+            '_parent_id' : self.item._id,
             '_type' : {"$in" : t},
             '$where' : code,
         }
-        print query
         res = self._query_objs(query) # list of dictionaries
         out = registry.fmt_registry[fmt](res)()
-        print out
         return out
 
 class Parents(ExtendedMethodAdapter):

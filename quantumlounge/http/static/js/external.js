@@ -3,18 +3,21 @@
   var __bind = function(func, context) {
     return function(){ return func.apply(context, arguments); };
   };
-  Item = function(_a, _b, _c, _d, _e, _f) {
-    this.elem = _f;
-    this.amount = _e;
-    this.type = _d;
-    this.templateurl = _c;
-    this.apiurl = _b;
+  Item = function(_a, _b, _c, _d, _e, _f, _g) {
+    this.elem = _g;
+    this.amount = _f;
+    this.type = _e;
+    this.templateurl = _d;
+    this.apiurl = _c;
+    this.node_id = _b;
     this.baseurl = _a;
     $.ajax({
-      url: this.apiurl + "0;query?type=" + this.type + "&so=date&sd=down&l=" + this.amount + "&fmt=html",
+      url: this.apiurl + this.node_id + ";query?type=" + this.type + "&so=date&sd=down&l=" + this.amount + "&fmt=html",
       dataType: "jsonp",
       success: __bind(function(data) {
         var e;
+        console.log(this.node_id);
+        console.log(data.html);
         e = $("<div />").html(data.html);
         e.hide();
         $(this.elem).html(e);
@@ -24,7 +27,7 @@
     return this;
   };
   Processor = function() {
-    var _a, _b, _c, amount, apiurl, baseurl, elem, item, item_elems, templateurl, type;
+    var _a, _b, _c, amount, apiurl, baseurl, elem, item, item_elems, node_id, templateurl, type;
     this.items = [];
     item_elems = $(".ql-item");
     _b = item_elems;
@@ -32,10 +35,14 @@
       elem = _b[_a];
       baseurl = $(elem).attr("data-baseurl");
       apiurl = $(elem).attr("data-api");
+      node_id = $(elem).attr("data-node");
+      if (!node_id) {
+        node_id = "0";
+      }
       templateurl = $(elem).attr("data-template");
       type = $(elem).attr("data-type");
       amount = $(elem).attr("data-amount");
-      item = new Item(baseurl, apiurl, templateurl, type, amount, elem);
+      item = new Item(baseurl, node_id, apiurl, templateurl, type, amount, elem);
       this.items.push(item);
     }
     return this;

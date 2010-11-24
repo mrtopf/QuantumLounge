@@ -1,12 +1,14 @@
 
 class Item
 
-    constructor: (@baseurl, @apiurl, @templateurl, @type, @amount, @elem) ->
+    constructor: (@baseurl, @node_id, @apiurl, @templateurl, @type, @amount, @elem) ->
         $.ajax({
             url:
-                @apiurl+"0;query?type="+@type+"&so=date&sd=down&l="+@amount+"&fmt=html"
+                @apiurl+@node_id+";query?type="+@type+"&so=date&sd=down&l="+@amount+"&fmt=html"
             dataType: "jsonp"
             success: (data) =>
+                console.log(@node_id)
+                console.log(data.html)
                 e = $("<div />").html(data.html)
                 e.hide()
                 $(@elem).html(e)
@@ -23,10 +25,13 @@ class Processor
         for elem in item_elems
             baseurl = $(elem).attr("data-baseurl")
             apiurl = $(elem).attr("data-api")
+            node_id = $(elem).attr("data-node")
+            if not node_id
+                node_id = "0"
             templateurl = $(elem).attr("data-template")
             type = $(elem).attr("data-type")
             amount = $(elem).attr("data-amount")
-            item = new Item(baseurl, apiurl, templateurl, type, amount, elem)
+            item = new Item(baseurl, node_id, apiurl, templateurl, type, amount, elem)
             @items.push(item)
 
 
