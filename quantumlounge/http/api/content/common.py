@@ -1,7 +1,7 @@
 from quantumlounge.framework import RESTfulHandler, json, html, role, jsonp
 import werkzeug
 import datetime
-import pymongo
+import pymongo.code
 
 class MethodAdapter(RESTfulHandler):
     """an adapter for using methods"""
