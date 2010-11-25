@@ -26,7 +26,7 @@ class Representation(object):
         We return the content type and the payload
         
         """
-        return "application/json", simplejson.dumps(self.items, default = jsonconverter)
+        return self.items
 
 class GenericHTML(Representation):
     """generic HTML representation"""
