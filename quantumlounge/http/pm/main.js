@@ -433,7 +433,7 @@
       return PAGE.set_id(this.params.id);
     });
     return this.post('#/submit', function(context) {
-      var active, active_type, base_url, data;
+      var active, active_type, base_url, data, that;
       active = TABS.active_name;
       active_type = TYPES[active];
       try {
@@ -448,6 +448,7 @@
       base_url = CONTENT_API + PAGE.id;
       data = JSON.stringify(data);
       ERROR.off();
+      that = this;
       $.ajax({
         url: base_url,
         type: 'POST',
@@ -462,7 +463,10 @@
             data.username = VAR.poco.name.formatted;
             data.profile = VAR.poco.thumbnailUrl;
             repr = TYPES[active].prepare(data);
-            context.render(TEMPLATES + 'entry.' + active + '.mustache', repr).then(function(content) {
+            repr.meta.username = data['username'];
+            that.render(TEMPLATES + 'meta.mustache', repr.meta).then(function(context2) {
+              return (repr.meta = context2);
+            }).render(TEMPLATES + 'entry.' + active + '.mustache', repr).then(function(content) {
               var a;
               a = $("<div/>").html(content);
               a.hide();

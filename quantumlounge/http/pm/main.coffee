@@ -373,6 +373,7 @@ app = $.sammy(
         base_url = CONTENT_API+PAGE.id
         data = JSON.stringify(data)
         ERROR.off()
+        that = this
         $.ajax({
             url : base_url
             type : 'POST'
@@ -386,7 +387,12 @@ app = $.sammy(
                     data.username = VAR.poco.name.formatted
                     data.profile = VAR.poco.thumbnailUrl
                     repr = TYPES[active].prepare(data)
-                    context.render(TEMPLATES+'entry.'+active+'.mustache', repr)
+                    repr.meta.username = data['username']
+                    that.render(TEMPLATES+'meta.mustache', repr.meta)
+                    .then( (context2) ->
+                        repr.meta = context2
+                    )
+                    .render(TEMPLATES+'entry.'+active+'.mustache', repr)
                     .then( (content) ->
                         a = $("<div/>").html(content)
                         a.hide()
