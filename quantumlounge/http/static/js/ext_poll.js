@@ -3,21 +3,23 @@
   var __bind = function(func, context) {
     return function(){ return func.apply(context, arguments); };
   };
-  Poll = function(_b, _c) {
+  Poll = function(_b, _c, _d, _e) {
     var _a;
-    this.elem = _c;
-    this.baseurl = _b;
+    this.node_id = _e;
+    this.elem = _d;
+    this.tapiurl = _c;
+    this.apiurl = _b;
     _a = this;
     this.vote = function(){ return Poll.prototype.vote.apply(_a, arguments); };
     this.load_template = function(){ return Poll.prototype.load_template.apply(_a, arguments); };
     $.ajax({
-      url: this.baseurl + this.content_api + "0?r=jsview&jsview_type=poll&so=date&sd=down&l=1",
+      url: this.apiurl + this.node_id + "?r=jsview&jsview_type=poll&so=date&sd=down&l=1",
       dataType: "jsonp",
       success: __bind(function(data) {
         this.item = data.jsview[0];
         this.item_id = this.item._id;
         return $.ajax({
-          url: this.baseurl + this.content_api + this.item._id + ";voted",
+          url: this.apiurl + this.item._id + ";voted",
           dataType: "jsonp",
           success: __bind(function(data) {
             this.voted = data.voted;
@@ -33,9 +35,9 @@
   Poll.prototype.load_template = function() {
     var url;
     if (this.voted) {
-      url = this.baseurl + this.template_api + 'entry.poll.results.mustache';
+      url = this.tapiurl + 'entry.poll.results.mustache';
     } else {
-      url = this.baseurl + this.template_api + 'entry.poll.mustache';
+      url = this.tapiurl + 'entry.poll.mustache';
     }
     return $.ajax({
       url: url,
@@ -66,7 +68,7 @@
   };
   Poll.prototype.display_results = function() {
     return $.ajax({
-      url: this.baseurl + this.content_api + this.item._id + ";results",
+      url: this.apiurl + this.item._id + ";results",
       dataType: "jsonp",
       success: __bind(function(data) {
         var h;
@@ -80,7 +82,7 @@
     elem = ev.target;
     qid = $(elem).attr('data-qid');
     aid = $(elem).attr('data-aid');
-    url = this.baseurl + this.content_api + qid + ";vote";
+    url = this.apiurl + qid + ";vote";
     data = {
       answer_no: aid
     };
@@ -96,7 +98,7 @@
     });
   };
   PollProcessor = function() {
-    var _a, _b, _c, baseurl, elem, poll, poll_elements;
+    var _a, _b, _c, apiurl, elem, node_id, poll, poll_elements, tapiurl;
     this.template = "";
     this.voted = false;
     this.polls = [];
@@ -104,8 +106,10 @@
     _b = poll_elements;
     for (_a = 0, _c = _b.length; _a < _c; _a++) {
       elem = _b[_a];
-      baseurl = $(elem).attr("data-baseurl");
-      poll = new Poll(baseurl, elem);
+      apiurl = $(elem).attr("data-api");
+      tapiurl = $(elem).attr("data-tapi");
+      node_id = $(elem).attr("data-node");
+      poll = new Poll(apiurl, tapiurl, elem, node_id);
       this.polls.push(poll);
     }
     return this;
