@@ -99,6 +99,18 @@ class Item(RESTfulHandler):
             return {r : m(content_id)}
         return self.error(404, "representation not found")
 
+    @json(content_type="application/json")
+    @role("admin")
+    def delete(self, content_id, format = None):
+        """DELETEing an item"""
+        cm = self.settings.contentmanager
+        item = self.settings.contentmanager.get(content_id)
+        if item is None:
+            self.error(404, "item to delete was not found")
+        res = self.settings.contentmanager.delete(content_id)
+        if res is not None:
+            return self.error(500, str(res))
+        return {'status' : 'ok'}
     
     @json(content_type="application/json")
     @role("admin")
