@@ -18,6 +18,9 @@ class Application(object):
         m = self.mapper.match(environ = environ)
         if m is not None:
             handler = m['handler'](app=self, request=request, settings=self.settings)
-            return handler.handle(**m)(environ, start_response)
+            try:
+                return handler.handle(**m)(environ, start_response)
+            except werkzeug.exceptions.HTTPException, e:
+                return e(environ, start_response)
         # no view found => 404
         return werkzeug.exceptions.NotFound()(environ, start_response)
