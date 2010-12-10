@@ -6,6 +6,7 @@ import werkzeug
 import functools
 import simplejson
 import datetime
+import werkzeug.exceptions
 
 def jsonconverter(obj):
     if isinstance(obj, datetime.datetime):
@@ -50,7 +51,6 @@ class jsonp(object):
             # now check if we have the content type "application/javascript"
             if type(res) == werkzeug.Response:
                 if self.request.args.has_key("callback"):
-                    print "change"
                     callback = self.request.args.get("callback")
                     res.data = "%s(%s)" %(callback, res.data)
                     res.content_type = "application/javascript"
@@ -105,7 +105,6 @@ class role(object):
         possible_roles = self.roles
         @functools.wraps(method)
         def wrapper(self, *args, **kwargs):
-            print "role"
             session = self.session
             if session is None:
                 roles = []
@@ -115,6 +114,7 @@ class role(object):
                 # TODO: find a better way
                 self.settings.log.error("access for session %s not authorized: roles needed: %s, roles found: %s"
                         %(session, possible_roles, roles))
+                raise werkzeug.exceptions.Unauthorized()
                 return None
             return method(self, *args, **kwargs)
         return wrapper

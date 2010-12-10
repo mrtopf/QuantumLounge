@@ -2,6 +2,7 @@ import os
 import simplejson
 from paste.urlparser import StaticURLParser
 from paste.fileapp import FileApp
+import werkzeug.exceptions
 
 from context import PageContext
 
