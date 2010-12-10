@@ -373,12 +373,22 @@
         float: left;
     }
 
-    .removebutton {
-        float: right;
-        width: 16px;
-    }
 }
 
+.removebutton {
+    float: right;
+    width: 16px;
+}
+
+.item-removebutton {
+    position: relative;
+    top: -3px;
+    opacity: .3;
+}
+
+.item-removebutton:hover {
+    opacity: 1;
+}
 
 /* calendar root element */
 #calroot {

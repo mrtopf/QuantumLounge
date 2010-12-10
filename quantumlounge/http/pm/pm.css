@@ -428,14 +428,27 @@
   color: #888;
   float: left;
 }
-/* line 376, sass/pm.scss */
-#pubdate-field .removebutton, #depubdate-field .removebutton {
+
+/* line 378, sass/pm.scss */
+.removebutton {
   float: right;
   width: 16px;
 }
 
+/* line 383, sass/pm.scss */
+.item-removebutton {
+  position: relative;
+  top: -3px;
+  opacity: .3;
+}
+
+/* line 389, sass/pm.scss */
+.item-removebutton:hover {
+  opacity: 1;
+}
+
 /* calendar root element */
-/* line 384, sass/pm.scss */
+/* line 394, sass/pm.scss */
 #calroot {
   /* place on top of other elements. set a higher value if nessessary */
   z-index: 10000;
@@ -452,13 +465,13 @@
 }
 
 /* head. contains title, prev/next month controls and possible month/year selectors */
-/* line 403, sass/pm.scss */
+/* line 413, sass/pm.scss */
 #calhead {
   padding: 2px 0;
   height: 22px;
 }
 
-/* line 408, sass/pm.scss */
+/* line 418, sass/pm.scss */
 #caltitle {
   font-size: 14px;
   color: #0150D1;
@@ -469,7 +482,7 @@
   text-shadow: 0 1px 0 #ddd;
 }
 
-/* line 418, sass/pm.scss */
+/* line 428, sass/pm.scss */
 #calnext, #calprev {
   display: block;
   width: 20px;
@@ -479,31 +492,31 @@
   cursor: pointer;
 }
 
-/* line 427, sass/pm.scss */
+/* line 437, sass/pm.scss */
 #calnext {
   background-image: url(next.gif);
   float: right;
 }
 
-/* line 432, sass/pm.scss */
+/* line 442, sass/pm.scss */
 #calprev.caldisabled, #calnext.caldisabled {
   visibility: hidden;
 }
 
 /* year/month selector */
-/* line 437, sass/pm.scss */
+/* line 447, sass/pm.scss */
 #caltitle select {
   font-size: 10px;
 }
 
 /* names of the days */
-/* line 442, sass/pm.scss */
+/* line 452, sass/pm.scss */
 #caldays {
   height: 14px;
   border-bottom: 1px solid #ddd;
 }
 
-/* line 447, sass/pm.scss */
+/* line 457, sass/pm.scss */
 #caldays span {
   display: block;
   float: left;
@@ -512,21 +525,21 @@
 }
 
 /* container for weeks */
-/* line 455, sass/pm.scss */
+/* line 465, sass/pm.scss */
 #calweeks {
   background-color: #fff;
   margin-top: 4px;
 }
 
 /* single week */
-/* line 461, sass/pm.scss */
+/* line 471, sass/pm.scss */
 .calweek {
   clear: left;
   height: 22px;
 }
 
 /* single day */
-/* line 467, sass/pm.scss */
+/* line 477, sass/pm.scss */
 .calweek a {
   display: block;
   float: left;
@@ -543,30 +556,30 @@
 }
 
 /* different states */
-/* line 483, sass/pm.scss */
+/* line 493, sass/pm.scss */
 .calweek a:hover, .calfocus {
   background-color: #ddd;
 }
 
 /* sunday */
-/* line 488, sass/pm.scss */
+/* line 498, sass/pm.scss */
 a.calsun {
   color: red;
 }
 
 /* offmonth day */
-/* line 493, sass/pm.scss */
+/* line 503, sass/pm.scss */
 a.caloff {
   color: #ccc;
 }
 
-/* line 497, sass/pm.scss */
+/* line 507, sass/pm.scss */
 a.caloff:hover {
   background-color: #f5f5fa;
 }
 
 /* unselecteble day */
-/* line 503, sass/pm.scss */
+/* line 513, sass/pm.scss */
 a.caldisabled {
   background-color: #efefef !important;
   color: #ccc  !important;
@@ -574,20 +587,20 @@ a.caldisabled {
 }
 
 /* current day */
-/* line 510, sass/pm.scss */
+/* line 520, sass/pm.scss */
 #calcurrent {
   background-color: #498CE2;
   color: #fff;
 }
 
 /* today */
-/* line 516, sass/pm.scss */
+/* line 526, sass/pm.scss */
 #caltoday {
   background-color: #333;
   color: #fff;
 }
 
-/* line 522, sass/pm.scss */
+/* line 532, sass/pm.scss */
 .error {
   height: 15px;
   background-color: #FFFE36;
@@ -606,18 +619,18 @@ a.caldisabled {
   -webkit-box-shadow: 0 0 6px #ddd;
 }
 
-/* line 542, sass/pm.scss */
+/* line 552, sass/pm.scss */
 .error p {
   margin: 0;
 }
 
-/* line 546, sass/pm.scss */
+/* line 556, sass/pm.scss */
 .title {
   font-size: 1.3em;
   font-weight: bold;
 }
 
-/* line 551, sass/pm.scss */
+/* line 561, sass/pm.scss */
 .answers {
   margin-bottom: 0;
 }
