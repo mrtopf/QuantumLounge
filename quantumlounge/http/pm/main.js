@@ -102,7 +102,8 @@
   Status.prototype.prepare = function(item) {
     var d, d1, d2, effective;
     item.meta = {
-      user: item.user
+      user: item.user,
+      id: item._id
     };
     if (item.date) {
       d = item.date.slice(0, 19);
@@ -376,6 +377,28 @@
             });
             $("#pubdate-remove").click(function() {
               $("#publication-date").val("");
+              return false;
+            });
+            $(".item-removebutton").live('click', function() {
+              var node_id;
+              node_id = $(this).attr("data-nodeid");
+              $.ajax({
+                url: virtual_path + '/api/1/content/' + node_id,
+                type: 'DELETE',
+                data: JSON.stringify({
+                  oauth_token: VAR.token
+                }),
+                processData: false,
+                contentType: "application/json",
+                success: function(data) {
+                  var node;
+                  node = $("#a-" + node_id);
+                  node.css({
+                    'background-color': 'red'
+                  });
+                  return node.fadeOut();
+                }
+              });
               return false;
             });
             statuslist = $("#statuslist").detach();

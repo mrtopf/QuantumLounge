@@ -77,6 +77,7 @@ class Status
     prepare: (item) ->
         item.meta = {
             user: item.user
+            id: item._id
         }
         if item.date
             d = item.date.slice(0,19)
@@ -291,13 +292,29 @@ PAGE = {
                         TYPES[a] = new v
 
                     # setup the date fields
-                    $(".dateinput" ).datepicker({dateFormat: 'dd.mm.yy'});
+                    $(".dateinput" ).datepicker({dateFormat: 'dd.mm.yy'})
                     $("#depubdate-remove" ).click(() ->
                         $("#depublication-date").val("")
                         false
                     )
                     $("#pubdate-remove" ).click(() ->
                         $("#publication-date").val("")
+                        false
+                    )
+
+                    $(".item-removebutton" ).live('click', () ->
+                        node_id = $(@).attr("data-nodeid")
+                        $.ajax({
+                            url: virtual_path+'/api/1/content/'+node_id
+                            type: 'DELETE'
+                            data: JSON.stringify({oauth_token : VAR.token})
+                            processData: false
+                            contentType: "application/json"
+                            success: (data) ->
+                                node = $("#a-"+node_id)
+                                node.css({'background-color' : 'red'})
+                                node.fadeOut()
+                        })
                         false
                     )
 
