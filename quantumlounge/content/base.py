@@ -330,6 +330,17 @@ class ContentManager(object):
         """return the object with the given object id"""
         d = self.collection.find_one({'_id' : oid})
         return self._to_obj(d)
+    
+    def delete(self, oid):
+        """delete the given object"""
+        print "deleting", oid
+        try:
+            d = self.collection.remove({'_id' : oid}, safe=True)
+            print "result",d
+            return None
+        except pymongo.OperationFailure, e:
+            print "fehler", e.error, e.code
+            return e.error
 
     @property
     def root(self):
