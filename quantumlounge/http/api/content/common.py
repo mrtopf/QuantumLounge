@@ -63,16 +63,20 @@ class Query(ExtendedMethodAdapter):
         now = datetime.datetime.now()
         t = self.request.args.get("type","status").split(",") # types
         fmt = self.request.args.get("fmt","html") # which repr you want
+        recursive = self.request.args.get("recursive","false").lower() == "true"
         s = """
             (this.publication_date < new Date() || !this.publication_date) &&
             (this.depublication_date > new Date() || !this.depublication_date) 
         """
         code=pymongo.code.Code(s)
         query = {
-            '_parent_id' : self.item._id,
             '_type' : {"$in" : t},
             '$where' : code,
         }
+        if recursive:
+            query['_ancestors'] = self.item._id
+        else:
+            query['_parent_id'] = self.item._id
         res = self._query_objs(query) # list of dictionaries
         out = registry.fmt_registry[fmt](res)()
         return out
