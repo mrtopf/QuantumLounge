@@ -19,29 +19,26 @@ from quantumlounge.framework.utils import get_static_urlparser, TemplateHandler
 
 
 JS = [
-    js_from_pkg_stream(__name__, 'static/js/jquery-1.4.2.min.js', name="jquery", merge=False, prio=1,),
+    js_from_pkg_stream(__name__, 'static/js/jquery-1.4.4.min.js', name="jquery", merge=False, prio=1,),
     js_from_pkg_stream(__name__, 'static/js/modernizr-1.5.min.js', name="head", merge=False, prio=1,),
 
     js_from_pkg_stream(__name__, 'static/js/jquery.NobleCount.min.js', name="", merge=True, prio=1,),
 
-    js_from_pkg_stream(__name__, 'static/js/jsuri-1.0.2-min.js', name="", merge=True, prio=1,),
-    js_from_pkg_stream(__name__, 'static/js/jquery.ui.min.js', name="", merge=True, prio=2,),
-    js_from_pkg_stream(__name__, 'static/js/sammy.js', name="", merge=True, prio=2,),
+    js_from_pkg_stream(__name__, 'static/js/jsuri.js', name="", merge=True, prio=1,),
+    js_from_pkg_stream(__name__, 'static/js/sammy.min.js', name="", merge=True, prio=2,),
     js_from_pkg_stream(__name__, 'static/js/sammy.mustache.min.js', name="", merge=True, prio=3,),
     js_from_pkg_stream(__name__, 'static/js/sammy.title.min.js', name="", merge=True, prio=3,),
     js_from_pkg_stream(__name__, 'static/js/sammy.json.min.js', name="", merge=True, prio=3,),
-    js_from_pkg_stream(__name__, 'static/js/underscore-min.js', name="", merge=True, prio=3,),
+    js_from_pkg_stream(__name__, 'static/js/underscore-min.js', name="", merge=False, prio=3,),
     js_from_pkg_stream(__name__, 'static/js/date.js', name="", merge=True, prio=3,),
-    js_from_pkg_stream(__name__, 'static/js/jquery.tools.min.js', name="", merge=True, prio=3,),
+    js_from_pkg_stream(__name__, 'static/js/jquery.tools.min.js', name="", merge=False, prio=4,),
+    js_from_pkg_stream(__name__, 'static/js/jquery-ui-1.8.7.custom.min.js', name="", merge=False, prio=5,),
 
     js_from_pkg_stream(__name__, 'static/js/plugins.js', name="", merge=True, prio=4,),
-    #js_from_pkg_stream(__name__, 'static/js/jquery-1.4.2.min.js', name="external", merge=True, prio=1, auto_reload=True),
     js_from_pkg_stream(__name__, 'static/js/mustache.js', name="external", merge=True, prio=3, auto_reload=True),
     js_from_pkg_stream(__name__, 'static/js/external.js', name="external", merge=True, prio=4, auto_reload=True),
-    #js_from_pkg_stream(__name__, 'static/js/jquery-1.4.2.min.js', name="ext_poll", merge=True, prio=1, auto_reload=True),
     js_from_pkg_stream(__name__, 'static/js/mustache.js', name="ext_poll", merge=True, prio=3, auto_reload=True),
     js_from_pkg_stream(__name__, 'static/js/ext_poll.js', name="ext_poll", merge=True, prio=4, auto_reload=True),
-    #js_from_pkg_stream(__name__, 'static/js/script.js', name="", merge=False, prio=5,),
 ]
 
 CSS = [
