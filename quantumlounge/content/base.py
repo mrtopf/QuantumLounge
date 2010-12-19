@@ -249,7 +249,7 @@ class Status(Model):
     def _after_init(self):
         """fix data"""
         t = datetime.datetime.now()
-        if self.date in (types.UnicodeType, types.StringType):
+        if type(self.date) in (types.UnicodeType, types.StringType):
             self.date = dateutil.parser.parse(self.date)
         if self.date is None:
             self.date = datetime.datetime.now()
