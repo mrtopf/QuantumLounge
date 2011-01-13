@@ -31,8 +31,8 @@ A status stream inspired project management tool""",
           'quantumcore.resources'
       ],
       entry_points={
-	'paste.app_factory': [
-	    'main=quantumlounge.http.main:app_factory',
-	    ],
-	}
+        'paste.app_factory': [
+            'main=quantumlounge.http.main:app_factory',
+            ],
+        }
       )
