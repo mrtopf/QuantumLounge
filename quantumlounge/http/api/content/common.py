@@ -24,7 +24,7 @@ class ExtendedMethodAdapter(MethodAdapter):
         so = self.request.values.get("so","date") # sort order
         sd = self.request.values.get("sd","down") # sort direction
         try:
-            l = int(self.request.values.get("l","10")) # limit
+            l = int(self.request.values.get("l","30")) # limit
         except:
             return self.error("wrong value for 'l'")
         try:
