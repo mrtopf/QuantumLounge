@@ -337,13 +337,10 @@ class ContentManager(object):
     
     def delete(self, oid):
         """delete the given object"""
-        print "deleting", oid
         try:
             d = self.collection.remove({'_id' : oid}, safe=True)
-            print "result",d
             return None
         except pymongo.OperationFailure, e:
-            print "fehler", e.error, e.code
             return e.error
 
     @property
