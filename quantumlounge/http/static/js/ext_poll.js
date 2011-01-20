@@ -3,15 +3,15 @@
   var __bind = function(func, context) {
     return function(){ return func.apply(context, arguments); };
   };
-  Poll = function(_b, _c, _d, _e) {
-    var _a;
-    this.node_id = _e;
-    this.elem = _d;
-    this.tapiurl = _c;
-    this.apiurl = _b;
-    _a = this;
-    this.vote = function(){ return Poll.prototype.vote.apply(_a, arguments); };
-    this.load_template = function(){ return Poll.prototype.load_template.apply(_a, arguments); };
+  Poll = function(_arg, _arg2, _arg3, _arg4) {
+    var _this;
+    this.node_id = _arg4;
+    this.elem = _arg3;
+    this.tapiurl = _arg2;
+    this.apiurl = _arg;
+    _this = this;
+    this.vote = function(){ return Poll.prototype.vote.apply(_this, arguments); };
+    this.load_template = function(){ return Poll.prototype.load_template.apply(_this, arguments); };
     $.ajax({
       url: this.apiurl + this.node_id + "?r=jsview&jsview_type=poll&so=date&sd=down&l=1",
       dataType: "jsonp",
@@ -49,15 +49,15 @@
     });
   };
   Poll.prototype.display_poll = function() {
-    var _a, _b, _c, answer, h, i, new_answers;
+    var _i, _len, _ref, answer, h, i, new_answers;
     new_answers = [];
     i = 0;
-    _b = this.item.answers;
-    for (_a = 0, _c = _b.length; _a < _c; _a++) {
-      answer = _b[_a];
+    _ref = this.item.answers;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      answer = _ref[_i];
       new_answers.push({
-        title: answer,
-        no: i
+        'title': "" + answer,
+        'no': i
       });
       i = i + 1;
     }
@@ -98,14 +98,14 @@
     });
   };
   PollProcessor = function() {
-    var _a, _b, _c, apiurl, elem, node_id, poll, poll_elements, tapiurl;
+    var _i, _len, _ref, apiurl, elem, node_id, poll, poll_elements, tapiurl;
     this.template = "";
     this.voted = false;
     this.polls = [];
     poll_elements = $(".ql-poll");
-    _b = poll_elements;
-    for (_a = 0, _c = _b.length; _a < _c; _a++) {
-      elem = _b[_a];
+    _ref = poll_elements;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      elem = _ref[_i];
       apiurl = $(elem).attr("data-api");
       tapiurl = $(elem).attr("data-tapi");
       node_id = $(elem).attr("data-node");
@@ -118,4 +118,4 @@
     var p;
     return (p = new PollProcessor());
   });
-})();
+}).call(this);
