@@ -213,7 +213,7 @@
     return $("#link-submit").text("Load");
   };
   Link.prototype.to_form = function(params) {
-    var data;
+    var _a, a, data, v;
     data = {
       content: params.content,
       link: params.link
@@ -227,6 +227,12 @@
       data.link_image = this.active_image;
     } else {
       data.link_title = params.link;
+    }
+    _a = this.convert_dates(params);
+    for (a in _a) {
+      if (!__hasProp.call(_a, a)) continue;
+      v = _a[a];
+      data[a] = v;
     }
     return data;
   };

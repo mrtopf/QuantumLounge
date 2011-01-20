@@ -178,6 +178,8 @@ class Link extends Status
             data.link_image = @active_image
         else
             data.link_title = params.link
+        for a,v of @convert_dates(params)
+            data[a]=v
         data
 
     process: () ->
