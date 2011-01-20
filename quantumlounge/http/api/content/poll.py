@@ -3,6 +3,7 @@ from quantumlounge.framework import json
 from werkzeug.contrib.securecookie import SecureCookie
 import werkzeug
 import simplejson
+import datetime
 
 class Voted(MethodAdapter):
     """check if user has voted already"""
@@ -43,7 +44,7 @@ class Vote(MethodAdapter):
         else:
             response = werkzeug.Response(s)
             response.content_type = "application/json"
-        response.set_cookie('qlpoll', cookie, httponly=True)
+        response.set_cookie('qlpoll', cookie, expires=datetime.datetime(2017,7,7), httponly=True)
         return response
 
 class Results(MethodAdapter):

@@ -26,7 +26,7 @@ class Item(RESTfulHandler):
         so = self.request.values.get("so","date") # sort order
         sd = self.request.values.get("sd","down") # sort direction
         try:
-            l = int(self.request.values.get("l","10")) # limit
+            l = int(self.request.values.get("l","30")) # limit
         except:
             return self.error(400, "wrong value for 'l'")
         try:
