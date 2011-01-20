@@ -319,7 +319,7 @@ class ContentManager(object):
             results = self.collection.find(query, 
                     limit=limit, 
                     skip=offset,
-                    sort = (sort_on, sort_order)
+                    sort = [(sort_on, sort_order)]
                     )
         else:
             results = self.collection.find(query, limit=limit, skip=offset)
