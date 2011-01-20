@@ -42,8 +42,8 @@ class Poll
         i=0
         for answer in @item.answers
             new_answers.push({
-                title: answer
-                no: i
+                'title': ""+answer
+                'no': i
             })
             i=i+1
         @item.answers = new_answers

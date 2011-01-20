@@ -3,14 +3,14 @@
   var __bind = function(func, context) {
     return function(){ return func.apply(context, arguments); };
   };
-  Item = function(_a, _b, _c, _d, _e, _f, _g) {
-    this.elem = _g;
-    this.amount = _f;
-    this.type = _e;
-    this.templateurl = _d;
-    this.apiurl = _c;
-    this.node_id = _b;
-    this.baseurl = _a;
+  Item = function(_arg, _arg2, _arg3, _arg4, _arg5, _arg6, _arg7) {
+    this.elem = _arg7;
+    this.amount = _arg6;
+    this.type = _arg5;
+    this.templateurl = _arg4;
+    this.apiurl = _arg3;
+    this.node_id = _arg2;
+    this.baseurl = _arg;
     $.ajax({
       url: this.apiurl + this.node_id + ";query?type=" + this.type + "&so=date&sd=down&l=" + this.amount + "&fmt=html",
       dataType: "jsonp",
@@ -25,12 +25,12 @@
     return this;
   };
   Processor = function() {
-    var _a, _b, _c, amount, apiurl, baseurl, elem, item, item_elems, node_id, templateurl, type;
+    var _i, _len, _ref, amount, apiurl, baseurl, elem, item, item_elems, node_id, templateurl, type;
     this.items = [];
     item_elems = $(".ql-item");
-    _b = item_elems;
-    for (_a = 0, _c = _b.length; _a < _c; _a++) {
-      elem = _b[_a];
+    _ref = item_elems;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      elem = _ref[_i];
       baseurl = $(elem).attr("data-baseurl");
       apiurl = $(elem).attr("data-api");
       node_id = $(elem).attr("data-node");
@@ -49,4 +49,4 @@
     var p;
     return (p = new Processor());
   });
-})();
+}).call(this);
