@@ -82,7 +82,10 @@ def setup(**kw):
     settings['log'] = logbook.Logger("quantumlounge")
 
     ## content types
-    settings.db = db = pymongo.Connection().pm
+    dbname = kw.get("dbname","pm")
+    print dbname
+    print kw
+    settings.db = db = pymongo.Connection()[dbname]
     ctm = ContentTypeManager()
     ctm.add(StatusType(db, "contents"))
     ctm.add(FolderType(db, "contents"))
