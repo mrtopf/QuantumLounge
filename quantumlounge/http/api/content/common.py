@@ -65,7 +65,7 @@ class Query(ExtendedMethodAdapter):
         fmt = self.request.args.get("fmt","html") # which repr you want
         recursive = self.request.args.get("recursive","false").lower() == "true"
         s = """
-            (this.publication_date < new Date() || !this.publication_date) &&
+            return (this.publication_date < new Date() || !this.publication_date) &&
             (this.depublication_date > new Date() || !this.depublication_date) 
         """
         code=pymongo.code.Code(s)
